@@ -11,12 +11,13 @@
 </template>
 
 <script>
+/* @flow */
 export default {
   name: 'app'
 }
 </script>
 
-<style>
+<style lang="scss">
 body {
   margin: 0;
 }
