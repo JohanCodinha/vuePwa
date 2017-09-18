@@ -49,6 +49,8 @@ module.exports = {
     // space after function name
     'space-before-function-paren': ["error", "always"],
     'no-confusing-arrow': 0,
-    'flowtype-errors/show-errors': 2
+    'flowtype-errors/show-errors': 2,
+    'no-shadow': ["error", { "allow": ["state", "getters"] }],
+    'no-param-reassign': ["error", { "props": true, "ignorePropertyModificationsFor": ["state"] }]
   }
 }

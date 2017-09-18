@@ -4,11 +4,13 @@ import observe from './modules/observe';
 import observation from './modules/observation';
 import account from './modules/account';
 import explore from './modules/explore';
+import location from './modules/location';
 
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
   modules: {
+    location,
     account,
     observation,
     observe,

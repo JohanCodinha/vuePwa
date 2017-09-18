@@ -30,10 +30,14 @@ export const SET_COUNT = 'SET_COUNT';
 export const SET_EXTRA_CODE = 'SET_EXTRA_CODE';
 export const SET_DATETIME = 'SET_DATETIME';
 export const SET_RECORDED_ID = 'SET_RECORDED_ID';
-export const SET_POSITION = 'SET_POSITION';
 export const UPDATE_STATUS = 'UPDATE_STATUS';
 export const ADD_SPECIE = 'ADD_SPECIE';
 export const HYDRATE_IMAGE = 'HYDRATE_IMAGE';
 export const SET_ACTIVE_DRAFT = 'SET_ACTIVE_DRAFT';
 export const DELETE_SURVEY = 'DELETE_SURVEY';
 
+/*
+ *  Location  
+ * */
+export const POSITION_ERROR = 'POSITION_ERROR';
+export const SET_POSITION = 'SET_POSITION';
