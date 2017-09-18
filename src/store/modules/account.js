@@ -22,11 +22,15 @@ const state = {
 const getters = {
   isLogin: (state) => {
     const { value, expiration } = state.jwt;
-    return (value !== null && isBefore(new Date(), expiration));
+    return (value !== null && isBefore(new Date(), expiration))
+      ? value
+      : false;
   },
   isLoginAsGuest: (state) => {
     const { value, expiration } = state.guestJwt;
-    return (value !== null && isBefore(new Date(), expiration));
+    return (value !== null && isBefore(new Date(), expiration))
+      ? value
+      : false;
   },
   displayName: state => state.displayName,
   status: state => state.status,
@@ -73,6 +77,7 @@ const mutations = {
 };
 
 export default {
+  namespaced: true,
   state,
   getters,
   actions,
