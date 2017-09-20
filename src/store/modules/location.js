@@ -16,7 +16,8 @@ const getters = {
       longitude: state.longitude,
       accuracy: state.accuracy,
     };
-    return position;
+    console.log(position);
+    return () => {};
   },
 };
 const actions = {

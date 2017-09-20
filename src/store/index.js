@@ -8,7 +8,7 @@ import location from './modules/location';
 
 Vue.use(Vuex);
 
-const store = new Vuex.Store({
+const store = {
   modules: {
     location,
     account,
@@ -16,6 +16,6 @@ const store = new Vuex.Store({
     observe,
     explore,
   },
-});
+};
 
 export default store;

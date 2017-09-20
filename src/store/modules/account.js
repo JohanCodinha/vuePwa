@@ -2,9 +2,10 @@
 import Vue from 'vue';
 import { isBefore, addMinutes } from 'date-fns';
 import { get } from 'lodash';
-import { login, guestLogin } from '@/api/vba';
+import api from '@/api/vba';
 import * as types from '../mutations-types';
 
+const { login, guestLogin } = api;
 const state = {
   jwt: {
     value: null,

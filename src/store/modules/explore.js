@@ -1,7 +1,9 @@
 import Vue from 'vue';
 import { get } from 'lodash';
-import { searchSpecies, specieRecords } from '@/api/vba';
+import api from '@/api/vba';
 import * as types from '../mutations-types';
+
+const { searchSpecies, specieRecords } = api;
 
 const state = {
   searchRadius: 250,
@@ -16,7 +18,8 @@ const state = {
 // getters
 const getters = {
   searchArea: (state, getters, rootState, rootGetters) => {
-    const { latitude, longitude } = rootGetters.location.position;
+    console.log(rootGetters);
+    const { latitude, longitude } = rootGetters['location/position'];
     if (latitude || longitude) {
       return {
         lat: latitude,
@@ -28,7 +31,7 @@ const getters = {
   },
   species: state => state.species,
   status: state => state.status,
-  position: state => state.position,
+  // position: state => state.position,
   records: state => state.records,
 };
 
