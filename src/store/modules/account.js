@@ -42,12 +42,13 @@ const actions = {
     try {
       const { jwt, userUid: userId, displayName } = await login(username, password);
       commit(types.STATUS, { message: 'Login successful' });
-      commit(types.SAVE_TOKEN, jwt);
+      commit(types.SAVE_TOKEN, { value: jwt, type: 'jwt' });
       commit(types.SAVE_USER_INFO, { userId, displayName });
     } catch (error) {
       const message = get(error, 'response.data.message', 'Login error');
       commit(types.STATUS, { message });
     }
+    return 'done';
   },
   async loginAsGuest ({ commit }) {
     try {
