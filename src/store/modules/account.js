@@ -58,7 +58,9 @@ const actions = {
       commit(types.STATUS, { message: error.message });
     }
   },
-
+  logout ({ commit }) {
+    commit(types.RESET_USER_INFO);
+  },
 };
 
 const mutations = {
@@ -75,6 +77,14 @@ const mutations = {
   },
   [types.STATUS] (state, { message }) {
     Vue.set(state, 'status', message);
+  },
+  [types.RESET_USER_INFO] (state) {
+    state.jwt = {
+      value: null,
+      expiration: null,
+    };
+    state.username = null;
+    state.userId = null;
   },
 };
 
