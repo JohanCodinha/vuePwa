@@ -1,5 +1,11 @@
 /* eslint-disable */
-import store from '../../store';
+jest.mock('@/api/vba', () => {
+  return {
+    login: () => new Promise(resolve => resolve(JSON.parse('{"jwt":"zR7lxC2HQO0W44ck56XAITBw8EARDdoctTxLEaS1tgc","userUid":10660,"displayName":"johan codinha"}')))
+  }  
+});
+
+import store from '@/store';
 import Vue from 'vue';
 import Vuex from 'vuex';
 
@@ -8,11 +14,10 @@ const $store = new Vuex.Store(store);
  
 describe('Login user', () => {
   test('User can login', async () => {
-    await $store.dispatch('account/fetchToken', { 
+    const res = await $store.dispatch('account/fetchToken', { 
       username: 'codeForVic',
       password: '19910908'
     }, { root: true });
-    // console.log($store.state.statue);
     expect(typeof $store.getters['account/isLogin'])
       .toBe('string');
   });
