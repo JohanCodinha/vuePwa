@@ -33,7 +33,7 @@ const getters = {
       ? value
       : false;
   },
-  displayName: state => state.displayName,
+  displayName: state => state.username,
   status: state => state.status,
 };
 
