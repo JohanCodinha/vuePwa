@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import { get } from 'lodash';
-import api from '@/api/vba';
+import api from '@/api/vbapi';
 import * as types from '../mutations-types';
 
 const { searchSpecies, specieRecords } = api;

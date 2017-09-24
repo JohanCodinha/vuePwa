@@ -9,9 +9,13 @@ import store from '@/store';
 import Vue from 'vue';
 import Vuex from 'vuex';
 
-Vue.use(Vuex);
-const $store = new Vuex.Store(store);
- 
+let $store;
+
+beforeEach(() => {
+  Vue.use(Vuex);
+  $store = new Vuex.Store(store);
+}); 
+
 describe('Login user', () => {
   test('User can login', async () => {
     const res = await $store.dispatch('account/fetchToken', { 

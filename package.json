@@ -13,16 +13,20 @@
   },
   "jest": {
     "moduleNameMapper": {
-      "src/components/(.*)$":"<rootDir>/src/components/$1.vue",
-      "^vue$":"vue/dist/vue.common.js",
-      "@/(.*)$":"<rootDir>/src/$1",
-      "src":"<rootDir>/src",
-      "assets":"<rootDir>/src/assets"
+      "src/components/(.*)$": "<rootDir>/src/components/$1.vue",
+      "^vue$": "vue/dist/vue.common.js",
+      "@/(.*)$": "<rootDir>/src/$1",
+      "src": "<rootDir>/src",
+      "assets": "<rootDir>/src/assets"
     },
     "transform": {
-      ".*":"<rootDir>/node_modules/webpack-babel-jest"
+      ".*": "<rootDir>/node_modules/webpack-babel-jest"
     },
-    "moduleFileExtensions": ["js", "json", "es6"]  
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "es6"
+    ]
   },
   "dependencies": {
     "axios": "^0.16.2",
