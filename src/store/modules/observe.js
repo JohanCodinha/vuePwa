@@ -12,6 +12,7 @@ const state = {
 
 // Getters
 const getters = {
+  getObservationById: state => id => state.items.find(item => item.id === id),
   allitems: state => state.items,
   activeDraft: (state) => {
     const ad = state.items.find(draft => draft.id === state.activeDraftId);
@@ -37,6 +38,7 @@ const actions = {
     commit('SET_COUNT', { count, obsId });
   },
   hydrateImageMetadata ({ commit, dispatch }, { image, obsId }) {
+    console.log(image);
     function getExif (img, tags) {
       return new Promise((resolve, reject) => {
         // eslint-disable-next-line
@@ -77,19 +79,24 @@ const actions = {
       .then(({ latitude, latitudeRef, longitude, longitudeRef, datetime,
         positioningError, dilutionOfPrecision }) => {
         console.timeEnd('getExif');
+        console.log(latitude, latitudeRef, longitude, longitudeRef,
+          datetime, positioningError, dilutionOfPrecision);
         const ddLatitude = ConvertDMSToDD(...latitude, latitudeRef);
         const ddLongitude = ConvertDMSToDD(...longitude, longitudeRef);
         const datetimeString = datetime
           ? formatDate(datetime)
           : null;
         const accuracy = positioningError || dilutionOfPrecision;
+        const observation = getters.getObservationById(obsId);
+
         dispatch('saveLocation', {
           latitude: ddLatitude,
           longitude: ddLongitude,
           accuracy,
           obsId,
         });
-        commit(types.SET_DATETIME, { datetime: datetimeString, obsId });
+        // dispatch('setDatetime', { datetime: datetimeString, obsId });
+        commit(types.SET_DATETIME, { datetime: datetimeString, observation });
       }).catch((error) => {
         console.log(error);
       });
@@ -154,8 +161,9 @@ const actions = {
   setExtraInfo ({ commit }, { code, obsId }) {
     commit('SET_EXTRA_CODE', { code, obsId });
   },
-  setDatetime ({ commit }, { datetimeString, obsId }) {
-    commit(types.SET_DATETIME, { datetime: datetimeString, obsId });
+  setDatetime ({ commit, getters }, { datetimeString, obsId }) {
+    const observation = getters.getObservationById(obsId);
+    commit(types.SET_DATETIME, { datetime: datetimeString, observation });
   },
 };
 
@@ -199,8 +207,8 @@ const mutations = {
       ? specie.scientificName
       : null;
   },
-  [types.SET_DATETIME] (state, { datetime, obsId }) {
-    const observation = state.items.find(obs => obs.id === obsId);
+  [types.SET_DATETIME] (state, { datetime, observation }) {
+    // const observation = state.items.find(obs => obs.id === obsId);
     Vue.set(observation, 'datetime', datetime);
   },
   [types.SET_ACTIVE_DRAFT] (state, { obsId }) {
@@ -233,6 +241,7 @@ const mutations = {
 };
 
 export default {
+  namespaced: true,
   state,
   getters,
   actions,

@@ -21,10 +21,10 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
-// import observationCard from './obsCard';
+import { createNamespacedHelpers } from 'vuex';
 import draftObservationCard from './draftObsCard';
 
+const { mapGetters: mapGettersObserve } = createNamespacedHelpers('observe');
 export default {
   name: 'observations-list',
   data () {
@@ -37,16 +37,17 @@ export default {
     'draft-observation-card': draftObservationCard,
   },
   computed: {
-    ...mapGetters({
-      generalObs: 'general',
+    ...mapGettersObserve({
+      // generalObs: 'general',
+      observations: 'allitems',
     }),
-    observations () {
-      return this.$store.state.newObservations.items;
-    },
+    // observations () {
+    //   return this.$store.state.newObservations.items;
+    // },
   },
   methods: {
-    ...mapActions([
-    ]),
+    // ...mapActions([
+    // ]),
     async newObservation () {
       this.$router.push({ name: 'GeneralObs' });
     },

@@ -11,7 +11,13 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
+import { createNamespacedHelpers } from 'vuex';
+
+const {
+  mapGetters: mapGettersObserve,
+  mapActions: mapActionsObserve,
+} = createNamespacedHelpers('observe');
+
 
 export default {
   name: 'countPicker',
@@ -26,12 +32,11 @@ export default {
     },
   },
   computed: {
-    ...mapGetters([
-      'allitems',
+    ...mapGettersObserve([
+      'getObservationById',
     ]),
     activeDraft () {
-      const draft = this.allitems.find(item => item.id === this.obsId);
-      return draft;
+      return this.getObservationById(this.obsId);
     },
     count: {
       get: function getter () {
@@ -45,7 +50,7 @@ export default {
         const obsId = this.obsId;
         if (!isNaN(count) && count >= 1) {
           console.log(`count set to ${value}`);
-          this.$store.dispatch('setCount', { count, obsId });
+          this.setCount({ count, obsId });
         } else {
           console.log(`value : ${count} of type ${typeof count} is not valid`);
         }
@@ -53,8 +58,8 @@ export default {
     },
   },
   methods: {
-    ...mapActions([
-      'addCount',
+    ...mapActionsObserve([
+      'setCount',
     ]),
     add () {
       console.log(this.count);

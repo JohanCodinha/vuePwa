@@ -28,10 +28,12 @@
 
 <script>
 import { createNamespacedHelpers } from 'vuex';
+// import { mapGetters, mapActions } from 'vuex';
 import observationCard from './obsCard';
 
 const { mapActions, mapGetters: mapGettersObservation } = createNamespacedHelpers('observation');
 const { mapGetters: mapGettersAccount } = createNamespacedHelpers('account');
+
 export default {
   name: 'saved-observations',
   data () {

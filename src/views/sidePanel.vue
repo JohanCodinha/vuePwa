@@ -23,7 +23,12 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { createNamespacedHelpers } from 'vuex';
+
+const {
+  mapGetters: mapGettersAccount,
+  // mapActions: mapActionsAccount,
+} = createNamespacedHelpers('account');
 
 export default {
   name: 'sidePanel',
@@ -32,7 +37,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters([
+    ...mapGettersAccount([
       'isLogin',
       'displayName',
     ]),

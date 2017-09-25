@@ -70,7 +70,7 @@ export default {
     })
     .then(res => res.data),
 
-  searcSpecieRecords: (position, taxonId, jwt) => http
+  searchSpecieRecords: (position, taxonId, jwt) => http
     .get('/search/point', {
       headers: { 'x-access-token': jwt },
       params: Object.assign({}, position, { detail: true, taxonId }),

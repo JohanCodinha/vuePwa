@@ -9,7 +9,11 @@ import mapboxgl from 'mapbox-gl';
 import token from '@/api/token.json';
 import { createNamespacedHelpers } from 'vuex';
 // import { debounce, get } from 'lodash'; // eslint-disable-line
-const { mapActions, mapGetters } = createNamespacedHelpers('explore');
+const {
+  mapActions,
+  mapGetters: mapGettersExplore,
+} = createNamespacedHelpers('explore');
+const { mapGetters: mapGettersLocation } = createNamespacedHelpers('location');
 const mapboxToken = token.mapbox;
 
 export default {
@@ -22,8 +26,11 @@ export default {
 
   },
   computed: {
-    ...mapGetters([
+    ...mapGettersLocation([
       'position',
+    ]),
+    ...mapGettersExplore([
+    // 'position',
       'records',
     ]),
   },

@@ -1,10 +1,11 @@
-import Vue from 'vue';
+// import Vue from 'vue';
 import * as types from '../mutations-types';
 
 const state = {
   latitude: null,
   longitude: null,
   accuracy: null,
+  lastRefresh: null,
   error: null,
 };
 
@@ -16,8 +17,7 @@ const getters = {
       longitude: state.longitude,
       accuracy: state.accuracy,
     };
-    console.log(position);
-    return () => {};
+    return position;
   },
 };
 const actions = {
@@ -44,9 +44,11 @@ const actions = {
         }, options);
     });
     try {
-      const position = await getCurrentPosition();
+      const position = await getCurrentPosition;
+      console.log(position);
       commit(types.SET_POSITION, position);
     } catch (error) {
+      console.log(error);
       commit(types.POSITION_ERROR, error);
     }
   },
@@ -55,18 +57,18 @@ const actions = {
 const mutations = {
   [types.SET_POSITION] (state, { latitude, longitude, accuracy }) {
     const timestamp = Date.now();
-    const previousLat = state.position.latitude;
-    const previousLon = state.position.longitude;
-    const previousAccu = state.position.accuracy;
+    const previousLat = state.latitude;
+    const previousLon = state.longitude;
+    const previousAccu = state.accuracy;
 
-    const position = {
-      latitude: latitude || previousLat,
-      longitude: longitude || previousLon,
-      accuracy: accuracy || previousAccu,
-      timestamp,
-    };
-
-    Vue.set(state, 'position', position);
+    // const position = {
+    state.latitude = latitude || previousLat;
+    state.longitude = longitude || previousLon;
+    state.accuracy = accuracy || previousAccu;
+    state.lastRefresh = timestamp;
+    // };
+    // console.log(position);
+    // Vue.set(state, 'position', position);
   },
   [types.POSITION_ERROR] (state, error) {
     state.error = error;

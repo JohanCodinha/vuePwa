@@ -18,8 +18,12 @@
 
 <script>
 // import Exif from 'exif-js';
-import { mapActions, mapGetters } from 'vuex';
+import { createNamespacedHelpers } from 'vuex';
 
+const {
+  mapGetters: mapGettersObserve,
+  mapActions: mapActionsObserve,
+} = createNamespacedHelpers('observe');
 
 export default {
   name: 'imagePicker',
@@ -34,8 +38,26 @@ export default {
       default () { return undefined; },
     },
   },
+  computed: {
+    ...mapGettersObserve([
+      'getObservationById',
+    ]),
+    obsId () {
+      return Number(this.observationId);
+    },
+    activeDraft () {
+      return this.getObservationById(this.obsId);
+    },
+    thumbnails () {
+      const draftObservation = this.activeDraft;
+      if (draftObservation) {
+        return draftObservation.images.map(image => URL.createObjectURL(image));
+      }
+      return [];
+    },
+  },
   methods: {
-    ...mapActions([
+    ...mapActionsObserve([
       'hydrateImageMetadata',
       'addImage',
     ]),
@@ -45,28 +67,9 @@ export default {
         return;
       }
       [...files].forEach((image) => {
-        this.$store.dispatch('addImage', { image, obsId: this.obsId });
+        this.addImage({ image, obsId: this.obsId });
         this.hydrateImageMetadata({ image, obsId: this.obsId });
       });
-    },
-  },
-  computed: {
-    ...mapGetters([
-      'allitems',
-    ]),
-    obsId () {
-      return Number(this.observationId);
-    },
-    activeDraft () {
-      const draft = this.allitems.find(item => item.id === this.obsId);
-      return draft;
-    },
-    thumbnails () {
-      const draftObservation = this.activeDraft;
-      if (draftObservation) {
-        return draftObservation.images.map(image => URL.createObjectURL(image));
-      }
-      return [];
     },
   },
 };

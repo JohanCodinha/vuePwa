@@ -3,7 +3,7 @@ import { get } from 'lodash';
 import api from '@/api/vbapi';
 import * as types from '../mutations-types';
 
-const { searchSpecies, specieRecords } = api;
+const { searchSpecies, searchSpecieRecords } = api;
 
 const state = {
   searchRadius: 250,
@@ -37,20 +37,20 @@ const getters = {
 
 const actions = {
   async searchSpecies ({ commit, getters, rootGetters, dispatch }) {
-    if (!rootGetters.account.isLoginAsGuest || !rootGetters.account.isLogin) {
+    if (!rootGetters['account/isLoginAsGuest'] || !rootGetters['account/isLogin']) {
       await dispatch('account/loginAsGuest', null, { root: true });
     }
     if (!getters.searchArea) {
       await dispatch('location/getPosition', null, { root: true });
     }
-    const token = rootGetters.account.isLoginAsGuest || rootGetters.account.isLogin;
+    const token = rootGetters['account/isLoginAsGuest'] || rootGetters['account/isLogin'];
     const searchArea = getters.searchArea;
     if (!token || !searchArea) {
       throw new Error('Search could not be perform, missing search parameters and/or token');
     }
 
     try {
-      const species = await searchSpecies(searchArea, token);
+      const { records: species } = await searchSpecies(searchArea, token);
       commit(types.UPDATE_STATUS, { searched: true });
       if (!species) {
         throw new Error('No species found at location');
@@ -60,10 +60,9 @@ const actions = {
         if (get(specie, 'countOfSightings') > 0) {
           commit(types.ADD_SPECIE, specie);
         }
-        const records = await specieRecords(searchArea, specie.taxonId, token);
+        const { records } = await searchSpecieRecords(searchArea, specie.taxonId, token);
         commit('ADD_RECORDS', records);
       });
-      // return species.length;
     } catch (error) {
       console.log(error);
     }
@@ -82,8 +81,8 @@ const mutations = {
     Vue.set(state, 'status', newStatus);
   },
   [types.ADD_RECORDS] (state, records) {
-    console.log(records);
-    Vue.set(state, 'records', [...state.records, ...records]);
+    state.records.push(...records);
+    // Vue.set(state, 'records', [...state.records, ...records]);
   },
 };
 

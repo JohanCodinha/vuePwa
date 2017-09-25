@@ -43,10 +43,15 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { createNamespacedHelpers } from 'vuex';
 import vbaSpecies from '@/api/vbaSpecies';
 import { debounce, get } from 'lodash'; // eslint-disable-line
 import specieSearchItem from './specieSearchItem';
+
+const {
+  // mapGetters: mapGettersObserve,
+  mapActions: mapActionsObserve,
+} = createNamespacedHelpers('observe');
 // import card from './card';
 
 
@@ -76,7 +81,7 @@ export default {
     discipline: function () { this.searchSpecie() },
   },
   methods: {
-    ...mapActions([
+    ...mapActionsObserve([
       'selectSpecie',
     ]),
     // eslint-disable-next-line
@@ -93,7 +98,7 @@ export default {
     select (specie) {
       const obsId = this.obsId;
       console.log(specie, obsId);
-      this.$store.dispatch('selectSpecie', { specie, obsId });
+      this.selectSpecie({ specie, obsId });
       this.$data.searchInput = specie;
       this.$router.go(-1);
     },

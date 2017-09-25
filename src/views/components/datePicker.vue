@@ -8,8 +8,13 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { createNamespacedHelpers } from 'vuex';
 import { format } from 'date-fns';
+
+const {
+  mapGetters: mapGettersObserve,
+  mapActions: mapActionsObserve,
+} = createNamespacedHelpers('observe');
 
 export default {
   name: 'datePicker',
@@ -24,29 +29,32 @@ export default {
     },
   },
   computed: {
-    ...mapGetters([
+    ...mapGettersObserve([
+      'getObservationById',
       'allitems',
     ]),
     activeDraft () {
-      const draft = this.allitems.find(item => item.id === this.obsId);
-      return draft;
+      return this.getObservationById(this.obsId);
     },
     obsDatetime: {
       get: function dateGetter () {
         if (!this.activeDraft) return null;
         if (!this.activeDraft.datetime) {
           const datetimeString = format(new Date(), 'YYYY-MM-DDTHH:mm');
-          this.$store.dispatch('setDatetime', { datetimeString, obsId: this.obsId });
+          this.setDatetime({ datetimeString, obsId: this.obsId });
           return this.activeDraft.datetime;
         }
         return this.activeDraft.datetime;
       },
       set: function dateSetter (datetimeString) {
-        this.$store.dispatch('setDatetime', { datetimeString, obsId: this.obsId });
+        this.setDatetime({ datetimeString, obsId: this.obsId });
       },
     },
   },
   methods: {
+    ...mapActionsObserve([
+      'setDatetime',
+    ]),
   },
 };
 </script>

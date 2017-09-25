@@ -1,9 +1,5 @@
 <template>
   <div class="general-observation">
-<!--     <div class="navigation">
-      <i @click="$router.push('/observations/drafts')"class="material-icons">arrow_back</i>
-      <h1>General Observation</h1>
-    </div> -->
     <div class="container">
       <div class="form-block">
         <p>Add images :</p>
@@ -93,12 +89,18 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
+// import { mapActions, mapGetters } from 'vuex';
+import { createNamespacedHelpers } from 'vuex';
 import imagePicker from './imagePicker';
 import speciePicker from './speciePicker';
 import datePicker from './datePicker';
 import countPicker from './countPicker';
 import extraInfo from './extraInfo';
+
+const {
+  mapGetters: mapGettersObserve,
+  mapActions: mapActionsObserve,
+} = createNamespacedHelpers('observe');
 
 export default {
   name: 'generalObservation',
@@ -121,15 +123,15 @@ export default {
     };
   },
   computed: {
-    ...mapGetters([
+    ...mapGettersObserve([
       'allitems',
+      'getObservationById',
     ]),
     obsId () {
       return Number(this.observationId);
     },
     activeDraft () {
-      const draft = this.allitems.find(item => item.id === this.obsId);
-      return draft;
+      return this.getObservationById(this.obsId);
     },
     taxonomy () {
       const draftObservation = this.activeDraft;
@@ -192,7 +194,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions([
+    ...mapActionsObserve([
       'createObservation',
     ]),
     navigateTo (routeName) {

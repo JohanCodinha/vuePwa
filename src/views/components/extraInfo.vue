@@ -9,7 +9,12 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { createNamespacedHelpers } from 'vuex';
+
+const {
+  mapGetters: mapGettersObserve,
+  mapActions: mapActionsObserve,
+} = createNamespacedHelpers('observe');
 
 export default {
   name: 'extraInfo',
@@ -41,12 +46,11 @@ export default {
     },
   },
   computed: {
-    ...mapGetters([
-      'allitems',
+    ...mapGettersObserve([
+      'getObservationById',
     ]),
     activeDraft () {
-      const draft = this.allitems.find(item => item.id === this.obsId);
-      return draft;
+      return this.getObservationById(this.obsId);
     },
     selected: {
       get: function getter () {
@@ -54,9 +58,14 @@ export default {
         return this.activeDraft.extraInfoCode;
       },
       set: function setter (code) {
-        this.$store.dispatch('setExtraInfo', { code, obsId: this.obsId });
+        this.setExtraInfo({ code, obsId: this.obsId });
       },
     },
+  },
+  methods: {
+    ...mapActionsObserve([
+      'setExtraInfo',
+    ]),
   },
 };
 </script>
