@@ -33,6 +33,12 @@
 <script>
 import sidePanel from '@/views/sidePanel';
 import bottomNav from '@/views/bottomNav';
+import { createNamespacedHelpers } from 'vuex';
+
+const {
+  mapActions: mapActionsAccount,
+  // mapGetters: mapGettersAccount,
+} = createNamespacedHelpers('account');
 
 export default {
   name: 'index-component',
@@ -76,6 +82,9 @@ export default {
     },
   },
   methods: {
+    ...mapActionsAccount([
+      'updateToken',
+    ]),
     menu () {
       this.slideoutOpen = !this.slideoutOpen;
     },
@@ -83,6 +92,9 @@ export default {
       console.log('backarrow');
       this.$router.go(-1);
     },
+  },
+  mounted: function mounted () {
+    this.updateToken();
   },
 };
 </script>
