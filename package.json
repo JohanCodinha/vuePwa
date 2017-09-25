@@ -31,6 +31,7 @@
   "dependencies": {
     "axios": "^0.16.2",
     "date-fns": "^1.28.5",
+    "dexie": "^2.0.0",
     "exif-js": "^2.3.0",
     "lodash": "^4.17.4",
     "mapbox-gl": "^0.40.0",
