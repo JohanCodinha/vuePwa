@@ -2,6 +2,7 @@
 import Vue from 'vue';
 import { isBefore, addMinutes } from 'date-fns';
 import { get } from 'lodash';
+import db from '@/store/db';
 import api from '@/api/vbapi';
 import * as types from '../mutations-types';
 
@@ -23,9 +24,10 @@ const state = {
 const getters = {
   isLogin: (state) => {
     const { value, expiration } = state.jwt;
-    return (value !== null && isBefore(new Date(), expiration))
-      ? value
-      : false;
+    if (value !== null && isBefore(new Date(), expiration)) {
+      return value;
+    }
+    return false;
   },
   isLoginAsGuest: (state) => {
     const { value, expiration } = state.guestJwt;
@@ -36,11 +38,42 @@ const getters = {
   displayName: state => state.username,
   status: state => state.status,
 };
-
 const actions = {
+  async updateToken ({ commit, dispatch }) {
+    try {
+      const [account] = await db.account.toArray();
+      if (!account) throw new Error('No locally saved account');
+      console.log('found acc', account);
+      const { userId, displayName, jwt, username, password } = account;
+      if (isBefore(new Date(), jwt.expiration)) {
+        console.log('is still valid');
+        commit(types.SAVE_TOKEN, { value: jwt.value, type: 'jwt' });
+        commit(types.SAVE_USER_INFO, { userId, displayName });
+        return;
+      }
+      dispatch('fetchToken', { username, password });
+    } catch (error) {
+      console.log(error);
+    }
+  },
   async fetchToken ({ commit }, { username, password }) {
     try {
-      const { jwt, userUid: userId, displayName } = await login(username, password);
+      const {
+        jwt,
+        userUid: userId,
+        displayName,
+      } = await login(username, password);
+      await db.account.clear();
+      db.account.add({
+        username,
+        password,
+        jwt: {
+          value: jwt,
+          expiration: addMinutes(new Date(), 29),
+        },
+        userId,
+        displayName,
+      });
       commit(types.STATUS, { message: 'Login successful' });
       commit(types.SAVE_TOKEN, { value: jwt, type: 'jwt' });
       commit(types.SAVE_USER_INFO, { userId, displayName });

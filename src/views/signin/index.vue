@@ -58,6 +58,7 @@ export default {
   methods: {
     ...mapActionsAccount([
       'fetchToken',
+      'updateToken',
     ]),
     async login () {
       await this.fetchToken({
@@ -70,6 +71,9 @@ export default {
         this.password = '';
       }
     },
+  },
+  mounted: function mounted () {
+    this.updateToken();
   },
 };
 </script>
