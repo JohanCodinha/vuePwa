@@ -115,7 +115,7 @@ const actions = {
 
   async uploadObservation ({ rootState, commit, dispatch }, { observation }) {
     const jwt = rootState.account.jwt.value;
-    const { userUid, displayName } = rootState.account;
+    const { userId, username } = rootState.account;
     const images = observation.images;
     const {
       latitude,
@@ -130,18 +130,18 @@ const actions = {
     images.forEach(image => formData.append('images', image));
     formData.append('latitude', latitude);
     formData.append('longitude', longitude);
-    formData.append('accuracy', accuracy);
+    formData.append('accuracy', accuracy || 5);
     formData.append('commonName', commonName);
     formData.append('scientificNmae', scientificName);
     formData.append('taxonId', taxonId);
     formData.append('count', count || 1);
     formData.append('dateTime', datetime);
     formData.append('extraInfoCode', extraInfoCode);
-    formData.append('userId', userUid);
-    formData.append('obsName', displayName);
+    formData.append('userId', userId);
+    formData.append('obsName', username);
     formData.append('locationDescription', description);
     try {
-      const { data: { taxonRecordedId } } = await postObservation(formData, jwt);
+      const { taxonRecordedId } = await postObservation(formData, jwt);
       console.log(taxonRecordedId);
       commit(types.SET_RECORDED_ID, { obsId: observation.id, taxonRecordedId });
       dispatch('getGeneralObs');

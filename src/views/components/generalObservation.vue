@@ -196,6 +196,7 @@ export default {
   methods: {
     ...mapActionsObserve([
       'createObservation',
+      'uploadObservation',
     ]),
     navigateTo (routeName) {
       this.$router.push({ name: routeName, params: { obsId: this.obsId } });
@@ -203,7 +204,7 @@ export default {
     upload () {
       console.log('uploading start');
       this.uploading = true;
-      this.$store.dispatch('uploadObservation', { observation: this.activeDraft })
+      this.uploadObservation({ observation: this.activeDraft })
         .then(() => this.false);
     },
   },

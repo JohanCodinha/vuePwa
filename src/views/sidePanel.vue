@@ -4,9 +4,8 @@
       <ul>
         <li>
           <p v-if="displayName">{{displayName}}</p>
-          <router-link @click.native="closeMenu" :to="{ name: 'Signin'}">
-            {{isLogin ? 'Sign out' : 'Sign in'}}
-          </router-link>
+          <router-link v-if="isLogin " @click.native="logoutClick" :to="{ name: 'Signin'}">Sign out</router-link>
+          <router-link v-else @click.native="closeMenu" :to="{ name: 'Signin'}">Sign in</router-link>
         </li>
         <li>
           <a href="mailto:vbago.feedback@gmail.com">Leave Feedback</a>
@@ -27,7 +26,7 @@ import { createNamespacedHelpers } from 'vuex';
 
 const {
   mapGetters: mapGettersAccount,
-  // mapActions: mapActionsAccount,
+  mapActions: mapActionsAccount,
 } = createNamespacedHelpers('account');
 
 export default {
@@ -43,8 +42,15 @@ export default {
     ]),
   },
   methods: {
+    ...mapActionsAccount([
+      'logout',
+    ]),
     closeMenu () {
       console.log('close');
+      this.$emit('closeMenu');
+    },
+    logoutClick () {
+      this.logout();
       this.$emit('closeMenu');
     },
   },

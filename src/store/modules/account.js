@@ -91,7 +91,8 @@ const actions = {
       commit(types.STATUS, { message: error.message });
     }
   },
-  logout ({ commit }) {
+  async logout ({ commit }) {
+    await db.account.clear();
     commit(types.RESET_USER_INFO);
   },
 };

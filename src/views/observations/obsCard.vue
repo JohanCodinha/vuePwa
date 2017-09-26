@@ -75,7 +75,7 @@ export default {
     // ...mapActions([
     // ]),
     deleteRecord (surveyId) {
-      this.$store.dispatch('deleteSurvey', surveyId);
+      this.$store.dispatch('observation/deleteSurvey', surveyId);
     },
   },
 };

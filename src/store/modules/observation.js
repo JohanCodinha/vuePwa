@@ -17,7 +17,7 @@ const state = {
 
 // Getters
 const getters = {
-  general: state => state.general,
+  general: state => state.general.reverse(),
 };
 
 // Actions

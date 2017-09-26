@@ -1,12 +1,12 @@
 <template>
-  <div :class="{ center: (isLogin && generalObs.length < 1)}" class="container">
-  <div class="no-obs" v-if="isLogin && generalObs.length < 1">
+  <div :class="{ center: (logedIn && generalObs.length < 1)}" class="container">
+  <div class="no-obs" v-if="logedIn && generalObs.length < 1">
     <p>No observation</p>
     <router-link to='/observations/drafts'>
       let's get started
     </router-link>
   </div>
-  <div class="loggedOut" v-if="!isLogin">
+  <div class="loggedOut" v-if="!logedIn">
     <h1>
       <router-link class="link" :to="{ name: 'Signin'}">Sign in</router-link>
       to the Victorian Biodiversity Atlas to see your observations
@@ -27,17 +27,12 @@
 </template>
 
 <script>
-import { createNamespacedHelpers } from 'vuex';
+// import { createNamespacedHelpers } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 import observationCard from './obsCard';
 
-const {
-  mapActions: mapActionsObservation,
-  mapGetters: mapGettersObservation,
-} = createNamespacedHelpers('observation');
-const {
-  // mapActions: mapActionsAccount,
-  mapGetters: mapGettersAccount,
-} = createNamespacedHelpers('account');
+// const { mapActions, mapGetters } = createNamespacedHelpers('observation');
+
 export default {
   name: 'saved-observations',
   data () {
@@ -48,27 +43,24 @@ export default {
     'observation-card': observationCard,
   },
   computed: {
-    ...mapGettersAccount([
-      'isLogin',
-    ]),
-    ...mapGettersObservation({
-      generalObs: 'general',
+    ...mapGetters({
+      generalObs: 'observation/general',
+      logedIn: 'account/isLogin',
     }),
   },
   methods: {
-    ...mapActionsObservation([
-      'getGeneralObs',
-      'deleteSurvey',
-    ]),
+    ...mapActions({
+      getGeneralObs: 'observation/getGeneralObs',
+    }),
     editObservation (obsId) {
       this.$router.push({ name: 'GeneralObs', params: { observationId: obsId } });
     },
     deleteRecord (surveyId) {
-      this.deleteSurvey(surveyId);
+      this.$store.dispatch('observation/deleteSurvey', surveyId);
     },
   },
   watch: {
-    isLogin: function isLoginWatcher () {
+    logedIn: function refreshOnLogin () {
       this.getGeneralObs();
     },
   },
