@@ -57,7 +57,7 @@ export default {
     })
     .then(res => res.data),
 
-  getSpecieMedia: (specieId, jwt) => http
+  getSpeciesMedia: (specieId, jwt) => http
     .get(`/species/${specieId}/media`, {
       headers: { 'x-access-token': jwt },
     })

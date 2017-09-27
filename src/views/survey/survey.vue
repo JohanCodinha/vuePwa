@@ -37,10 +37,10 @@ export default {
   },
   computed: {
     ...mapGetters({
-      generalObs: 'general',
+      observations: 'observation/general',
     }),
     survey () {
-      return this.generalObs.find(obs => obs.surveyId === this.surveyId);
+      return this.observations.find(obs => obs.surveyId === this.surveyId);
     },
     species () {
       return this.survey.species;
@@ -51,7 +51,7 @@ export default {
     // ]),
   },
   mounted () {
-    this.$store.dispatch('getSurveySpecies', this.surveyId);
+    this.$store.dispatch('observation/getSurveySpecies', this.surveyId);
   },
 };
 </script>

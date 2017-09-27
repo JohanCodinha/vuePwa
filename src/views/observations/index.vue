@@ -14,7 +14,7 @@
   </div>
     <h1 v-if="generalObs.length > 0">{{generalObs.length}} saved observations</h1>
     <ul>
-      <observation-card v-for="record in generalObs"
+      <observation-card v-for="record in obsByDate"
         :scientificName="record.species && record.species.length && record.species[0].scientificNme"
         :commonName="record.species && record.species.length && record.species[0].commonNme"
         :siteName="record.siteNme"
@@ -47,6 +47,10 @@ export default {
       generalObs: 'observation/general',
       logedIn: 'account/isLogin',
     }),
+    obsByDate () {
+      const observations = this.generalObs;
+      return observations.sort((a, b) => new Date(b.surveyStartSdt) - new Date(a.surveyStartSdt));
+    },
   },
   methods: {
     ...mapActions({
