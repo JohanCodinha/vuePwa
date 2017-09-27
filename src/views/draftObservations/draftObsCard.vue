@@ -3,8 +3,8 @@
     <img v-if="imageUrl" slot="image" :src="imageUrl">
     <div class="content" slot="content">
       <dl @click="$router.push({ name: 'GeneralObs', params: { observationId: obsId } })">
-          <dt>Specie</dt>
-          <dd>{{specieName || 'Unidentified specie'}}</dd>
+          <dt>Species</dt>
+          <dd>{{specieName || 'Unidentified'}}</dd>
           <dt>Site name</dt>
           <dd>{{siteName || 'Unknown location'}}</dd>
           <dt>Status</dt>
@@ -75,7 +75,7 @@ export default {
     // ...mapActions([
     // ]),
     deleteDraft () {
-      this.$store.dispatch('deleteObservation', this.obsId);
+      this.$store.dispatch('observe/deleteObservation', this.obsId);
     },
     upload () {
       console.log('uploading start');

@@ -2,7 +2,6 @@
   <div class="location-picker">
     <div id="map" class="mapboxgl-map">
       <div class="location-display">
-        <i @click="$router.go(-1)" class="material-icons">arrow_back</i>
         <div>
           <p>latitude: {{markerLatitude}}</p>
           <p>longitude: {{markerLongitude}}</p>
@@ -52,12 +51,12 @@ export default {
     },
   },
   computed: {
-    ...mapGetters([
-      'allitems',
-    ]),
+    ...mapGetters({
+      getObservationById: 'observe/getObservationById',
+      allitems: 'allitems',
+    }),
     activeDraft () {
-      const draft = this.allitems.find(item => item.id === this.obsId);
-      return draft;
+      return this.getObservationById(this.obsId);
     },
     locationName () {
       return this.activeDraft.position.description;
@@ -125,7 +124,7 @@ export default {
       const { lat: latitude, lng: longitude } = location;
       this.$data.moved = false;
       this.$data.map.flyTo({ zoom: 12 });
-      this.$store.dispatch('saveLocation', { latitude, longitude, accuracy: 10, obsId });
+      this.$store.dispatch('observe/saveLocation', { latitude, longitude, accuracy: 10, obsId });
     },
     revertLocation () {
       const center = [this.longitude, this.latitude];

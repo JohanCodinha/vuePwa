@@ -67,6 +67,7 @@ export default {
   padding-bottom: .5rem;
   display: flex;
   flex-direction: column;
+  margin-bottom: 3rem;
 }
 
 .button {
@@ -92,6 +93,7 @@ export default {
   align-items: center;
   justify-content: center;
   margin: 1rem;
+  min-height: 2rem;
 }
 
 .description > p {

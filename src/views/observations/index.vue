@@ -68,6 +68,7 @@ export default {
   padding-bottom: .5rem;
   display: flex;
   flex-direction: column;
+  margin-bottom: 3rem;
 }
 
 h1 {

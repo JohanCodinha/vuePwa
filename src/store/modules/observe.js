@@ -226,8 +226,7 @@ const mutations = {
     state.items.push(observation);
   },
   [types.DELETE_OBSERVATION] (state, obsId) {
-    const observationIndex = state.items.findIndex(obs => obs.id !== obsId);
-    // Vue.set(state, 'items', itemsWithoutObs);
+    const observationIndex = state.items.findIndex(obs => obs.id === obsId);
     state.items.splice(observationIndex, 1);
   },
   [types.SAVE_IMAGE] (state, { image, observation }) {
