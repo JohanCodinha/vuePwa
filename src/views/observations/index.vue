@@ -14,7 +14,7 @@
   </div>
     <h1 v-if="generalObs.length > 0">{{generalObs.length}} saved observations</h1>
     <ul>
-      <observation-card v-for="record in obsByDate"
+      <observation-card v-for="record in generalObs"
         :scientificName="record.species && record.species.length && record.species[0].scientificNme"
         :commonName="record.species && record.species.length && record.species[0].commonNme"
         :siteName="record.siteNme"
@@ -44,6 +44,7 @@ export default {
   },
   computed: {
     ...mapGetters({
+      observationsByDate: 'observation/observationsByDate',
       generalObs: 'observation/general',
       logedIn: 'account/isLogin',
     }),
