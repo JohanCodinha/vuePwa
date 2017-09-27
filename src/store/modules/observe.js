@@ -26,9 +26,13 @@ const actions = {
   /* eslint-disable */
   async loadObservation ({ commit, getters }) {
     const dbObservations = await db.observe.toArray();
-    dbObservations.forEach(observation => commit(types.SAVE_OBSERVATION, observation));
-    const storeObservations = getters.allitems;
-    console.log(dbObservations, storeObservations);
+    dbObservations.forEach((observation) => {
+      let imagesAsBlob = observation.images.map((buffer) => {
+        return new Blob( [buffer ], { type: "image/jpeg" } ); 
+      });
+      observation.images = imagesAsBlob; 
+      commit(types.SAVE_OBSERVATION, observation);
+    });
   },
   async saveLocation ({ commit, getters }, { latitude, longitude, accuracy, obsId }) {
     const observation = getters.getObservationById(obsId);
@@ -183,15 +187,28 @@ const actions = {
     try {
       const { taxonRecordedId } = await postObservation(formData, jwt);
       console.log(taxonRecordedId);
+      if (!taxonRecordedId) throw new Error('upload failed');
       commit(types.SET_RECORDED_ID, { obsId: observation.id, taxonRecordedId });
       dispatch('getGeneralObs');
     } catch (error) {
+      alert(error.message);
       console.log(error);
     }
   },
   async addImage ({ commit, getters }, { image, obsId }) {
-    await db.observe.where('id').equals(obsId).modify(obs => 
-      obs.images.push(image));
+    let arrayBuffer;
+    let fileReader = new FileReader();
+    fileReader.onload = async function() {
+      arrayBuffer = this.result;
+      try {
+        await db.observe.where('id').equals(obsId).modify(obs => 
+          obs.images.push(arrayBuffer));
+      } catch (error) {
+        console.log(error.message);
+        alert('fail to save image');
+      }
+    };
+    fileReader.readAsArrayBuffer(image); 
     const observation = getters.getObservationById(obsId);
     commit('SAVE_IMAGE', { image, observation });
   },
