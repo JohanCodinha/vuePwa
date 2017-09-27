@@ -46,7 +46,7 @@ export default {
         container: 'map',
         style: 'mapbox://styles/panelvw/cj4f5jcy500pw2rsetkub2wos',
         center: [longitude, latitude],
-        zoom: 12,
+        zoom: 14,
         // maxBounds: bounds,
         interactive: false,
       });
@@ -65,7 +65,7 @@ export default {
           source: 'records',
           type: 'circle',
           paint: {
-            'circle-radius': 10,
+            'circle-radius': 6,
             'circle-color': '#007cbf',
           },
         });

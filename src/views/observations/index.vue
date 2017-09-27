@@ -59,11 +59,6 @@ export default {
       this.$store.dispatch('observation/deleteSurvey', surveyId);
     },
   },
-  watch: {
-    logedIn: function refreshOnLogin () {
-      this.getGeneralObs();
-    },
-  },
 };
 </script>
 

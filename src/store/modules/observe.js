@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import mapboxApi from '@/api/mapbox';
 import vbapi from '@/api/vbapi';
+import db from '@/store/db';
 import * as types from '../mutations-types';
 
 const { reverseGeocoding } = mapboxApi;
@@ -22,20 +23,40 @@ const getters = {
 
 // Actions
 const actions = {
-  async saveLocation ({ commit }, { latitude, longitude, accuracy, obsId }) {
-    commit('SAVE_LOCATION', { latitude, longitude, accuracy, obsId });
+  /* eslint-disable */
+  async loadObservation ({ commit, getters }) {
+    const dbObservations = await db.observe.toArray();
+    dbObservations.forEach(observation => commit(types.SAVE_OBSERVATION, observation));
+    const storeObservations = getters.allitems;
+    console.log(dbObservations, storeObservations);
+  },
+  async saveLocation ({ commit, getters }, { latitude, longitude, accuracy, obsId }) {
+    const observation = getters.getObservationById(obsId);
+    const position = {
+      latitude,
+      longitude,
+      accuracy,
+    };
+    await db.observe.where('id').equals(obsId).modify(obs => 
+      obs.position = position);
+    commit('SAVE_LOCATION', { position, observation });
     try {
       const place = await reverseGeocoding(longitude, latitude);
       const description = place.features[0].place_name;
       if (description) {
-        commit(types.SAVE_LOCATION_DESCRIPTION, { description, obsId });
+        await db.observe.where('id').equals(obsId).modify(obs => 
+          obs.position.description = description);
+        commit(types.SAVE_LOCATION_DESCRIPTION, { description, observation });
       }
     } catch (error) {
       console.log(error);
     }
   },
-  setCount ({ commit }, { count, obsId }) {
-    commit('SET_COUNT', { count, obsId });
+  async setCount ({ commit, getters }, { count, obsId }) {
+    const observation = getters.getObservationById(obsId);
+    await db.observe.where('id').equals(obsId).modify(obs => 
+      obs.count = count);
+    commit('SET_COUNT', { count, observation });
   },
   hydrateImageMetadata ({ commit, dispatch }, { image, obsId }) {
     console.log(image);
@@ -101,15 +122,34 @@ const actions = {
         console.log(error);
       });
   },
-  createObservation ({ commit }) {
+  async createObservation ({ commit }) {
     function generateId () {
       return Date.now();
     }
     const id = generateId();
-    commit(types.CREATE_OBSERVATION, id);
+    const observation = {
+      id,
+      images: [],
+      taxonomy: {
+        taxonId: null,
+        commonName: null,
+        scientificName: null,
+      },
+      position: {
+        accuracy: null,
+        description: null,
+        latitude: null,
+        longitude: null,
+      },
+      datetime: null,
+      count: 0,
+    };
+    await db.observe.add(observation);
+    commit(types.SAVE_OBSERVATION, observation);
     return id;
   },
-  deleteObservation ({ commit }, obsId) {
+  async deleteObservation ({ commit }, obsId) {
+    await db.observe.where('id').equals(obsId).delete();
     commit('DELETE_OBSERVATION', obsId);
   },
 
@@ -149,11 +189,24 @@ const actions = {
       console.log(error);
     }
   },
-  addImage ({ commit }, { image, obsId }) {
-    commit('SAVE_IMAGE', { image, obsId });
+  async addImage ({ commit, getters }, { image, obsId }) {
+    await db.observe.where('id').equals(obsId).modify(obs => 
+      obs.images.push(image));
+    const observation = getters.getObservationById(obsId);
+    commit('SAVE_IMAGE', { image, observation });
   },
-  selectSpecie ({ commit }, { specie, obsId }) {
-    commit('SELECT_SPECIE', { specie, obsId });
+  async selectSpecie ({ commit, getters }, { specie, obsId }) {
+    const { taxonId, commonName = null, scientificName = null } = specie;
+    const observation = getters.getObservationById(obsId);
+    const taxonomy = {
+      taxonId,
+      commonName,
+      scientificName,
+    };
+    const updatedObservation = Object.assign({}, observation, { taxonomy });
+    await db.observe.where('id').equals(obsId).modify(obs => 
+      obs.taxonomy = taxonomy);
+    commit('SELECT_SPECIE', { taxonomy, observation });
   },
   setActiveDraft ({ commit }, { obsId }) {
     commit('SET_ACTIVE_DRAFT', { obsId });
@@ -169,23 +222,7 @@ const actions = {
 
 // mutations
 const mutations = {
-  [types.CREATE_OBSERVATION] (state, id) {
-    const observation = {
-      id,
-      images: [],
-      taxonomy: {
-        taxonId: null,
-        commonName: null,
-        scientificName: null,
-      },
-      position: {
-        accuracy: null,
-        description: null,
-        latitude: null,
-        longitude: null,
-      },
-      datetime: null,
-    };
+  [types.SAVE_OBSERVATION] (state, observation) {
     state.items.push(observation);
   },
   [types.DELETE_OBSERVATION] (state, obsId) {
@@ -193,41 +230,26 @@ const mutations = {
     // Vue.set(state, 'items', itemsWithoutObs);
     state.items.splice(observationIndex, 1);
   },
-  [types.SAVE_IMAGE] (state, { image, obsId }) {
-    const observation = state.items.find(obs => obs.id === obsId);
+  [types.SAVE_IMAGE] (state, { image, observation }) {
     observation.images.push(image);
   },
-  [types.SELECT_SPECIE] (state, { specie, obsId }) {
-    const observation = state.items.find(obs => obs.id === obsId);
-    observation.taxonomy.taxonId = specie.taxonId;
-    observation.taxonomy.commonName = specie.commonName
-      ? specie.commonName
-      : null;
-    observation.taxonomy.scientificName = specie.scientificName
-      ? specie.scientificName
-      : null;
+  [types.SELECT_SPECIE] (state, { taxonomy, observation }) {
+    Vue.set(observation, 'taxonomy', taxonomy);
+      
   },
   [types.SET_DATETIME] (state, { datetime, observation }) {
-    // const observation = state.items.find(obs => obs.id === obsId);
     Vue.set(observation, 'datetime', datetime);
   },
   [types.SET_ACTIVE_DRAFT] (state, { obsId }) {
     Vue.set(state, 'activeDraftId', obsId);
   },
-  [types.SAVE_LOCATION] (state, { latitude, longitude, accuracy, obsId }) {
-    const observation = state.items.find(obs => obs.id === obsId);
-    Vue.set(observation, 'position', {
-      latitude,
-      longitude,
-      accuracy,
-    });
+  [types.SAVE_LOCATION] (state, { position, observation }) {
+    Vue.set(observation, 'position', position);
   },
-  [types.SAVE_LOCATION_DESCRIPTION] (state, { description, obsId }) {
-    const observation = state.items.find(obs => obs.id === obsId);
+  [types.SAVE_LOCATION_DESCRIPTION] (state, { description, observation }) {
     Vue.set(observation.position, 'description', description);
   },
-  [types.SET_COUNT] (state, { count, obsId }) {
-    const observation = state.items.find(obs => obs.id === obsId);
+  [types.SET_COUNT] (state, { count, observation }) {
     Vue.set(observation, 'count', count);
   },
   [types.SET_EXTRA_CODE] (state, { code, obsId }) {

@@ -33,11 +33,11 @@
 <script>
 import sidePanel from '@/views/sidePanel';
 import bottomNav from '@/views/bottomNav';
-import { createNamespacedHelpers } from 'vuex';
+import { mapActions, createNamespacedHelpers } from 'vuex';
 
 const {
   mapActions: mapActionsAccount,
-  // mapGetters: mapGettersAccount,
+  mapGetters: mapGettersAccount,
 } = createNamespacedHelpers('account');
 
 export default {
@@ -52,6 +52,9 @@ export default {
     bottomNav,
   },
   computed: {
+    ...mapGettersAccount([
+      'isLogin',
+    ]),
     displayBackArrow () {
       switch (this.$route.path) {
         case '/':
@@ -82,6 +85,10 @@ export default {
     },
   },
   methods: {
+    ...mapActions({
+      loadObservation: 'observe/loadObservation',
+      getGeneralObs: 'observation/getGeneralObs',
+    }),
     ...mapActionsAccount([
       'updateToken',
     ]),
@@ -95,6 +102,12 @@ export default {
   },
   mounted: function mounted () {
     this.updateToken();
+    this.loadObservation();
+  },
+  watch: {
+    isLogin: function refreshOnLogin () {
+      this.getGeneralObs();
+    },
   },
 };
 </script>

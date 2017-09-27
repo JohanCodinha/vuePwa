@@ -21,7 +21,7 @@ export const SAVE_SPECIES = 'SAVE_SPECIES';
 /*
  *  Observation
  * */
-export const CREATE_OBSERVATION = 'CREATE_OBSERVATION';
+export const SAVE_OBSERVATION = 'SAVE_OBSERVATION';
 export const DELETE_OBSERVATION = 'DELETE_OBSERVATION';
 export const SAVE_IMAGE = 'SAVE_IMAGE';
 export const SELECT_SPECIE = 'SELECT_SPECIE';
