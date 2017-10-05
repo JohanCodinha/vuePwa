@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const baseURL = 'https://vbago.science/vbapi';
+const baseURL = 'http://localhost:3000'; // 'https://vbago.science/vbapi';
 const http = axios.create({
   baseURL,
 });

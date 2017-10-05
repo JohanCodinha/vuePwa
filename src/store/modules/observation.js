@@ -67,7 +67,7 @@ const actions = {
 // mutations
 const mutations = {
   [SAVE_GENERAL_OBS] (state, records) {
-    state.general.push(...records);
+    state.general = records;
   },
   [DELETE_SURVEY] (state, surveyId) {
     const newState = state.general.filter(record => record.surveyId !== surveyId);

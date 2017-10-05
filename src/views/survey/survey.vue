@@ -51,7 +51,7 @@ export default {
     // ]),
   },
   mounted () {
-    this.$store.dispatch('observation/getSurveySpecies', this.surveyId);
+    // this.$store.dispatch('observation/getSurveySpecies', this.surveyId);
   },
 };
 </script>

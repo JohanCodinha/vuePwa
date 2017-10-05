@@ -30,6 +30,7 @@
   },
   "dependencies": {
     "axios": "^0.16.2",
+    "babel-polyfill": "^6.26.0",
     "date-fns": "^1.28.5",
     "dexie": "^2.0.0",
     "exif-js": "^2.3.0",
