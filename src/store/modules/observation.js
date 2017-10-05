@@ -6,9 +6,7 @@ import { SAVE_GENERAL_OBS, DELETE_SURVEY, SAVE_SPECIES } from '../mutations-type
 const {
   getGeneralObservation,
   deleteSurvey,
-  getMethods,
-  getMethodsSpecies,
-  getSpeciesMedia } = vbapi;
+} = vbapi;
 
 // initial state
 const state = {
@@ -34,25 +32,6 @@ const actions = {
     }
   },
 
-  async getSurveySpecies ({ rootState, commit }, surveyId) {
-    try {
-      const jwt = rootState.account.jwt.value;
-      const { methods } = await getMethods(surveyId, jwt);
-      const methodsSpecies = await Promise.all(
-        methods.map(method => getMethodsSpecies(method.componentId, jwt)),
-      );
-      const species = methodsSpecies
-        .reduce((accu, value) => [...accu, ...value.species], []);
-      const speciesMedia = await Promise.all(
-        species.map(specie => getSpeciesMedia(specie.id, jwt)),
-      );
-      const hydratedSpecies = species.map((specie, index) => Object.assign(
-        {}, specie, speciesMedia[index]));
-      commit(SAVE_SPECIES, { surveyId, species: hydratedSpecies });
-    } catch (error) {
-      console.log(error);
-    }
-  },
   async deleteSurvey ({ rootState, commit }, surveyId) {
     try {
       const jwt = rootState.account.jwt.value;
