@@ -10,6 +10,7 @@
         :imagesId="specie.images.map(i=>i.id)"
         :status="specie.reliabilityDesc"
         :extraDescription="specie.extraDesc"
+        :siteName="survey.siteNme"
         :key="specie.surveyId">
       </specie-card> 
     </ul>

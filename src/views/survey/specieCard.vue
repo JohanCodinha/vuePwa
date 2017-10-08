@@ -3,14 +3,16 @@
     <img v-if="imageSources" slot="image" :src="imageSources">
     <div class="content" slot="content">
       <dl>
-        <dt>Specie</dt>
+        <dt>Species</dt>
         <dd>{{commonName}}</dd>
         <dd>{{scientificName}}</dd>
-<!--         <dt>Site name</dt>
-        <dd>{{siteName || 'Unknown location'}}</dd> -->
+        <dt>Count</dt>
+        <dd>{{count}}</dd>
+        <dt>Site name</dt>
+        <dd>{{siteName || 'Unknown location'}}</dd>
         <dt>Status</dt>
         <dd>{{status === 'a' ? 'Approved' : status}}</dd>
-        <dt>Extra</dt>
+        <dt v-if="extraDescription">Extra</dt>
         <dd>{{extraDescription}}</dd>
       </dl>
     </div>
@@ -52,6 +54,10 @@ export default {
       type: String,
       default () { return ''; },
     },
+    count: {
+      type: Number,
+      default () { return 1; },
+    },
     obsId: {
       type: Number,
       default () { return undefined; },
@@ -71,7 +77,7 @@ export default {
     ]),
     imageSources () {
       if (this.imagesId.length < 1) return null;
-      return this.imagesId.map(id => `https://vba.dse.vic.gov.au/vba/getFile.do?id=${id}`);
+      return this.imagesId.map(id => `https://res.cloudinary.com/vba/image/fetch/w_300,f_auto/https://vba.dse.vic.gov.au/vba/getFile.do%3Fid%3D${id}`);
     },
   },
   methods: {

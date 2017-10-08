@@ -17,11 +17,13 @@
       <observation-card v-for="record in generalObs"
         :scientificName="record.species && record.species.length && record.species[0].scientificNme"
         :commonName="record.species && record.species.length && record.species[0].commonNme"
+        :imagesId="record.species[0] && record.species[0].images.map(i=>i.id)"
         :siteName="record.siteNme"
         :surveyId="record.surveyId"
         :status="record.expertReviewStatusCde"
         :startDate="record.surveyStartSdt"
-        :key="record.surveyId"></observation-card>
+        :key="record.surveyId">
+      </observation-card>
     </ul>
   </div>
 </template>
@@ -68,43 +70,43 @@ export default {
 </script>
 
 <style scoped>
-.container {
-  margin: 0 .5rem 0 .5rem;
-  padding-bottom: .5rem;
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 3rem;
-}
+  .container {
+    margin: 0 .5rem 0 .5rem;
+    padding-bottom: .5rem;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 3rem;
+  }
 
-h1 {
-  margin: 1rem;
-  font-size: 1.8rem
-}
+  h1 {
+    font-size: 1rem;
+    margin: .5rem .5rem 0 .5rem;
+  }
 
-.loggedOut {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-}
+  .loggedOut {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
 
-.link {
-  color: #00b7bd;
-  text-decoration: underline;
-  font-weight: 500;
-  font-style: normal;
-  font-stretch: normal;
-  line-height: normal;
-}
+  .link {
+    color: #00b7bd;
+    text-decoration: underline;
+    font-weight: 500;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+  }
 
-.center {
-  align-items: center;
-  justify-content: center;
-}
+  .center {
+    align-items: center;
+    justify-content: center;
+  }
 
-.no-obs {
-  font-size: 1.8rem;
-}
+  .no-obs {
+    font-size: 1.8rem;
+  }
 </style>

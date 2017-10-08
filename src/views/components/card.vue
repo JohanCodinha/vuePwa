@@ -7,14 +7,14 @@
       <div class="visible-content">
         <slot name="content"></slot>
         <a v-if="this.$slots['reveal']" href="#">
-          <i @click="cardReveal" class="material-icons">more_vert</i>
+          <i @click.stop="cardReveal" class="material-icons">more_vert</i>
         </a>
       </div>
       <div class="card-reveal_" v-bind:class="{'card-revealed': cardRevealed}">
         <div class="card-reveal-content">
           <slot name="reveal"></slot>
           <a href="#">
-            <i @click="cardHide" class="material-icons">close</i>
+            <i @click.stop="cardHide" class="material-icons">close</i>
           </a>
         </div>
       </div>
@@ -67,11 +67,11 @@ export default {
 }
 
 .visible-content{
-  margin: 1.5rem;
   justify-content: space-between;
   flex: 1;
   display: flex;
   flex-direction: row;
+  margin: .5rem;
 }
 
 .card-reveal_ {
@@ -122,8 +122,6 @@ export default {
 .image {
   display: flex;
   justify-content: center;
-  height: 10rem;
-  background-color: lightgrey;
 }
 .image img {
   max-height: 100%;
