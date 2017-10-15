@@ -65,6 +65,10 @@ export default {
     get (object, path) {
       return get(object, path);
     },
+    select (species) {
+      console.log('madeit');
+      this.$router.push({ name: 'speciesDetails', params: { taxonId: species.taxonId } });
+    },
   },
   mounted: function mountedEvent () { this.searchSpecies(); },
 };
@@ -86,6 +90,7 @@ export default {
   display: flex;
   flex-direction: column;
   flex: 1 0 auto;
+  height: 100%;
 }
 
 .collection {
@@ -102,6 +107,7 @@ export default {
   align-items: center;
   justify-content: center;
   margin: .5rem;
+  min-height: 2rem;
 }
 
 .reload > i {

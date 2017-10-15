@@ -112,4 +112,8 @@ export default {
 .content dl dt {
   color: #5d636a;
 }
+
+img {
+  max-height: 40vh;
+}
 </style>

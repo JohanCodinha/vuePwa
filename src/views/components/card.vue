@@ -124,7 +124,6 @@ export default {
   justify-content: center;
 }
 .image img {
-  max-height: 100%;
   max-width: 100%;
 }
 

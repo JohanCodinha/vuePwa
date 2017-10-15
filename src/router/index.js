@@ -9,6 +9,7 @@ import survey from '@/views/survey/survey';
 import signin from '@/views/signin/index';
 import observationsList from '@/views/observations/index';
 import around from '@/views/around/index';
+import speciesDetails from '@/views/speciesDetails/index';
 
 Vue.use(Router);
 
@@ -40,7 +41,6 @@ export default new Router({
       name: 'LocationPicker',
       component: locationPicker,
       props: true,
-
     },
     {
       path: '/generalObs/:observationId?',
@@ -68,6 +68,12 @@ export default new Router({
       path: '/explore',
       name: 'exploreAround',
       component: around,
+    },
+    {
+      path: '/explore/species/:taxonId',
+      name: 'speciesDetails',
+      component: speciesDetails,
+      props: true,
     },
   ],
 });

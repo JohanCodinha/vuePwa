@@ -33,6 +33,7 @@ const getters = {
   status: state => state.status,
   // position: state => state.position,
   records: state => state.records,
+  speciesByTaxonId: state => id => state.species.find(item => item.taxonId === id),
 };
 
 const actions = {
