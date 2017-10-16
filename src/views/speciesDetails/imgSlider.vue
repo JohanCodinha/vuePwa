@@ -1,21 +1,23 @@
 <template>
   <div>
     <div class="images">
+      <img :src="currentImage.s3Url">
+    </div>
+    <div class="credit" v-if="currentImage.source">
+      <p>Source: {{currentImage.source}}</p>
+    </div>
+    <div v-if="images.length > 1" class="controls">
       <button @click="previous"
         :class="{hidden: (!this.selectedImg > 0)}"
         class="nav-button">
-        <p>prev</p>
+        <i class="material-icons">chevron_left</i>
       </button>
-      <img :src="currentImage">
+      <p>{{selectedImg + 1}}/{{images.length}}</p>
       <button @click="next"
         :class="{hidden: (this.selectedImg >= this.media.length - 1)}"
         class="nav-button">
-        <p>next</p>
+        <i class="material-icons">chevron_right</i>
       </button>
-    </div>
-    <div class="credit" v-if="credit.by">
-      <p>Author: {{credit.by}}</p>
-      <!-- <p>Licence: {{credit.licence}}</p> -->
     </div>
   </div>
 </template>
@@ -43,8 +45,7 @@ export default {
     },
     currentImage () {
       console.log(this.selectedImg, this.media[this.selectedImg]);
-      const media = this.media[this.selectedImg];
-      return media.s3Url;
+      return this.media[this.selectedImg];
     },
     credit () {
       if (!this.media) return {};
@@ -70,9 +71,8 @@ export default {
 <style scoped>
 .images {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: 30vh;
+  justify-content: center;
+  height: 36vh;
 }
 
 .images img {
@@ -81,17 +81,21 @@ export default {
   object-fit: contain;
   overflow: auto;
 }
-
+.controls {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 1rem;
+}
 .nav-button {
   display: flex;
   max-width: 10vw;
   justify-content: center;
   background-color: rgba(128,128,128,.4);
+  color: #646464;
+  border: none;
+  background-color: #eee;
 }
 
-.hidden {
-  visibility: hidden;
-}
 .credit {
   margin-left: 1rem;
 }

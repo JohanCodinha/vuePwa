@@ -107,7 +107,4 @@ export default {
       color: #5d636a;
     }
   }
-  .description {
-    
-  }
 </style>
