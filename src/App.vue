@@ -22,9 +22,7 @@
           </a>
         </div>
       </header>
-      <keep-alive>
-        <router-view class="app-content"></router-view>
-        </keep-alive>
+      <router-view class="app-content"></router-view>
     </div>
     <bottomNav :style="{ transform: slideoutOpen ? 'translateX(-268px)' : 'translateX(0px)' }" class="bottom-nav slideLeft"></bottomNav>
     <sidePanel :style="{ display: slideoutOpen ? 'block' : 'none' }" @closeMenu="menu"></sidePanel>

@@ -97,6 +97,7 @@
 <script>
 // import { mapActions, mapGetters } from 'vuex';
 import { createNamespacedHelpers } from 'vuex';
+import { get } from 'lodash';
 import imagePicker from './imagePicker';
 import speciePicker from './speciePicker';
 import datePicker from './datePicker';
@@ -188,7 +189,7 @@ export default {
         : null;
     },
     locationDescription () {
-      return this.activeDraft.position.description;
+      return get(this.activeDraft, 'position.description', '');
     },
     obsIsValid () {
       const draft = this.activeDraft;
@@ -225,10 +226,14 @@ export default {
         .then(() => this.false);
     },
     async getLocation () {
-      await this.getPosition();
-      const { latitude, longitude, accuracy } = this.position;
-      this.$store.dispatch('observe/saveLocation', { latitude, longitude, accuracy, obsId: this.obsId });
-      // dispatch('location/getPosition', null, { root: true });
+      try {
+        await this.getPosition();
+        const { latitude, longitude, accuracy } = this.position;
+        this.$store.dispatch('observe/saveLocation', { latitude, longitude, accuracy, obsId: this.obsId });
+        // dispatch('location/getPosition', null, { root: true });
+      } catch (error) {
+        console.log(error);
+      }
     },
   },
   mounted: async function mountedEvent () {
