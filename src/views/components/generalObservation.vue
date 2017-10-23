@@ -26,18 +26,22 @@
           </div>
         </template>
       </div>
-      <div @click="$router.push({ name: 'LocationPicker', params : { observationId: obsId } })"class="form-block">
-        <template v-if="coordinates">
-          <p>Lat: {{latitude}}</p>
-          <p>Long: {{longitude}}</p>
-          <p>{{locationDescription}}</p>
-        </template>
-        <div v-else class="location-picker">
+      <div class="form-block">
+        <div class="location-picker">
           <div class="">
             <i class="material-icons">pin_drop</i>
-            <p class="location-picker-initial-text">Enter location :</p>
+            <div v-if="coordinates">
+              <p>Lat: {{latitude}}</p>
+              <p>Long: {{longitude}}</p>
+              <p>{{locationDescription}}</p>
+            </div>
+            <button v-else @click="getLocation">
+              Use GPS
+            </button>
+            <button @click="$router.push({ name: 'LocationPicker', params : { observationId: obsId } })">
+              Edit location
+            </button>
           </div>
-            <i class="material-icons">chevron_right</i>
         </div>
       </div>
       <div class="form-block">
