@@ -28,20 +28,22 @@
       </div>
       <div class="form-block">
         <div class="location-picker">
-          <div class="">
-            <i class="material-icons">pin_drop</i>
-            <div v-if="coordinates">
-              <p>Lat: {{latitude}}</p>
-              <p>Long: {{longitude}}</p>
-              <p>{{locationDescription}}</p>
-            </div>
-            <button v-else @click="getLocation">
-              Use GPS
-            </button>
-            <button @click="$router.push({ name: 'LocationPicker', params : { observationId: obsId } })">
-              Edit location
-            </button>
+          <i class="material-icons">pin_drop</i>
+          <div class="location" v-if="coordinates" @click="$router.push({ name: 'LocationPicker', params : { observationId: obsId } })">
+            <p>Lat: {{latitude}}</p>
+            <p>Long: {{longitude}}</p>
+            <p>{{locationDescription}}</p>
           </div>
+          <div v-else class="buttons">
+            <button class="button"
+              @click="getLocation">
+              Use GPS
+              </button>
+              <button class="button"
+                @click="$router.push({ name: 'LocationPicker', params : { observationId: obsId } })">
+                Edit location
+              </button>
+            </div>
         </div>
       </div>
       <div class="form-block">
@@ -106,6 +108,11 @@ const {
   mapActions: mapActionsObserve,
 } = createNamespacedHelpers('observe');
 
+const {
+  mapActions: mapActionsLocation,
+  mapGetters: mapGettersLocation,
+} = createNamespacedHelpers('location');
+
 export default {
   name: 'generalObservation',
   components: {
@@ -130,6 +137,9 @@ export default {
     ...mapGettersObserve([
       'allitems',
       'getObservationById',
+    ]),
+    ...mapGettersLocation([
+      'position',
     ]),
     obsId () {
       return Number(this.observationId);
@@ -202,6 +212,9 @@ export default {
       'createObservation',
       'uploadObservation',
     ]),
+    ...mapActionsLocation([
+      'getPosition',
+    ]),
     navigateTo (routeName) {
       this.$router.push({ name: routeName, params: { obsId: this.obsId } });
     },
@@ -210,6 +223,12 @@ export default {
       this.uploading = true;
       this.uploadObservation({ observation: this.activeDraft })
         .then(() => this.false);
+    },
+    async getLocation () {
+      await this.getPosition();
+      const { latitude, longitude, accuracy } = this.position;
+      this.$store.dispatch('observe/saveLocation', { latitude, longitude, accuracy, obsId: this.obsId });
+      // dispatch('location/getPosition', null, { root: true });
     },
   },
   mounted: async function mountedEvent () {
@@ -223,86 +242,112 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-.container {
-  margin: 1rem .5rem 1rem .5rem;
-  /*margin-bottom: 3rem;*/
-}
+<style lang="scss" scoped>
+  .container {
+    margin: 1rem .5rem 1rem .5rem;
+    /*margin-bottom: 3rem;*/
+  }
 
-.specie-lookup {
-  margin: 1rem 1rem .5rem 1rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  color: black;
-}
+  .specie-lookup {
+    margin: 1rem 1rem .5rem 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: black;
+  }
 
-.specie-lookup div:first-child {
-  display: flex;
-  align-items: center;
-}
+  .specie-lookup div:first-child {
+    display: flex;
+    align-items: center;
+  }
 
-.specie-lookup-text {
-  margin-left: .5rem;
-}
+  .specie-lookup-text {
+    margin-left: .5rem;
+  }
 
-.location-picker {
-  margin: 1rem 1rem .5rem 1rem;
-  display: flex;
-  justify-content: space-between;
-}
+  .location-picker {
+    margin: 1rem 1rem .5rem 1rem;
+    display: flex;
+    justify-content: space-between;
+  }
 
-.location-picker div:first-child {
-  display: flex;
-  align-items: center;
-}
+  .location-picker div:first-child {
+    display: flex;
+    align-items: center;
+  }
 
-.location-picker-initial-text {
-  margin-left: .5rem;
-  display: flex;
-}
-.form-block {
-  border-bottom: 0.05rem solid rgba(32, 22, 71, 0.3);
-  margin: .5rem 0 .5rem;
-  padding-bottom: .5rem;
-}
+  .location-picker-initial-text {
+    margin-left: .5rem;
+    display: flex;
+  }
+  .form-block {
+    border-bottom: 0.05rem solid rgba(32, 22, 71, 0.3);
+    margin: .5rem 0 .5rem;
+    padding-bottom: .5rem;
+  }
 
-.action {
-  display: flex;
-  width: 100%;
-  justify-content: center;
-}
+  .action {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+  }
 
-.button {
-  box-shadow: 
-    0 2px 2px 0 rgba(0,0,0,0.14),
-    0 1px 5px 0 rgba(0,0,0,0.12),
-    0 3px 1px -2px rgba(0,0,0,0.2);
-}
+  .button {
+    box-shadow: 
+      0 2px 2px 0 rgba(0,0,0,0.14),
+      0 1px 5px 0 rgba(0,0,0,0.12),
+      0 3px 1px -2px rgba(0,0,0,0.2);
+  }
 
-.deactivated {
-  box-shadow: none;
-  background-color: #c9c9c9;
-}
+  .deactivated {
+    box-shadow: none;
+    background-color: #c9c9c9;
+  }
 
-.textarea {
-  box-sizing: border-box;
-  width: 100%;
-  position: relative;
-  display: inline-block;
-  vertical-align: middle;
-  border: 1px #D2D6DF solid;
-  border-radius: 3px;
-  color: #45494E;
-  background-color: #fff;
-  font-size: 16px;
-  line-height: 16px;
-  height: 5rem;
-}
+  .textarea {
+    box-sizing: border-box;
+    width: 100%;
+    position: relative;
+    display: inline-block;
+    vertical-align: middle;
+    border: 1px #D2D6DF solid;
+    border-radius: 3px;
+    color: #45494E;
+    background-color: #fff;
+    font-size: 16px;
+    line-height: 16px;
+    height: 5rem;
+  }
 
-.navigation {
-  display: flex;
-  justify-content: space-around;
-}
+  .navigation {
+    display: flex;
+    justify-content: space-around;
+  }
+  .location {
+    margin-left: .5rem;
+  }
 
+  .material-icons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .location-picker {
+    .buttons {
+      display: flex;
+      margin-left: .5rem;
+      justify-content: space-around;
+      flex: 1;
+    }
+    button {
+      display: flex;
+      padding: 0;
+      padding: 0;
+      width: 100%;
+      margin-left: .25rem;
+      margin-right: .25rem;
+      justify-content: center;
+    }
+  }
 </style>
