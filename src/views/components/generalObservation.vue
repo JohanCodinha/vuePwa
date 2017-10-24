@@ -87,7 +87,7 @@
         </div>
       </template>
       <template v-if="recordedId">
-        <h2>Upload succes !</h2>
+        <h2>Upload success !</h2>
       </template>
       </div>
     </div>
@@ -273,7 +273,6 @@ export default {
   .location-picker {
     margin: 1rem 1rem .5rem 1rem;
     display: flex;
-    justify-content: space-between;
   }
 
   .location-picker div:first-child {
