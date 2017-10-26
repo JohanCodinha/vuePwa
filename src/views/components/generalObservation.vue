@@ -345,13 +345,10 @@ export default {
       flex: 1;
     }
     button {
-      display: flex;
-      padding: 0;
-      padding: 0;
+      display: block;
       width: 100%;
       margin-left: .25rem;
       margin-right: .25rem;
-      justify-content: center;
     }
   }
 </style>

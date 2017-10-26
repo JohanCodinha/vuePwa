@@ -1,9 +1,6 @@
 <template>
   <div class="imagePicker">
    <ul>
-     <li v-for="thumbnail in thumbnails">
-       <img :src="thumbnail">
-     </li>
      <li>
       <input type="file" name="imagePicker" id="imagePicker" class="inputFile"
         multiple
@@ -11,6 +8,9 @@
       <label for="imagePicker">
         <i class="material-icons">add_a_photo</i>
       </label>
+     </li>
+     <li v-for="thumbnail in thumbnails">
+       <img :src="thumbnail">
      </li>
    </ul>
   </div>
@@ -101,6 +101,7 @@ a {
 
 img {
   width: 100%;
+  border-radius: 3px;
 }
 
 .imagePicker {
