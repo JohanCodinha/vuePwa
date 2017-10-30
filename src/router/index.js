@@ -10,6 +10,7 @@ import signin from '@/views/signin/index';
 import observationsList from '@/views/observations/index';
 import around from '@/views/around/index';
 import speciesDetails from '@/views/speciesDetails/index';
+import imageSlideshow from '@/views/imageSlideshow/index';
 
 Vue.use(Router);
 
@@ -24,6 +25,12 @@ export default new Router({
     {
       path: '/',
       redirect: '/observations',
+    },
+    {
+      path: '/img/slideshow/:observationId',
+      name: 'imageSlideshow',
+      component: imageSlideshow,
+      props: true,
     },
     {
       path: '/img/:observationId',

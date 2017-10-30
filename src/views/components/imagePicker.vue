@@ -10,7 +10,13 @@
       </label>
      </li>
      <li v-for="thumbnail in thumbnails">
-       <img :src="thumbnail">
+       <img :src="thumbnail"
+        @click="$router.push({ name: 'imageSlideshow', params : { observationId: obsId } })">
+     </li>
+     <li>
+       <label for="imagePicker">
+        <i class="material-icons">add</i>
+       </label> 
      </li>
    </ul>
   </div>
@@ -75,7 +81,6 @@ export default {
 };
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 h1, h2 {
   font-weight: normal;
