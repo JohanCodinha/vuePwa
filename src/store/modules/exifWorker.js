@@ -8,6 +8,7 @@ onmessage = function workerTriger (message) {
   const tags = message.data.tags;
   Exif.getData(image, function exifData () {
     const tagsValues = {};
+    tagsValues.allMetaData = Exif.getAllTags(this);
     Object.keys(tags).forEach((key) => {
       const tagValue = Exif.getTag(this, tags[key]);
       if (Array.isArray(tagValue)) {

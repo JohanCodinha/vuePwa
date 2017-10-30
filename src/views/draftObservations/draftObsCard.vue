@@ -61,7 +61,7 @@ export default {
       'isLogin',
     ]),
     imageUrl () {
-      if (this.image) return URL.createObjectURL(this.image);
+      if (this.image) return URL.createObjectURL(this.image.data);
       return null;
     },
     isValid () {

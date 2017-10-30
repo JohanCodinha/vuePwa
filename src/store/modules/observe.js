@@ -27,8 +27,12 @@ const actions = {
   async loadObservation ({ commit, getters }) {
     const dbObservations = await db.observe.toArray();
     dbObservations.forEach((observation) => {
-      let imagesAsBlob = observation.images.map((buffer) => {
-        return new Blob( [buffer ], { type: "image/jpeg" } ); 
+      let imagesAsBlob = observation.images.map((image) => {
+        const { data, exif } = image;
+        return {
+          exif,
+          data: new Blob( [data], { type: "image/jpeg" } ),
+        };
       });
       observation.images = imagesAsBlob; 
       commit(types.SAVE_OBSERVATION, observation);
@@ -101,11 +105,11 @@ const actions = {
     };
     console.time('getExif');
     return getExif(image, tags)
-      .then(({ latitude, latitudeRef, longitude, longitudeRef, datetime,
-        positioningError, dilutionOfPrecision }) => {
+      .then((tags) => {
+        const { latitude, latitudeRef, longitude, longitudeRef, datetime,
+          positioningError, dilutionOfPrecision } = tags;
         console.timeEnd('getExif');
-        console.log(latitude, latitudeRef, longitude, longitudeRef,
-          datetime, positioningError, dilutionOfPrecision);
+        console.log(tags);
         const ddLatitude = ConvertDMSToDD(...latitude, latitudeRef);
         const ddLongitude = ConvertDMSToDD(...longitude, longitudeRef);
         const datetimeString = datetime
@@ -199,10 +203,11 @@ const actions = {
     let arrayBuffer;
     let fileReader = new FileReader();
     fileReader.onload = async function() {
-      arrayBuffer = this.result;
       try {
-        await db.observe.where('id').equals(obsId).modify(obs => 
-          obs.images.push(arrayBuffer));
+        arrayBuffer = this.result;
+        const image = { data: arrayBuffer };
+        await db.observe.where('id').equals(obsId)
+          .modify(obs => obs.images.push(image));
       } catch (error) {
         console.log(error.message);
         alert('fail to save image');
@@ -210,7 +215,7 @@ const actions = {
     };
     fileReader.readAsArrayBuffer(image); 
     const observation = getters.getObservationById(obsId);
-    commit('SAVE_IMAGE', { image, observation });
+    commit('SAVE_IMAGE', { image: { data: image }, observation });
   },
   async selectSpecie ({ commit, getters }, { specie, obsId }) {
     const { taxonId, commonName = null, scientificName = null } = specie;

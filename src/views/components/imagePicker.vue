@@ -57,7 +57,8 @@ export default {
     thumbnails () {
       const draftObservation = this.activeDraft;
       if (draftObservation) {
-        return draftObservation.images.map(image => URL.createObjectURL(image));
+        console.log('images', draftObservation.images);
+        return draftObservation.images.map(image => URL.createObjectURL(image.data));
       }
       return [];
     },
