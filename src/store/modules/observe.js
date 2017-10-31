@@ -66,8 +66,7 @@ const actions = {
       obs.count = count);
     commit('SET_COUNT', { count, observation });
   },
-  hydrateImageMetadata ({ commit, dispatch }, { image, obsId }) {
-    console.log(image);
+  getImageMetadata ({ commit, dispatch }, { image, obsId }) {
     function getExif (img, tags) {
       return new Promise((resolve, reject) => {
         // eslint-disable-next-line
@@ -78,6 +77,18 @@ const actions = {
         worker.postMessage({ image: img, tags });
       });
     }
+    const tags = {
+      latitude: 'GPSLatitude',
+      latitudeRef: 'GPSLatitudeRef',
+      longitude: 'GPSLongitude',
+      longitudeRef: 'GPSLongitudeRef',
+      datetime: 'DateTimeOriginal',
+      positioningError: 'GPSHPositioningError',
+      dilutionOfPrecision: 'GPSDOP',
+    };
+    return getExif(image, tags)
+  },
+  async processExifData ({ commit, dispatch }, imageMetadata) {
     function ConvertDMSToDD (degrees, minutes, seconds, direction) {
       if (typeof degrees !== 'number'
         || typeof minutes !== 'number'
@@ -94,41 +105,25 @@ const actions = {
       const [date, time] = [...exifDate.split(' ')];
       return `${date.replace(/:/g, '-')}T${time}`;
     }
-    const tags = {
-      latitude: 'GPSLatitude',
-      latitudeRef: 'GPSLatitudeRef',
-      longitude: 'GPSLongitude',
-      longitudeRef: 'GPSLongitudeRef',
-      datetime: 'DateTimeOriginal',
-      positioningError: 'GPSHPositioningError',
-      dilutionOfPrecision: 'GPSDOP',
-    };
-    console.time('getExif');
-    return getExif(image, tags)
-      .then((tags) => {
-        const { latitude, latitudeRef, longitude, longitudeRef, datetime,
-          positioningError, dilutionOfPrecision } = tags;
-        console.timeEnd('getExif');
-        console.log(tags);
-        const ddLatitude = ConvertDMSToDD(...latitude, latitudeRef);
-        const ddLongitude = ConvertDMSToDD(...longitude, longitudeRef);
-        const datetimeString = datetime
-          ? formatDate(datetime)
-          : null;
-        const accuracy = positioningError || dilutionOfPrecision;
-        const observation = getters.getObservationById(obsId);
+    const { latitude, latitudeRef, longitude, longitudeRef, datetime,
+      positioningError, dilutionOfPrecision } = imageMetadata;
+    console.log(imageMetadata);
+    const ddLatitude = ConvertDMSToDD(...latitude, latitudeRef);
+    const ddLongitude = ConvertDMSToDD(...longitude, longitudeRef);
+    const datetimeString = datetime
+      ? formatDate(datetime)
+      : null;
+    const accuracy = positioningError || dilutionOfPrecision;
+    const observation = getters.getObservationById(obsId);
 
-        dispatch('saveLocation', {
-          latitude: ddLatitude,
-          longitude: ddLongitude,
-          accuracy,
-          obsId,
-        });
-        // dispatch('setDatetime', { datetime: datetimeString, obsId });
-        commit(types.SET_DATETIME, { datetime: datetimeString, observation });
-      }).catch((error) => {
-        console.log(error);
-      });
+    dispatch('saveLocation', {
+      latitude: ddLatitude,
+      longitude: ddLongitude,
+      accuracy,
+      obsId,
+    });
+    // dispatch('setDatetime', { datetime: datetimeString, obsId });
+    commit(types.SET_DATETIME, { datetime: datetimeString, observation });
   },
   async createObservation ({ commit }) {
     function generateId () {

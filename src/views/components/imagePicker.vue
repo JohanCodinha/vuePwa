@@ -65,7 +65,8 @@ export default {
   },
   methods: {
     ...mapActionsObserve([
-      'hydrateImageMetadata',
+      'processExifData',
+      'getImageMetadata',
       'addImage',
     ]),
     onFileChange (e) {
@@ -73,9 +74,10 @@ export default {
       if (!files.length) {
         return;
       }
-      [...files].forEach((image) => {
+      [...files].forEach(async (image) => {
+        const imageMetadata = await this.getImageMetadata({ image, obsId: this.obsId });
         this.addImage({ image, obsId: this.obsId });
-        this.hydrateImageMetadata({ image, obsId: this.obsId });
+        this.processExifData({ imageMetadata, obsId: this.obsId });
       });
     },
   },

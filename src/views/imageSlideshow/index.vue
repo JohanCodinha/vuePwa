@@ -24,7 +24,8 @@
            @click="closeInfoPanel">close</i>
       </div>
       <h2>Details</h2>
-      <p>Info page</p> 
+      <div class="details">
+      </div>
     </div>
   </div>
 </template>
