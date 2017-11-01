@@ -96,8 +96,11 @@ export default {
       this.slideoutOpen = !this.slideoutOpen;
     },
     backArrow () {
-      console.log('backarrow');
-      this.$router.go(-1);
+      if (/generalOb/g.test(this.$route.path)) {
+        console.log('going back to draft obs');
+        return this.$router.push({ name: 'draftObservations' });
+      }
+      return this.$router.go(-1);
     },
   },
   mounted: function mounted () {
@@ -114,16 +117,34 @@ export default {
 
 <style scoped>
 @font-face {
-  font-family: 'delwp';
-  src: url('./assets/fonts/hinted-VIC-Regular.woff2') format('woff2');
-  /*url('../assets/fonts/ratio.woff') format('woff'),*/
-  /*url('../assets/fonts/ratio.ttf') format('truetype');*/
+  font-family: 'vic';
+  src: 
+    url('./assets/fonts/hinted-VIC-Regular.woff2') format('woff2');
   font-weight: normal;
   font-style: normal;
 }
 
+@font-face {
+  font-family: 'vic';
+  src: 
+    url('./assets/fonts/hinted-VIC-Bold.woff2') format('woff2'),
+    url('./assets/fonts/hinted-VIC-SemiBold.woff2')  format('woff2'),
+    url('./assets/fonts/hinted-VIC-Medium.woff2') format('woff2');
+  font-weight: 700;
+  font-style: bold;
+}
+
+@font-face {
+  font-family: 'vic';
+  src: 
+    url('./assets/fonts/hinted-VIC-Medium.woff2') format('woff2'),
+    url('./assets/fonts/hinted-VIC-SemiBold.woff2')  format('woff2');
+  font-weight: 500;
+  font-style: medium;
+}
+
 #app {
-  font-family: 'delwp', Arial, sans-serif;
+  font-family: 'vic', Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;

@@ -21,6 +21,22 @@ const getters = {
   },
 };
 
+function ConvertDMSToDD (degrees, minutes, seconds, direction) {
+  if (typeof degrees !== 'number'
+    || typeof minutes !== 'number'
+    || typeof seconds !== 'number') return undefined;
+  const dd = degrees
+    + minutes / 60
+    + seconds / (60 * 60);
+  if (direction === 'S' || direction === 'W') {
+    return dd * -1;
+  } // Don't do anything for N or E
+  return dd;
+}
+function formatDate (exifDate) {
+  const [date, time] = [...exifDate.split(' ')];
+  return `${date.replace(/:/g, '-')}T${time}`;
+}
 // Actions
 const actions = {
   /* eslint-disable */
@@ -28,9 +44,9 @@ const actions = {
     const dbObservations = await db.observe.toArray();
     dbObservations.forEach((observation) => {
       let imagesAsBlob = observation.images.map((image) => {
-        const { data, exif } = image;
+        const { data, metadata } = image;
         return {
-          exif,
+          metadata,
           data: new Blob( [data], { type: "image/jpeg" } ),
         };
       });
@@ -88,23 +104,7 @@ const actions = {
     };
     return getExif(image, tags)
   },
-  async processExifData ({ commit, dispatch }, imageMetadata) {
-    function ConvertDMSToDD (degrees, minutes, seconds, direction) {
-      if (typeof degrees !== 'number'
-        || typeof minutes !== 'number'
-        || typeof seconds !== 'number') return undefined;
-      const dd = degrees
-        + minutes / 60
-        + seconds / (60 * 60);
-      if (direction === 'S' || direction === 'W') {
-        return dd * -1;
-      } // Don't do anything for N or E
-      return dd;
-    }
-    function formatDate (exifDate) {
-      const [date, time] = [...exifDate.split(' ')];
-      return `${date.replace(/:/g, '-')}T${time}`;
-    }
+  async processExifData ({ commit, dispatch }, { imageMetadata, obsId }) {
     const { latitude, latitudeRef, longitude, longitudeRef, datetime,
       positioningError, dilutionOfPrecision } = imageMetadata;
     console.log(imageMetadata);
@@ -115,14 +115,14 @@ const actions = {
       : null;
     const accuracy = positioningError || dilutionOfPrecision;
     const observation = getters.getObservationById(obsId);
-
-    dispatch('saveLocation', {
-      latitude: ddLatitude,
-      longitude: ddLongitude,
-      accuracy,
-      obsId,
-    });
-    // dispatch('setDatetime', { datetime: datetimeString, obsId });
+    if (ddLatitude && ddLongitude) {
+      dispatch('saveLocation', {
+        latitude: ddLatitude,
+        longitude: ddLongitude,
+        accuracy,
+        obsId,
+      });
+    }
     commit(types.SET_DATETIME, { datetime: datetimeString, observation });
   },
   async createObservation ({ commit }) {
@@ -194,23 +194,62 @@ const actions = {
       console.log(error);
     }
   },
-  async addImage ({ commit, getters }, { image, obsId }) {
-    let arrayBuffer;
-    let fileReader = new FileReader();
-    fileReader.onload = async function() {
-      try {
-        arrayBuffer = this.result;
-        const image = { data: arrayBuffer };
-        await db.observe.where('id').equals(obsId)
-          .modify(obs => obs.images.push(image));
-      } catch (error) {
-        console.log(error.message);
-        alert('fail to save image');
-      }
-    };
-    fileReader.readAsArrayBuffer(image); 
+  async removeImage ({commit, getters}, { imageId, obsId }) {
     const observation = getters.getObservationById(obsId);
-    commit('SAVE_IMAGE', { image: { data: image }, observation });
+    console.log('madeit', observation, obsId);
+    commit('DELETE_IMAGE', { imageId, observation });
+  },
+  async addImage ({ commit, getters }, { image: imageFile, metadata, obsId }) {
+    const fileToArrayBuffer = function (file) {
+      return new Promise ((resolve, reject) => {
+        let arrayBuffer;
+        let fileReader = new FileReader();
+        fileReader.onload = function() {
+          resolve(this.result);
+        }
+        return fileReader.readAsArrayBuffer(file);
+      });
+    }
+    try {
+      const {
+        latitude,
+        latitudeRef,
+        longitude, 
+        longitudeRef, 
+        datetime,
+        positioningError, 
+        dilutionOfPrecision 
+      } = metadata;
+      let ddLatitude = null;
+      let ddLongitude = null;
+      if (latitude && longitude) {
+        ddLatitude = ConvertDMSToDD(...latitude, latitudeRef);
+        ddLongitude = ConvertDMSToDD(...longitude, longitudeRef);
+      }
+      const datetimeString = datetime
+        ? formatDate(datetime)
+        : null;
+      const accuracy = positioningError || dilutionOfPrecision;
+      const metadataParsed = {
+        latitude: ddLatitude,
+        longitude: ddLongitude,
+        accuracy,
+        datetime: datetimeString,
+        allMetaData: metadata.allMetaData,
+      };
+      console.log(metadataParsed.allMetaData)
+      const observation = getters.getObservationById(obsId);
+      const imageId = observation.images.length + 1;
+      metadataParsed.id = imageId;
+
+      const imageArrayBuffer = await fileToArrayBuffer(imageFile);
+      const image = { data: imageArrayBuffer, metadata: metadataParsed };
+      commit('SAVE_IMAGE', { image: { data: imageFile, metadata: metadataParsed }, observation });
+      await db.observe.where('id').equals(obsId)
+        .modify(obs => obs.images.push(image));
+    } catch (error) {
+      console.log('here', error);
+    }
   },
   async selectSpecie ({ commit, getters }, { specie, obsId }) {
     const { taxonId, commonName = null, scientificName = null } = specie;
@@ -248,6 +287,10 @@ const mutations = {
   },
   [types.SAVE_IMAGE] (state, { image, observation }) {
     observation.images.push(image);
+  },
+  [types.DELETE_IMAGE] (state, { imageId, observation }) {
+     const imageIndex = observation.images.findIndex(image => image.metadata.id === imageId);
+    observation.images.splice(imageIndex, 1);
   },
   [types.SELECT_SPECIE] (state, { taxonomy, observation }) {
     Vue.set(observation, 'taxonomy', taxonomy);

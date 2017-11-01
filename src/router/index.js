@@ -27,7 +27,7 @@ export default new Router({
       redirect: '/observations',
     },
     {
-      path: '/img/slideshow/:observationId',
+      path: '/img/slideshow/:observationId/:imageId',
       name: 'imageSlideshow',
       component: imageSlideshow,
       props: true,

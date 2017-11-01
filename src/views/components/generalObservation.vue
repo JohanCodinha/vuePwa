@@ -6,25 +6,21 @@
         <imagePicker :observationId="obsId"></imagePicker>
       </div>
       <div @click="$router.push({ name: 'SpeciePicker', params : { observationId: obsId } })"class="form-block">
-        <template v-if="taxonId">
-        <dl>
-          <dt>Common name :</dt>
-          <dd>{{commonName}}</dd>
-          <dt>Scientific :</dt>
-          <dd>{{scientificName}}</dd>
-        </dl>
-        </template>
-        <template v-else>
           <div class="specie-lookup">
             <div>
               <i class="material-icons">search</i>
-              <p class="specie-lookup-text">Lookup Species</p>
+              <dl v-if="taxonId">
+                <dt>Common name :</dt>
+                <dd>{{commonName}}</dd>
+                <dt>Scientific :</dt>
+                <dd>{{scientificName}}</dd>
+              </dl>
+              <p v-else>class="specie-lookup-text">Lookup Species</p>
             </div>
             <div>
               <i class="material-icons">chevron_right</i>
             </div>
           </div>
-        </template>
       </div>
       <div class="form-block">
         <div class="location-picker">

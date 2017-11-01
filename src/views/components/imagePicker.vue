@@ -10,8 +10,8 @@
       </label>
      </li>
      <li v-for="thumbnail in thumbnails">
-       <img :src="thumbnail"
-        @click="$router.push({ name: 'imageSlideshow', params : { observationId: obsId } })">
+       <img :src="thumbnail.objectUrl"
+        @click="$router.push({ name: 'imageSlideshow', params : { observationId: obsId, imageId: thumbnail.imageId } })">
      </li>
      <li>
        <label for="imagePicker">
@@ -57,8 +57,12 @@ export default {
     thumbnails () {
       const draftObservation = this.activeDraft;
       if (draftObservation) {
-        console.log('images', draftObservation.images);
-        return draftObservation.images.map(image => URL.createObjectURL(image.data));
+        return draftObservation.images.map((image) => {
+          const objectUrl = URL.createObjectURL(image.data);
+          const imageId = image.metadata.id;
+          console.log({ objectUrl, imageId });
+          return { objectUrl, imageId };
+        });
       }
       return [];
     },
@@ -75,9 +79,14 @@ export default {
         return;
       }
       [...files].forEach(async (image) => {
-        const imageMetadata = await this.getImageMetadata({ image, obsId: this.obsId });
-        this.addImage({ image, obsId: this.obsId });
-        this.processExifData({ imageMetadata, obsId: this.obsId });
+        try {
+          const metadata = await this.getImageMetadata({ image, obsId: this.obsId });
+          console.log(metadata);
+          this.addImage({ image, metadata, obsId: this.obsId });
+          this.processExifData({ imageMetadata: metadata, obsId: this.obsId });
+        } catch (error) {
+          console.log(error);
+        }
       });
     },
   },
