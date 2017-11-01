@@ -15,7 +15,7 @@
                 <dt>Scientific :</dt>
                 <dd>{{scientificName}}</dd>
               </dl>
-              <p v-else>class="specie-lookup-text">Lookup Species</p>
+              <p class="specie-lookup-text" v-else>Lookup Species</p>
             </div>
             <div>
               <i class="material-icons">chevron_right</i>
