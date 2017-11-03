@@ -14,7 +14,7 @@
         <button class="button" @click="pickLocation">
           Done        
         </button>
-        <button v-show="coordinates" class="myLocation" @click="findLocation">
+        <button v-show="true" class="myLocation" @click="findLocation">
           <img class="" src="../../assets/my_location.svg">
         </button>
       </div>

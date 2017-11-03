@@ -36,21 +36,21 @@ import { createNamespacedHelpers } from 'vuex';
 
 const {
   mapActions: mapActionsLocation,
-  // mapGetters: mapGettersLocation,
+  mapGetters: mapGettersLocation,
 } = createNamespacedHelpers('location');
 
 export default {
   name: 'locationField',
   props: {
     observationId: {
-      type: Number,
+      type: [String, Number],
     },
     latitude: {
-      type: String,
+      type: Number,
       default () { return ''; },
     },
     longitude: {
-      type: String,
+      type: Number,
       default () { return ''; },
     },
     locationDescription: {
@@ -58,14 +58,19 @@ export default {
       default () { return ''; },
     },
   },
+  computed: {
+    ...mapGettersLocation([
+      'position',
+    ]),
+  },
   methods: {
     ...mapActionsLocation([
       'getPosition',
     ]),
     async getLocation () {
       try {
-        await this.getPosition();
-        const { latitude, longitude, accuracy } = this.position;
+        const position = await this.getPosition();
+        const { latitude, longitude, accuracy } = position;
         this.$store.dispatch('observe/saveLocation', { latitude, longitude, accuracy, obsId: this.observationId });
       } catch (error) {
         console.log(error);
