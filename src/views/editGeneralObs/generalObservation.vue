@@ -23,24 +23,11 @@
           </div>
       </div>
       <div class="form-block">
-        <div class="location-picker">
-          <i class="material-icons">pin_drop</i>
-          <div class="location" v-if="coordinates" @click="$router.push({ name: 'LocationPicker', params : { observationId: obsId } })">
-            <p>Lat: {{latitude}}</p>
-            <p>Long: {{longitude}}</p>
-            <p>{{locationDescription}}</p>
-          </div>
-          <div v-else class="buttons">
-            <button class="button"
-              @click="getLocation">
-              Use GPS
-              </button>
-              <button class="button"
-                @click="$router.push({ name: 'LocationPicker', params : { observationId: obsId } })">
-                Edit location
-              </button>
-            </div>
-        </div>
+        <location-field 
+          :observationId="observationId" 
+          :locationDescription="locationDescription"
+          :longitude="longitude"
+          :latitude="latitude"></location-field>
       </div>
       <div class="form-block">
         <datePicker :obsId="obsId"></datePicker>
@@ -99,6 +86,7 @@ import speciePicker from './speciePicker';
 import datePicker from './datePicker';
 import countPicker from './countPicker';
 import extraInfo from './extraInfo';
+import locationField from './components/locationField';
 
 const {
   mapGetters: mapGettersObserve,
@@ -117,6 +105,7 @@ export default {
     speciePicker,
     datePicker,
     countPicker,
+    'location-field': locationField,
     extraInfo,
   },
   props: {
@@ -176,7 +165,7 @@ export default {
     },
     latitude () {
       return this.coordinates
-        ? this.coordinates.latitude
+        ? this.coordinates.latitude.toString()
         : null;
     },
     longitude () {
@@ -266,20 +255,7 @@ export default {
     margin-left: .5rem;
   }
 
-  .location-picker {
-    margin: 1rem 1rem .5rem 1rem;
-    display: flex;
-  }
-
-  .location-picker div:first-child {
-    display: flex;
-    align-items: center;
-  }
-
-  .location-picker-initial-text {
-    margin-left: .5rem;
-    display: flex;
-  }
+  
   .form-block {
     border-bottom: 0.05rem solid rgba(32, 22, 71, 0.3);
     margin: .5rem 0 .5rem;
@@ -323,9 +299,6 @@ export default {
     display: flex;
     justify-content: space-around;
   }
-  .location {
-    margin-left: .5rem;
-  }
 
   .material-icons {
     display: flex;
@@ -333,18 +306,4 @@ export default {
     align-items: center;
   }
 
-  .location-picker {
-    .buttons {
-      display: flex;
-      margin-left: .5rem;
-      justify-content: space-around;
-      flex: 1;
-    }
-    button {
-      display: block;
-      width: 100%;
-      margin-left: .25rem;
-      margin-right: .25rem;
-    }
-  }
 </style>

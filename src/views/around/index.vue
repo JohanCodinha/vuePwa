@@ -31,7 +31,7 @@
 <script>
 import { createNamespacedHelpers } from 'vuex';
 import { debounce, get } from 'lodash'; // eslint-disable-line
-import specieSearchItem from '../components/specieSearchItem';
+import specieSearchItem from '@/views/editGeneralObs/specieSearchItem';
 import explorerMap from './explorerMap';
 
 const { mapActions, mapGetters } = createNamespacedHelpers('explore');

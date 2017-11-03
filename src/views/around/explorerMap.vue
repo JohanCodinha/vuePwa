@@ -30,7 +30,6 @@ export default {
       'position',
     ]),
     ...mapGettersExplore([
-    // 'position',
       'records',
     ]),
   },

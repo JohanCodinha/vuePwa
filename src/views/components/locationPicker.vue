@@ -10,12 +10,12 @@
         </div>
       </div>
       <img class="center-marker" :style="{ left: markerLeft, top: markerTop}" src="https://image.flaticon.com/icons/png/128/8/8168.png">
-      <div v-show="showButton" class="validate-location actions">
-        <button class="action-button" @click="pickLocation">
-          {{buttonMessage}}
+      <div v-show="true" class="validate-location actions">
+        <button class="button" @click="pickLocation">
+          Done        
         </button>
-        <button v-show="coordinates" class="action-button" @click="revertLocation">
-          revert
+        <button v-show="coordinates" class="myLocation" @click="findLocation">
+          <img class="" src="../../assets/my_location.svg">
         </button>
       </div>
     </div>
@@ -23,9 +23,14 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
+import { mapGetters, createNamespacedHelpers } from 'vuex';
 import mapboxgl from 'mapbox-gl';
 import token from '@/api/token.json';
+
+const {
+  mapGetters: mapGettersLocation,
+  mapActions: mapActionsLocation,
+} = createNamespacedHelpers('location');
 
 export default {
   name: 'locationPicker',
@@ -51,6 +56,9 @@ export default {
     },
   },
   computed: {
+    ...mapGettersLocation([
+      'position',
+    ]),
     ...mapGetters({
       getObservationById: 'observe/getObservationById',
       allitems: 'allitems',
@@ -109,15 +117,29 @@ export default {
       return zoom;
     },
     buttonMessage () {
-      return 'Validate Location';
+      return 'Done';
     },
     showButton () {
       return this.$data.moved;
     },
   },
   methods: {
-    ...mapActions([
+    ...mapActionsLocation([
+      'getPosition',
     ]),
+    async findLocation () {
+      const position = await this.getPosition();
+      const { latitude, longitude } = position;
+      this.mapCenter = {
+        lng: longitude,
+        lat: latitude,
+      };
+      const center = [longitude, latitude];
+      this.$data.map.flyTo({
+        center,
+        zoom: 12,
+      });
+    },
     pickLocation () {
       const location = this.$data.mapCenter;
       const obsId = this.activeDraft.id;
@@ -125,6 +147,7 @@ export default {
       this.$data.moved = false;
       this.$data.map.flyTo({ zoom: 12 });
       this.$store.dispatch('observe/saveLocation', { latitude, longitude, accuracy: 10, obsId });
+      this.$router.go(-1);
     },
     revertLocation () {
       const center = [this.longitude, this.latitude];
@@ -232,6 +255,9 @@ export default {
   z-index: 2;
   box-shadow: 5px black;
   display: flex;
+  align-items: center;
+  width: 100%;
+  justify-content: space-around;
 }
 
 .action-button {
@@ -255,11 +281,21 @@ export default {
   font-size: 1rem;
   align-items: center;
   border-radius: 3px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.3);
 }
 
 .location-display a {
   font-size: 2rem;
   margin-right: 1rem;
   margin-left: .5rem;
+}
+
+.myLocation {
+    width: 56px;
+    height: 56px;
+    border-radius: 28px;
+    background-color: white;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+    border: white;
 }
 </style>

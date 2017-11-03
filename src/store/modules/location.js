@@ -47,9 +47,11 @@ const actions = {
       const position = await getCurrentPosition;
       console.log(position);
       commit(types.SET_POSITION, position);
+      return position;
     } catch (error) {
       console.log(error);
       commit(types.POSITION_ERROR, error);
+      throw error;
     }
   },
 };
