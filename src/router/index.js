@@ -11,6 +11,7 @@ import observationsList from '@/views/observations/index';
 import around from '@/views/around/index';
 import speciesDetails from '@/views/speciesDetails/index';
 import imageSlideshow from '@/views/imageSlideshow/index';
+import aboutPage from '@/views/about/index';
 
 Vue.use(Router);
 
@@ -23,8 +24,9 @@ export default new Router({
       component: signin,
     },
     {
-      path: '/',
-      redirect: '/observations',
+      path: '/about',
+      name: 'aboutPage',
+      component: aboutPage,
     },
     {
       path: '/img/slideshow/:observationId/:imageId',

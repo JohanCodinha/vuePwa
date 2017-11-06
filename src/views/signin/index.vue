@@ -78,7 +78,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 
 h1 {
   font-size: 1.8rem;
@@ -92,21 +92,19 @@ h2 {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin: 1rem;
-  margin-top: 10%;
+  margin: 0 .5rem 0 .5rem;
 }
 
 .instruction {
   text-align: center;
-}
-
-.instruction img {
-  max-width: 50%;
-  margin-bottom: 5%;
+  margin-top: 1rem;
+  img {
+    max-width: 25vw; 
+  }
 }
 
 form {
-  margin-top: 10%;
+  margin-top: 2rem;
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -152,23 +150,7 @@ form {
 }
 
 .button {
-  -webkit-appearance: none;
-  background: #201547;
-  border: 0;
-  color: #fff;
-  font-size: 1rem;
-  height: 3.125rem;
-  /*min-width: 9.6875rem;*/
-  margin: 1rem;
-  /*padding: 0.875rem 1.25rem;*/
-  letter-spacing: .05rem;
-  text-align: center;
-  text-decoration: none;
-  border-radius: 2px;
-  box-shadow: 
-  0 2px 2px 0 rgba(0,0,0,0.14),
-  0 1px 5px 0 rgba(0,0,0,0.12),
-  0 3px 1px -2px rgba(0,0,0,0.2);
+  font-size: 1.3rem;
 }
 
 </style>

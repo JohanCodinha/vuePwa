@@ -3,8 +3,6 @@
     <img v-if="imageSources" slot="image" :src="imageSources">
     <dl slot="content">
       <div class="content">
-        <div>
-        </div> 
         <div class="description">
           <dt v-if="commonName || scientificName">Species</dt>
           <dd>{{commonName || scientificName}}</dd>
@@ -96,14 +94,16 @@ export default {
 <style lang="scss" scoped>
   .content {
     display: flex;
+    height: 100%;
     img {
       max-width: 3rem;
     }
     dd {
-      font-size: 1.2rem;
-      font-weight: 600;
+      font-size: 1rem;
+      font-weight: 500;
     }
     dt {
+      font-size: .8rem;
       color: #5d636a;
     }
   }

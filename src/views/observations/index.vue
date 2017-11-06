@@ -1,20 +1,15 @@
 <template>
   <div :class="{ center: (logedIn && generalObs.length < 1)}" class="container">
-  <div class="no-obs" v-if="logedIn && generalObs.length < 1">
-    <p>No observation</p>
-    <router-link to='/observations/drafts'>
-      let's get started
-    </router-link>
-  </div>
-  <div class="loggedOut" v-if="!logedIn">
-    <h1>
-      <router-link class="link" :to="{ name: 'Signin'}">Sign in</router-link>
-      to the Victorian Biodiversity Atlas to see your observations
-    </h1>
-  </div>
+    <div class="no-obs" v-if="logedIn && generalObs.length < 1">
+      <p>No observation</p>
+      <router-link to='/observations/drafts'>
+        let's get started
+      </router-link>
+    </div>
     <h1 v-if="generalObs.length > 0">{{generalObs.length}} saved observations</h1>
-    <ul>
-      <observation-card v-for="record in generalObs"
+    <ul class="observationsList">
+      <observation-card class="observationCard"  
+        v-for="record in generalObs"
         :scientificName="record.species && record.species.length && record.species[0].scientificNme"
         :commonName="record.species && record.species.length && record.species[0].commonNme"
         :imagesId="record.species[0] && record.species[0].images.map(i=>i.id)"
@@ -69,7 +64,16 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+  @media (min-width: 320px) {
+ }
+  .observationsList {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+
   .container {
     margin: 0 .5rem 0 .5rem;
     padding-bottom: .5rem;
@@ -90,6 +94,23 @@ export default {
     justify-content: center;
     align-items: center;
     text-align: center;
+
+    div {
+      margin: 1rem 0 1rem 0 
+    }
+    img {
+      max-width: 25vw;
+    }
+
+    h1 {
+      color: black;
+      font-size: 2rem;
+    }
+
+    .button {
+      display: inline-block;
+      font-size: 1.2rem;
+    }
   }
 
   .link {
@@ -108,5 +129,19 @@ export default {
 
   .no-obs {
     font-size: 1.8rem;
+  }
+
+  .observationCard  {
+    width: 49%;
+    align-self: stretch;
+    @media screen and (max-width:320px) {
+      width: 100%; 
+    }
+    @media screen and (min-width:768px) {
+      width: 33%; 
+    }
+    @media screen and (min-width:1024px) {
+      width: 24.5%; 
+    }
   }
 </style>

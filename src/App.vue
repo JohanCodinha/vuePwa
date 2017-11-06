@@ -58,6 +58,7 @@ export default {
     displayBackArrow () {
       switch (this.$route.path) {
         case '/':
+        case '/about':
         case '/observations':
         case '/observations/drafts':
         case '/explore':
