@@ -64,7 +64,6 @@ export default {
   flex-grow: 1;
   justify-content: space-between;
   flex-direction: column;
-  height: 100%; 
 }
 
 .visible-content{

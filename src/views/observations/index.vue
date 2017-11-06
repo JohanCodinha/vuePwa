@@ -65,8 +65,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  @media (min-width: 320px) {
- }
   .observationsList {
     display: flex;
     flex-wrap: wrap;
@@ -134,6 +132,9 @@ export default {
   .observationCard  {
     width: 49%;
     align-self: stretch;
+    display: flex;
+    flex-direction: column;
+
     @media screen and (max-width:320px) {
       width: 100%; 
     }

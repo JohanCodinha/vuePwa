@@ -94,7 +94,6 @@ export default {
 <style lang="scss" scoped>
   .content {
     display: flex;
-    height: 100%;
     img {
       max-width: 3rem;
     }
