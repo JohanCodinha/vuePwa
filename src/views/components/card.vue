@@ -55,6 +55,8 @@ export default {
   margin: .5rem 0 0 0;
   background-color: #fff;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .card-content_ {
