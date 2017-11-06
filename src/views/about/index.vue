@@ -1,7 +1,9 @@
 <template>
   <div class="loggedOut">
-    <img src="../../assets/Environment.svg">
-    <h1>Vba Go</h1>
+    <div class="hero">
+      <img src="../../assets/Environment.svg">
+      <h1>Vba Go</h1>
+    </div>
     <div>
       <p>
         Share your observations,
@@ -36,7 +38,7 @@ export default {
     ]),
     startLink () {
       return this.isLogin
-        ? { name: 'Observations' }
+        ? { name: 'observations' }
         : { name: 'Signin' };
     },
   },
@@ -53,7 +55,6 @@ export default {
   }
 
   h1 {
-    font-size: 1rem;
     margin: .5rem .5rem 0 .5rem;
   }
 
@@ -66,7 +67,8 @@ export default {
     text-align: center;
 
     div {
-      margin: 1rem 0 1rem 0 
+      margin: 1rem 0 1rem 0;
+      font-size: 5vw;
     }
     img {
       max-width: 25vw;
@@ -74,13 +76,17 @@ export default {
 
     h1 {
       color: black;
-      font-size: 2rem;
+      font-size: 10vw;
     }
 
     .button {
       display: inline-block;
       font-size: 1.2rem;
     }
+  }
+  
+  .hero {
+  
   }
 
   .link {

@@ -7,8 +7,8 @@
         <p>New general observation</p>
       </a>
     </div>
-    <ul>
-      <draft-observation-card v-for="obs in observations"
+    <ul class="observationsList">
+      <draft-observation-card class="observationCard" v-for="obs in observations"
         :obsId="obs.id"
         :specieName="obs.taxonomy.commonName"
         :siteName="obs.position.description"
@@ -61,7 +61,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .container {
   margin: 0 .5rem 0 .5rem;
   padding-bottom: .5rem;
@@ -110,4 +110,27 @@ h1 {
   justify-content: center;
   align-items: center;
 }
+
+
+  .observationCard  {
+    width: 49%;
+    align-self: stretch;
+    @media screen and (max-width:320px) {
+      width: 100%; 
+    }
+    @media screen and (min-width:768px) {
+      width: 33%; 
+    }
+    @media screen and (min-width:1024px) {
+      width: 24.5%; 
+    }
+  }
+
+
+  .observationsList {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
 </style>

@@ -24,6 +24,10 @@ export default new Router({
       component: signin,
     },
     {
+      path: '/',
+      redirect: '/about',
+    },
+    {
       path: '/about',
       name: 'aboutPage',
       component: aboutPage,

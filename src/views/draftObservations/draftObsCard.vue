@@ -85,7 +85,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .button {
   color: #26a69a;
   background-color: transparent;
@@ -102,15 +102,14 @@ export default {
 
 .content {
   width: 100%;
-}
-
-.content dl dd {
-  font-size: 1.2rem;
-  font-weight: 600;
-}
-
-.content dl dt {
-  color: #5d636a;
+  dt {
+    font-size: .8rem;
+    color: #5d636a;
+  }
+  dd {
+    font-size: 1rem;
+    font-weight: 500;
+  }
 }
 
 img {

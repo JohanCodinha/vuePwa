@@ -155,7 +155,9 @@ export default {
 
 </style>
 
-<style>
+<style lang="scss">
+.descripton {
+}
 #data-list {
   margin-left: 1rem;
   margin-right: 1rem;
