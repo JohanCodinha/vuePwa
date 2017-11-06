@@ -17,6 +17,11 @@
 h1 {
   font-size: 1.8rem;
 }
+
+input, textarea, select {
+   -webkit-appearance: none;
+}
+
 html {
  background-color: #f5f5f5;
 }
