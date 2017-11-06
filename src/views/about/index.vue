@@ -1,5 +1,5 @@
 <template>
-  <div class="loggedOut">
+  <div class="container">
     <div class="hero">
       <img src="../../assets/Environment.svg">
       <h1>Vba Go</h1>
@@ -46,37 +46,38 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .container {
-    margin: 0 .5rem 0 .5rem;
-    padding-bottom: .5rem;
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 3rem;
-  }
 
   h1 {
     margin: .5rem .5rem 0 .5rem;
   }
 
-  .loggedOut {
+  .container {
     display: flex;
     flex: 1;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
     text-align: center;
-
+    margin-top: 10vh;
     div {
       margin: 1rem 0 1rem 0;
       font-size: 5vw;
+      @media screen and (min-width:1024px) {
+        font-size: 2rem;
+      }
     }
     img {
       max-width: 25vw;
+      @media screen and (min-width:1024px) {
+        max-width: 15rem;
+      }
     }
 
     h1 {
       color: black;
       font-size: 10vw;
+      @media screen and (min-width:1024px) {
+        font-size: 6.5rem;
+      }
     }
 
     .button {
@@ -85,10 +86,6 @@ export default {
     }
   }
   
-  .hero {
-  
-  }
-
   .link {
     color: #00b7bd;
     text-decoration: underline;
