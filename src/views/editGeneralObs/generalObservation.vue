@@ -36,7 +36,7 @@
         <extraInfo :obsId="obsId"></extraInfo>  
       </div>
       <div class="form-block">
-        <notes-field></notes-field>
+        <notes-field :obsId="obsId" ></notes-field>
       </div>
       <div class="form-block">
         <countPicker :obsId="obsId"></countPicker>
@@ -239,7 +239,6 @@ export default {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    color: black;
   }
 
   .specie-lookup div:first-child {
@@ -264,8 +263,8 @@ export default {
 
   .action {
     display: flex;
-    width: 100%;
     justify-content: center;
+    margin: 2rem;
   }
 
   .button {

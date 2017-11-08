@@ -175,7 +175,7 @@ const actions = {
     formData.append('longitude', longitude);
     formData.append('accuracy', accuracy || 5);
     formData.append('commonName', commonName);
-    formData.append('scientificNmae', scientificName);
+    formData.append('scientificNmae', scientificName);;
     formData.append('taxonId', taxonId);
     formData.append('count', count || 1);
     formData.append('dateTime', datetime);
@@ -270,8 +270,16 @@ const actions = {
   setExtraInfo ({ commit }, { code, obsId }) {
     commit('SET_EXTRA_CODE', { code, obsId });
   },
+  setNotes ({ commit, getters }, { notes, obsId }) {
+    const observation = getters.getObservationById(obsId)
+    console.log(observation, notes, obsId);
+    db.observe.where('id').equals(obsId).modify(obs => 
+      obs.notes = notes );
+    commit('SET_NOTES', { notes, observation });
+  },
   setDatetime ({ commit, getters }, { datetimeString, obsId }) {
     const observation = getters.getObservationById(obsId);
+    console.log(observation);
     commit(types.SET_DATETIME, { datetime: datetimeString, observation });
   },
 };
@@ -310,6 +318,9 @@ const mutations = {
   },
   [types.SET_COUNT] (state, { count, observation }) {
     Vue.set(observation, 'count', count);
+  },
+  [types.SET_NOTES] (state, { notes, observation }) {
+    Vue.set(observation, 'notes', notes);
   },
   [types.SET_EXTRA_CODE] (state, { code, obsId }) {
     const observation = state.items.find(obs => obs.id === obsId);

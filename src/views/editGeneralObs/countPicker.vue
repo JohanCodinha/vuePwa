@@ -1,6 +1,9 @@
 <template>
-  <div class="">
-    <label for="count">Count:</label>
+  <div class="countPicker">
+    <label for="count">
+      <i class="material-icons">grain</i>
+      Count
+    </label>
     <div class="count-picker">
       <i @click="remove" class="material-icons">exposure_minus_1</i>
       <input class="number-input"
@@ -72,52 +75,62 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+.countPicker {
+  display: flex;
+  margin: 1rem 1rem .5rem 1rem;
+  label {
+    display: flex;
+    flex-direction: column;
+  }
+}
 h1, h2 {
-  font-weight: normal;
-}
+    font-weight: normal;
+  }
 
-ul {
-  list-style-type: none;
-  display: flex;
-  flex-direction: column;
-}
+  ul {
+    list-style-type: none;
+    display: flex;
+    flex-direction: column;
+  }
 
-li {
-  display: inline-block;
-  margin: .1rem;
-  border: 1px solid black
-}
+  li {
+    display: inline-block;
+    margin: .1rem;
+    border: 1px solid black
+  }
 
-li:hover {
-  display: inline-block;
-  margin: .1rem;
-  border: 1px solid pink
-}
+  li:hover {
+    display: inline-block;
+    margin: .1rem;
+    border: 1px solid pink
+  }
 
-a {
-  color: #42b983;
-}
-.count-picker {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-}
+  a {
+    color: #42b983;
+  }
+  .count-picker {
+    display: flex;
+    flex: 1;
+    justify-content: space-around;
+    align-items: center;
+  }
 
-.number-input {
-  text-align: center;
-  display: block;
-  width: 4rem;
-  height: 100%;
-  padding: 8px 12px 9px;
-  box-sizing: border-box;
-  background-color: #fff;
-  border-radius: 2px;
-  outline: none;
-  border: 0;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
-  -webkit-appearance: none;
-}
+  .number-input {
+    text-align: center;
+    display: block;
+    width: 4rem;
+    height: 100%;
+    padding: 8px 12px 9px;
+    box-sizing: border-box;
+    background-color: #fff;
+    border-radius: 2px;
+    outline: none;
+    border: 0;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    -webkit-appearance: none;
+    -moz-appearance:textfield;
+  }
 </style>

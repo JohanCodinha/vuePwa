@@ -4,63 +4,49 @@
       <i class="material-icons">comment</i>
     </label>
     <textarea class="textarea" 
+              v-model="notes"
               name="notes"
-              placeholder="Notes..."></textarea>
+              placeholder="Notes...">
+    </textarea>
   </div>
 </template>
 
 <script>
 import { createNamespacedHelpers } from 'vuex';
+import { get } from 'lodash';
 
 const {
-  mapActions: mapActionsLocation,
-  mapGetters: mapGettersLocation,
-} = createNamespacedHelpers('location');
+  mapActions: mapActionsObserve,
+  mapGetters: mapGettersObserve,
+} = createNamespacedHelpers('observe');
 
 export default {
-  name: 'locationField',
+  name: 'notes-field',
   props: {
-    observationId: {
+    obsId: {
       type: [String, Number],
-    },
-    latitude: {
-      type: Number,
-      default () { return ''; },
-    },
-    longitude: {
-      type: Number,
-      default () { return ''; },
-    },
-    locationDescription: {
-      type: String,
-      default () { return ''; },
     },
   },
   computed: {
-    ...mapGettersLocation([
-      'position',
+    ...mapGettersObserve([
+      'getObservationById',
     ]),
-    description () {
-      const csv = this.locationDescription.split(',');
-      return `${csv[0]}, ${csv[1]}`;
+    observation () {
+      return this.getObservationById(this.obsId);
     },
-    coordinates () {
-      return `${this.latitude.toString().slice(0, 8)}, ${this.longitude.toString().slice(0, 8)}`;
+    notes: {
+      get: function getter () {
+        return get(this.observation, 'notes', '');
+      },
+      set: function setter (notes) {
+        this.setNotes({ notes, obsId: this.obsId });
+      },
     },
   },
   methods: {
-    ...mapActionsLocation([
-      'getPosition',
+    ...mapActionsObserve([
+      'setNotes',
     ]),
-    async getLocation () {
-      try {
-        const position = await this.getPosition();
-        const { latitude, longitude, accuracy } = position;
-        this.$store.dispatch('observe/saveLocation', { latitude, longitude, accuracy, obsId: this.observationId });
-      } catch (error) {
-        console.log(error);
-      }
-    },
   },
 };
 </script>

@@ -72,17 +72,6 @@ export default {
 
 <style lang="scss" scoped>
 .form-select {
-/*  opacity: 0;
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  cursor: pointer;
-  z-index: 1;
-  display: block;
-  font-size: 16px;
-  background: #fff;
-  overflow: hidden;
-  -webkit-appearance: menulist-button;*/
   width: 100%;
   position: relative;
   display: inline-block;
