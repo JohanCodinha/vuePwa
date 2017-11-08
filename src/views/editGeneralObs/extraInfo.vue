@@ -1,6 +1,6 @@
 <template>
   <div class="input-field">
-    <label for="extra-info">Extra information:</label>
+    <i class="material-icons">info_outline</i>
     <select class="form-select" name="extra-info" id="extra-info" v-model="selected">
       <option v-for="option in options"
         :value="option.value">{{ option.text }}</option>
@@ -70,7 +70,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .form-select {
 /*  opacity: 0;
   width: 100%;
@@ -94,5 +94,14 @@ export default {
   font-size: 16px;
   line-height: 16px;
   height: 2rem;
+}
+
+.input-field {
+  display: flex;
+  align-items: center;
+  margin: 1rem 1rem .5rem 1rem;
+  i {
+    margin-right: .5rem;
+  }
 }
 </style>

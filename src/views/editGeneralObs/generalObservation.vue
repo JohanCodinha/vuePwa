@@ -36,13 +36,7 @@
         <extraInfo :obsId="obsId"></extraInfo>  
       </div>
       <div class="form-block">
-        <div class="input-field">
-          <label>
-            Notes :
-          </label>
-          <textarea class="textarea" name="notes"
-            placeholder="..."></textarea>
-        </div>
+        <notes-field></notes-field>
       </div>
       <div class="form-block">
         <countPicker :obsId="obsId"></countPicker>
@@ -87,6 +81,7 @@ import datePicker from './datePicker';
 import countPicker from './countPicker';
 import extraInfo from './extraInfo';
 import locationField from './components/locationField';
+import notesField from './components/notesField';
 
 const {
   mapGetters: mapGettersObserve,
@@ -107,6 +102,7 @@ export default {
     countPicker,
     'location-field': locationField,
     extraInfo,
+    'notes-field': notesField,
   },
   props: {
     observationId: {
