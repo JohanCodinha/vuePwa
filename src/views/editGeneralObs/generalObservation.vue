@@ -2,7 +2,7 @@
   <div class="general-observation">
     <div class="container">
       <div class="form-block">
-        <p>Add images :</p>
+        <h1>I observed...</h1>
         <imagePicker :observationId="obsId"></imagePicker>
       </div>
       <div @click="$router.push({ name: 'SpeciePicker', params : { observationId: obsId } })"class="form-block">
@@ -165,7 +165,7 @@ export default {
     },
     latitude () {
       return this.coordinates
-        ? this.coordinates.latitude.toString()
+        ? this.coordinates.latitude
         : null;
     },
     longitude () {
@@ -257,9 +257,13 @@ export default {
 
   
   .form-block {
-    border-bottom: 0.05rem solid rgba(32, 22, 71, 0.3);
+    //border-bottom: 0.05rem solid rgba(32, 22, 71, 0.3);
     margin: .5rem 0 .5rem;
     padding-bottom: .5rem;
+    h1 {
+      margin: 1rem;
+      font-size: 1.5rem;
+    }
   }
 
   .action {

@@ -1,21 +1,24 @@
 <template>
   <div class="imagePicker">
-   <ul>
-     <li>
-      <input type="file" name="imagePicker" id="imagePicker" class="inputFile"
-        multiple
-        @change="onFileChange">
+    <div class="icons">
+      <input type="file"
+             name="imagePicker" 
+             id="imagePicker" 
+             class="inputFile"
+             multiple
+             @change="onFileChange">
       <label for="imagePicker">
         <i class="material-icons">add_a_photo</i>
       </label>
-     </li>
-     <li v-for="thumbnail in thumbnails">
-       <img :src="thumbnail.objectUrl"
-        @click="$router.push({ name: 'imageSlideshow', params : { observationId: obsId, imageId: thumbnail.imageId } })">
-     </li>
-     <li>
-       <label for="imagePicker">
-        <i class="material-icons">add</i>
+    </div>
+    <ul>
+      <li class="thumbnail" v-for="thumbnail in thumbnails">
+        <img :src="thumbnail.objectUrl"
+          @click="$router.push({ name: 'imageSlideshow', params : { observationId: obsId, imageId: thumbnail.imageId } })">
+      </li>
+      <li class="addIcons" v-if="thumbnails.length > 0">
+        <label for="imagePicker">
+          <i class="material-icons">add</i>
        </label> 
      </li>
    </ul>
@@ -93,7 +96,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 h1, h2 {
   font-weight: normal;
 }
@@ -123,7 +126,12 @@ img {
 
 .imagePicker {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
+
+  li {
+    min-width: 25%;
+    flex: 1;
+  }
 }
 
 
@@ -150,5 +158,21 @@ img {
 
 .material-icons {
   margin-left: 0.6rem;
+}
+
+.icons{
+  margin-right: 1rem;
+}
+
+.thumbnail {
+}
+
+.addIcons {
+  label {
+    margin: auto;
+  }
+  i {
+    margin: 0;
+  }
 }
 </style>

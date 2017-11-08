@@ -4,14 +4,9 @@
     <div v-if="latitude && longitude"
          class="location"
          @click="$router.push({ name: 'LocationPicker', params : { observationId }})">
-      <p>{{locationDescription}}</p>
-      <div>
-        <dl>
-          <dt>Lat </dt>
-          <dd>{{latitude}}</dd>
-          <dt>Long</dt>
-          <dd>{{longitude}}</dd>
-        </dl>
+      <p class="description">{{description}}</p>
+      <div class="coordinates">
+        <p>{{coordinates}}</p>
       </div>
     </div>
     <div v-else
@@ -62,6 +57,13 @@ export default {
     ...mapGettersLocation([
       'position',
     ]),
+    description () {
+      const csv = this.locationDescription.split(',');
+      return `${csv[0]}, ${csv[1]}`;
+    },
+    coordinates () {
+      return `${this.latitude.toString().slice(0, 8)}, ${this.longitude.toString().slice(0, 8)}`;
+    },
   },
   methods: {
     ...mapActionsLocation([
@@ -81,10 +83,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.location-picker {
+  .location-picker {
     margin: 1rem 1rem .5rem 1rem;
     display: flex;
     align-items: center;
+    .description {
+      font-weight: 500; 
+    }
   }
 
   .location-picker div:first-child {
@@ -112,6 +117,12 @@ export default {
       margin-left: .25rem;
       margin-right: .25rem;
       padding: 0;
+    }
+  }
+
+  .coordinates {
+    div {
+      
     }
   }
 </style>

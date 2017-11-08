@@ -100,6 +100,9 @@ h2 {
   margin-top: 1rem;
   img {
     max-width: 25vw; 
+    @media screen and (min-width:768px) {
+      max-width: 15rem; 
+    }
   }
 }
 

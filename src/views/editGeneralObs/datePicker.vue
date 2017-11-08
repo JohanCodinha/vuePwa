@@ -59,17 +59,12 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .date-picker {
   display: flex;
-  /*flex-direction: column;*/
   align-items: center;
   flex: 1;
-  width: 100%;
-}
-
-.material-icons {
-  margin-left: 1rem;
+  margin: 1rem 1rem .5rem 1rem;
 }
 
 .date-picker input {
