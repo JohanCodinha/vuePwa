@@ -1,10 +1,25 @@
 <template>
   <div class="input-field">
     <i class="material-icons">info_outline</i>
-    <select class="form-select" name="extra-info" id="extra-info" v-model="selected">
+    <ul class="radioList">
+      <li v-for="option in options">
+        <input type="radio"
+               :id="option.text"
+               :value="option.value"
+               name="extraInfo"
+               v-model="selected"i>
+        <!-- @click="radioClick(option.value, selected)"> -->
+        <label :for="option.text">
+          <i class="material-icons">radio_button_{{option.value === selected ? 'checked':'unchecked'}}</i>
+          <p>{{option.text}}</p>
+        </label>
+      </li>
+    </ul>
+    <!-- <select class="form-select" name="extra-info" id="extra-info" v-model="selected">
       <option v-for="option in options"
         :value="option.value">{{ option.text }}</option>
     </select>
+    --> 
   </div>
 </template>
 
@@ -21,7 +36,6 @@ export default {
   data () {
     return {
       options: [
-        { text: '', value: null },
         // { text: 'Beach washed', value: 'w' },
         { text: 'Breeding', value: 'b' },
         // { text: 'Carnivore bait', value: 'carni' },
@@ -58,7 +72,11 @@ export default {
         return this.activeDraft.extraInfoCode;
       },
       set: function setter (code) {
-        this.setExtraInfo({ code, obsId: this.obsId });
+        console.log(code);
+        if (this.selected === code) {
+          return this.setExtraInfo({ code: null, obsId: this.obsId });
+        }
+        return this.setExtraInfo({ code, obsId: this.obsId });
       },
     },
   },
@@ -66,6 +84,12 @@ export default {
     ...mapActionsObserve([
       'setExtraInfo',
     ]),
+    radioClick (code, selected) {
+      console.log(code, selected);
+      if (selected === code) {
+        this.setExtraInfo({ code: null, obsId: this.obsId });
+      }
+    },
   },
 };
 </script>
@@ -92,5 +116,30 @@ export default {
   i {
     margin-right: .5rem;
   }
+}
+
+.radioList {
+  display: flex;
+  li {
+    display: flex;
+    max-height: 2rem;
+    background-color: #dfdfdf;
+    border-radius: 1rem;
+    margin: .5rem;
+    padding-right: .5rem;
+  }
+  label {
+    color: #2c3f50;
+    display: flex;
+    align-items: center;
+  }
+  input {
+    margin: 0;
+    display: none;
+  }
+  i {
+    margin: .3rem;
+  }
+
 }
 </style>

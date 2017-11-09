@@ -10,9 +10,9 @@
             <div>
               <i class="material-icons">search</i>
               <dl v-if="taxonId">
-                <dt>Common name :</dt>
-                <dd>{{commonName}}</dd>
-                <dt>Scientific :</dt>
+                <!-- <dt>Common name :</dt>-->
+                <dd class="commonName" >{{commonName}}</dd>
+                <!--<dt>Scientific :</dt>-->
                 <dd>{{scientificName}}</dd>
               </dl>
               <p class="specie-lookup-text" v-else>Lookup Species</p>
@@ -239,6 +239,13 @@ export default {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    dl {
+      margin-left: .5rem;
+    }
+    .commonName {
+      font-size: 1.2rem;
+      font-weight: 500;
+    }
   }
 
   .specie-lookup div:first-child {
