@@ -159,7 +159,7 @@ const actions = {
   async uploadObservation ({ rootState, commit, dispatch }, { observation }) {
     const jwt = rootState.account.jwt.value;
     const { userId, username } = rootState.account;
-    const images = observation.images;
+    const images = observation.images.map(image => image.data);
     const {
       latitude,
       longitude,

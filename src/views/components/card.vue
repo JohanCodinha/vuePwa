@@ -52,7 +52,7 @@ export default {
   transition: box-shadow .25s, -webkit-box-shadow .25s;
   border-radius: 2px;
   position: relative;
-  margin: .5rem 0 0 0;
+  // margin: .5rem 0 0 0;
   background-color: #fff;
   overflow: hidden;
   display: flex;

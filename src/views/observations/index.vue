@@ -7,6 +7,7 @@
       </router-link>
     </div>
     <h1 v-if="generalObs.length > 0">{{generalObs.length}} saved observations</h1>
+    <div>
     <ul class="observationsList">
       <observation-card class="observationCard"  
         v-for="record in generalObs"
@@ -20,6 +21,7 @@
         :key="record.surveyId">
       </observation-card>
     </ul>
+    </div>
   </div>
 </template>
 
@@ -69,7 +71,7 @@ export default {
     display: flex;
     flex-wrap: wrap;
     align-items: flex-start;
-    justify-content: space-between;
+   // justify-content: space-between;
   }
 
   .container {
@@ -134,12 +136,12 @@ export default {
     align-self: stretch;
     display: flex;
     flex-direction: column;
-
+    margin: .125rem;
     @media screen and (max-width:320px) {
       width: 100%; 
     }
     @media screen and (min-width:768px) {
-      width: 33%; 
+      width: 32%; 
     }
     @media screen and (min-width:1024px) {
       width: 24.5%; 

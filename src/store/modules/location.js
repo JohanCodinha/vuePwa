@@ -62,7 +62,7 @@ const mutations = {
     const previousLat = state.latitude;
     const previousLon = state.longitude;
     const previousAccu = state.accuracy;
-
+    console.log(state);
     // const position = {
     state.latitude = latitude || previousLat;
     state.longitude = longitude || previousLon;

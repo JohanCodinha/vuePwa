@@ -115,11 +115,12 @@ h1 {
   .observationCard  {
     width: 49%;
     align-self: stretch;
+    margin: .125rem;
     @media screen and (max-width:320px) {
       width: 100%; 
     }
     @media screen and (min-width:768px) {
-      width: 33%; 
+      width: 32%; 
     }
     @media screen and (min-width:1024px) {
       width: 24.5%; 
@@ -131,6 +132,6 @@ h1 {
     display: flex;
     flex-wrap: wrap;
     align-items: flex-start;
-    justify-content: space-between;
+    // justify-content: space-between;
   }
 </style>

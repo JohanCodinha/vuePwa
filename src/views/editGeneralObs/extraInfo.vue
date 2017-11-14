@@ -7,8 +7,7 @@
                :id="option.text"
                :value="option.value"
                name="extraInfo"
-               v-model="selected"i>
-        <!-- @click="radioClick(option.value, selected)"> -->
+               @click="radioClick(option.value)"> 
         <label :for="option.text">
           <i class="material-icons">radio_button_{{option.value === selected ? 'checked':'unchecked'}}</i>
           <p>{{option.text}}</p>
@@ -66,29 +65,21 @@ export default {
     activeDraft () {
       return this.getObservationById(this.obsId);
     },
-    selected: {
-      get: function getter () {
-        if (!this.activeDraft) return null;
-        return this.activeDraft.extraInfoCode;
-      },
-      set: function setter (code) {
-        console.log(code);
-        if (this.selected === code) {
-          return this.setExtraInfo({ code: null, obsId: this.obsId });
-        }
-        return this.setExtraInfo({ code, obsId: this.obsId });
-      },
+    selected () {
+      if (!this.activeDraft) return null;
+      return this.activeDraft.extraInfoCode;
     },
   },
   methods: {
     ...mapActionsObserve([
       'setExtraInfo',
     ]),
-    radioClick (code, selected) {
-      console.log(code, selected);
-      if (selected === code) {
-        this.setExtraInfo({ code: null, obsId: this.obsId });
+    radioClick (code) {
+      console.log(code, this.selected);
+      if (this.selected === code) {
+        return this.setExtraInfo({ code: null, obsId: this.obsId });
       }
+      return this.setExtraInfo({ code, obsId: this.obsId });
     },
   },
 };
