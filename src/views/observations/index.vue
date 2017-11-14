@@ -136,7 +136,7 @@ export default {
     align-self: stretch;
     display: flex;
     flex-direction: column;
-    margin: .125rem;
+    margin: .1rem;
     @media screen and (max-width:320px) {
       width: 100%; 
     }

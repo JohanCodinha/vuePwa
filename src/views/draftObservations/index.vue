@@ -115,7 +115,7 @@ h1 {
   .observationCard  {
     width: 49%;
     align-self: stretch;
-    margin: .125rem;
+    margin: .1rem;
     @media screen and (max-width:320px) {
       width: 100%; 
     }

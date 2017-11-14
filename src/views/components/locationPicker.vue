@@ -137,7 +137,7 @@ export default {
       const center = [longitude, latitude];
       this.$data.map.flyTo({
         center,
-        zoom: 12,
+        zoom: 15,
       });
     },
     pickLocation () {
