@@ -105,25 +105,32 @@ const actions = {
     return getExif(image, tags)
   },
   async processExifData ({ commit, dispatch }, { imageMetadata, obsId }) {
-    const { latitude, latitudeRef, longitude, longitudeRef, datetime,
-      positioningError, dilutionOfPrecision } = imageMetadata;
-    console.log(imageMetadata);
-    const ddLatitude = ConvertDMSToDD(...latitude, latitudeRef);
-    const ddLongitude = ConvertDMSToDD(...longitude, longitudeRef);
-    const datetimeString = datetime
-      ? formatDate(datetime)
-      : null;
-    const accuracy = positioningError || dilutionOfPrecision;
-    const observation = getters.getObservationById(obsId);
-    if (ddLatitude && ddLongitude) {
-      dispatch('saveLocation', {
-        latitude: ddLatitude,
-        longitude: ddLongitude,
-        accuracy,
-        obsId,
-      });
+    try {
+      const { latitude, latitudeRef, longitude, longitudeRef, datetime,
+        positioningError, dilutionOfPrecision } = imageMetadata;
+      if (latitude && longitude ) {
+        const ddLatitude = ConvertDMSToDD(...latitude, latitudeRef);
+        const ddLongitude = ConvertDMSToDD(...longitude, longitudeRef);
+        if (ddLatitude && ddLongitude) {
+          const accuracy = positioningError || dilutionOfPrecision;
+          dispatch('saveLocation', {
+            latitude: ddLatitude,
+            longitude: ddLongitude,
+            accuracy,
+            obsId,
+          });
+        }
+      }
+      const datetimeString = datetime
+        ? formatDate(datetime)
+        : null;
+      const observation = getters.getObservationById(obsId);
+      if (datetimeString) {
+        commit(types.SET_DATETIME, { datetime: datetimeString, observation });
+      }
+    } catch (error) {
+      console.log(error);
     }
-    commit(types.SET_DATETIME, { datetime: datetimeString, observation });
   },
   async createObservation ({ commit }) {
     function generateId () {
@@ -297,12 +304,12 @@ const mutations = {
     observation.images.push(image);
   },
   [types.DELETE_IMAGE] (state, { imageId, observation }) {
-     const imageIndex = observation.images.findIndex(image => image.metadata.id === imageId);
+    const imageIndex = observation.images.findIndex(image => image.metadata.id === imageId);
     observation.images.splice(imageIndex, 1);
   },
   [types.SELECT_SPECIE] (state, { taxonomy, observation }) {
     Vue.set(observation, 'taxonomy', taxonomy);
-      
+
   },
   [types.SET_DATETIME] (state, { datetime, observation }) {
     Vue.set(observation, 'datetime', datetime);

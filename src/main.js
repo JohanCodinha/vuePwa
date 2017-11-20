@@ -9,14 +9,14 @@ import router from './router';
 import store from './store';
 
 Vue.use(Vuex);
-const vuexStore = new Vuex.Store(store);
-sync(vuexStore, router);
+// const vuexStore = new Vuex.Store(store);
+sync(store, router);
 Vue.config.productionTip = false;
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
   router,
-  store: vuexStore,
+  store,
   template: '<App/>',
   components: { App },
 });

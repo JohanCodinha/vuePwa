@@ -109,8 +109,10 @@ export default {
     this.loadObservation();
   },
   watch: {
-    isLogin: function refreshOnLogin () {
-      this.getGeneralObs();
+    isLogin: function refreshOnLogin (value) {
+      if (value) {
+        this.getGeneralObs();
+      }
     },
   },
 };

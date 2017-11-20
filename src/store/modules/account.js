@@ -39,21 +39,25 @@ const getters = {
   status: state => state.status,
 };
 const actions = {
-  async updateToken ({ commit, dispatch }) {
+  // async revokeToken ({ commit, dispatch }) {
+  //  const [account] = await db.account.toArray();
+  // },
+  async updateToken ({ /* commit, */ dispatch }) {
     try {
       const [account] = await db.account.toArray();
       if (!account) throw new Error('No locally saved account');
-      console.log('found acc', account);
-      const { userId, displayName, jwt, username, password } = account;
-      if (isBefore(new Date(), jwt.expiration)) {
-        console.log('is still valid');
-        commit(types.SAVE_TOKEN, { value: jwt.value, type: 'jwt' });
-        commit(types.SAVE_USER_INFO, { userId, displayName });
-        return;
-      }
-      dispatch('fetchToken', { username, password });
+      const { displayName, username, password } = account;
+      // const { userId, displayName, jwt, username, password } = account;
+      console.log('found acc', displayName);
+      // if (isBefore(new Date(), jwt.expiration)) {
+      // console.log('is still valid');
+      // commit(types.SAVE_TOKEN, { value: jwt.value, type: 'jwt' });
+      // commit(types.SAVE_USER_INFO, { userId, displayName });
+      // return Promise.resolve(jwt.value);
+      // }
+      return dispatch('fetchToken', { username, password });
     } catch (error) {
-      console.log(error);
+      return Promise.reject(error);
     }
   },
   async fetchToken ({ commit }, { username, password }) {

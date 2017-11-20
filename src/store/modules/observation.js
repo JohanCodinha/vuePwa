@@ -22,9 +22,9 @@ const getters = {
 
 // Actions
 const actions = {
-  async getGeneralObs ({ rootState, commit }) {
+  async getGeneralObs ({ rootGetters, commit }) {
     try {
-      const jwt = rootState.account.jwt.value;
+      const jwt = rootGetters['account/isLogin'];
       const { records } = await getGeneralObservation(jwt);
       commit(SAVE_GENERAL_OBS, records);
     } catch (error) {

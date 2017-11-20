@@ -18,4 +18,5 @@ const store = {
   },
 };
 
-export default store;
+const storeInstance = new Vuex.Store(store);
+export default storeInstance;

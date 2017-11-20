@@ -7,6 +7,7 @@
       </router-link>
     </div>
     <h1 v-if="generalObs.length > 0">{{generalObs.length}} saved observations</h1>
+    <button style="padding: 1rem" @click="refresh">refresh</button>
     <div>
     <ul class="observationsList">
       <observation-card class="observationCard"  
@@ -56,6 +57,9 @@ export default {
     ...mapActions({
       getGeneralObs: 'observation/getGeneralObs',
     }),
+    refresh () {
+      this.getGeneralObs();
+    },
     editObservation (obsId) {
       this.$router.push({ name: 'GeneralObs', params: { observationId: obsId } });
     },

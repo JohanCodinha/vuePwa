@@ -1,10 +1,33 @@
 import axios from 'axios';
+import store from '@/store';
 
-const baseURL = 'https://vbago.science/vbapi';
-// 'http://localhost:3000';
+// const baseURL = 'https://vbago.science/vbapi';
+const baseURL = 'http://localhost:9000';
+
 const http = axios.create({
   baseURL,
 });
+
+http.interceptors.response.use(response => response,
+  async (error) => {
+    /* eslint-disable no-underscore-dangle */
+    const originalRequest = error.config;
+    if (originalRequest._retry) return Promise.reject(error);
+    if (originalRequest.url === `${originalRequest.baseURL}/auth`) return error;
+    console.log(error.config);
+    originalRequest._retry = true;
+    try {
+      await store.dispatch('account/updateToken');
+      const jwt = store.getters['account/isLogin'];
+      console.log(jwt, store);
+      originalRequest.headers['x-access-token'] = jwt;
+      return http(originalRequest)
+        .catch(retryError => console.log(retryError));
+    } catch (refreshError) {
+      console.log(refreshError);
+    }
+    return Promise.reject(error);
+  });
 
 export default {
   autocomplete: (query, discipline) => http

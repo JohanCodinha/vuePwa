@@ -78,6 +78,7 @@ export default {
     ]),
     onFileChange (e) {
       const files = e.target.files;
+      console.log(e, files);
       if (!files.length) {
         return;
       }
