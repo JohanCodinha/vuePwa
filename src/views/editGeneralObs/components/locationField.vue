@@ -1,6 +1,7 @@
 <template>
   <div class="location-picker">
-    <i class="material-icons">pin_drop</i>
+    <div>
+     <i class="material-icons">pin_drop</i>
     <div v-if="latitude && longitude"
          class="location"
          @click="$router.push({ name: 'LocationPicker', params : { observationId }})">
@@ -20,7 +21,9 @@
         Edit location
       </button>
     </div>
-    <div>
+    
+    </div>
+   <div>
       <i class="material-icons">chevron_right</i>
     </div>
   </div>
@@ -87,6 +90,7 @@ export default {
     margin: 1rem 1rem .5rem 1rem;
     display: flex;
     align-items: center;
+    justify-content: space-between;
     .description {
       font-weight: 500; 
     }

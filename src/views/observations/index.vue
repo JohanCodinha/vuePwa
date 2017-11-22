@@ -6,8 +6,10 @@
         let's get started
       </router-link>
     </div>
-    <h1 v-if="generalObs.length > 0">{{generalObs.length}} saved observations</h1>
-    <button style="padding: 1rem" @click="refresh">refresh</button>
+    <div v-if="generalObs.length > 0" class="menu">
+      <h1 class="menu-item" >{{generalObs.length}} saved observations</h1>
+      <i @click="refresh" class="material-icons menu-item">refresh</i>
+    </div>
     <div>
     <ul class="observationsList">
       <observation-card class="observationCard"  
@@ -149,6 +151,19 @@ export default {
     }
     @media screen and (min-width:1024px) {
       width: 24.5%; 
+    }
+  }
+
+  .menu {
+    display: flex;
+    min-height: 2rem;
+    margin: .5rem;
+    justify-content: space-between;
+    .menu-item {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
     }
   }
 </style>

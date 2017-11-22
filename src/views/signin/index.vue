@@ -61,19 +61,25 @@ export default {
       'updateToken',
     ]),
     async login () {
-      await this.fetchToken({
-        username: this.username,
-        password: this.password });
-      if (this.isLogin) {
-        this.$store.dispatch('observation/getGeneralObs');
-        this.$router.push({ name: 'observations' });
-      } else {
-        this.password = '';
+      try {
+        await this.fetchToken({
+          username: this.username,
+          password: this.password });
+        if (this.isLogin) {
+          this.$store.dispatch('observation/getGeneralObs');
+          this.$router.push({ name: 'observations' });
+        } else {
+          this.password = '';
+        }
+      } catch (error) {
+        console.log(this);
+        this.$store.dispatch('errors/addSnackbar', { message: error.message, timeout: 2000 }, { root: true });
+        console.log(error);
       }
     },
   },
   mounted: function mounted () {
-    this.updateToken();
+    // this.updateToken();
   },
 };
 </script>

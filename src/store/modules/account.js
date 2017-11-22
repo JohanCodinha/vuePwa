@@ -19,6 +19,7 @@ const state = {
   username: null,
   userId: null,
   status: null,
+  onLine: null,
 };
 
 const getters = {
@@ -35,6 +36,7 @@ const getters = {
       ? value
       : false;
   },
+  onLine: state => state.onLine,
   displayName: state => state.username,
   status: state => state.status,
 };
@@ -42,21 +44,24 @@ const actions = {
   // async revokeToken ({ commit, dispatch }) {
   //  const [account] = await db.account.toArray();
   // },
-  async updateToken ({ /* commit, */ dispatch }) {
+  updateOnlineStatus ({ commit }) {
+    const onLine = navigator.onLine || false;
+    commit(types.UPDATE_ONLINE_STATUS, { onLine });
+  },
+  async updateToken ({ commit, dispatch }) {
     try {
       const [account] = await db.account.toArray();
       if (!account) throw new Error('No locally saved account');
-      const { displayName, username, password } = account;
-      // const { userId, displayName, jwt, username, password } = account;
+      const { userId, displayName, jwt, username, password } = account;
       console.log('found acc', displayName);
-      // if (isBefore(new Date(), jwt.expiration)) {
-      // console.log('is still valid');
-      // commit(types.SAVE_TOKEN, { value: jwt.value, type: 'jwt' });
-      // commit(types.SAVE_USER_INFO, { userId, displayName });
-      // return Promise.resolve(jwt.value);
-      // }
-      return dispatch('fetchToken', { username, password });
+      console.log('is still valid');
+      commit(types.SAVE_USER_INFO, { userId, displayName });
+      await dispatch('fetchToken', { username, password });
+      return Promise.resolve(jwt.value);
     } catch (error) {
+      console.log(error);
+      // alert('Network error');
+      dispatch('errors/addSnackbar', { message: error.message, timeout: 2000 }, { root: true });
       return Promise.reject(error);
     }
   },
@@ -84,6 +89,7 @@ const actions = {
     } catch (error) {
       const message = get(error, 'response.data.message', 'Login error');
       commit(types.STATUS, { message });
+      throw error;
     }
     return 'done';
   },
@@ -123,6 +129,9 @@ const mutations = {
     };
     state.username = null;
     state.userId = null;
+  },
+  [types.UPDATE_ONLINE_STATUS] (state, { onLine }) {
+    state.onLine = onLine;
   },
 };
 

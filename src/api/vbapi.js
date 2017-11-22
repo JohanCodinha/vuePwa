@@ -1,8 +1,8 @@
 import axios from 'axios';
 import store from '@/store';
 
-// const baseURL = 'https://vbago.science/vbapi';
-const baseURL = 'http://localhost:9000';
+const baseURL = 'https://vbago.science/vbapi';
+// const baseURL = 'http://localhost:9000';
 
 const http = axios.create({
   baseURL,
@@ -12,19 +12,20 @@ http.interceptors.response.use(response => response,
   async (error) => {
     /* eslint-disable no-underscore-dangle */
     const originalRequest = error.config;
+    if (error.message === 'Network Error') {
+      return Promise.reject(error);
+    }
     if (originalRequest._retry) return Promise.reject(error);
-    if (originalRequest.url === `${originalRequest.baseURL}/auth`) return error;
+    if (originalRequest.url === `${originalRequest.baseURL}/auth`) return Promise.reject(error);
     console.log(error.config);
     originalRequest._retry = true;
     try {
       await store.dispatch('account/updateToken');
       const jwt = store.getters['account/isLogin'];
-      console.log(jwt, store);
       originalRequest.headers['x-access-token'] = jwt;
-      return http(originalRequest)
-        .catch(retryError => console.log(retryError));
-    } catch (refreshError) {
-      console.log(refreshError);
+      return http(originalRequest);
+    } catch ({ message }) {
+      store.dispatch('errors/addSnackbar', { message, timeout: 3500 }, { root: true });
     }
     return Promise.reject(error);
   });

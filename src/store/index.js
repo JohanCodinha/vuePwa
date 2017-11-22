@@ -5,6 +5,7 @@ import observation from './modules/observation';
 import account from './modules/account';
 import explore from './modules/explore';
 import location from './modules/location';
+import errors from './modules/errors';
 
 Vue.use(Vuex);
 
@@ -15,6 +16,7 @@ const store = {
     observation,
     observe,
     explore,
+    errors,
   },
 };
 

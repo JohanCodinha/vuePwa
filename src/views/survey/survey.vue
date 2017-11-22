@@ -58,14 +58,6 @@ export default {
 </script>
 
 <style scoped>
-h1, h2 {
-  font-weight: normal;
-}
-
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
 
 a {
   color: #42b983;
@@ -73,7 +65,6 @@ a {
 
 .container {
   margin: .5rem;
-  margin-bottom: 3rem;
   display: flex;
   flex-direction: column;
 }

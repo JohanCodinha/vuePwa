@@ -200,11 +200,15 @@ export default {
     navigateTo (routeName) {
       this.$router.push({ name: routeName, params: { obsId: this.obsId } });
     },
-    upload () {
-      console.log('uploading start');
-      this.uploading = true;
-      this.uploadObservation({ observation: this.activeDraft })
-        .then(() => this.false);
+    async upload () {
+      try {
+        console.log('uploading start');
+        this.uploading = true;
+        await this.uploadObservation({ observation: this.activeDraft });
+        this.uploading = false;
+      } catch (error) {
+        this.$store.dispatch('errors/addSnackbar', { message: error.message, timeout: 3500 }, { root: true });
+      }
     },
     async getLocation () {
       try {

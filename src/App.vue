@@ -3,6 +3,7 @@
     <div class="main slideLeft" 
          :style="{ transform: slideoutOpen ? 'translateX(-268px)' : 'translateX(0px)' }">
       <header>
+        <snackbar></snackbar>
         <div class="header-menu-background"></div>
         <div class="header-container">
           <div class="header-container-left" v-if="displayBackArrow" @click="backArrow">
@@ -10,16 +11,22 @@
             <p class="header-back-route" >{{backButtonText}}</p>
           </div>
           <img v-if="!displayBackArrow" class="logo" src="./assets/logo-delwp.png">
-          <a @click="menu" class="header-menu-burger">
-            <div class="menu-burger-box">
-              <div class="menu-burger-inner"
-                   :class="{
-                      'menu-burger-inner-active': slideoutOpen,
-                      'menu-burger-inner-active': slideoutOpen,
-                   }">
-              </div>
+          <div class="header-container-right">
+            <div class="online-status" v-if="!onLine">
+              <i class="material-icons">signal_wifi_off</i>
+              <p>Offline</p>
             </div>
-          </a>
+            <a @click="menu" class="header-menu-burger">
+              <div class="menu-burger-box">
+                <div class="menu-burger-inner"
+                     :class="{
+                     'menu-burger-inner-active': slideoutOpen,
+                     'menu-burger-inner-active': slideoutOpen,
+                     }">
+                </div>
+              </div>
+            </a>
+          </div>
         </div>
       </header>
       <router-view class="app-content"></router-view>
@@ -33,6 +40,7 @@
 <script>
 import sidePanel from '@/views/sidePanel';
 import bottomNav from '@/views/bottomNav';
+import snackbar from '@/views/components/snackbar';
 import { mapActions, createNamespacedHelpers } from 'vuex';
 
 const {
@@ -50,10 +58,12 @@ export default {
   components: {
     sidePanel,
     bottomNav,
+    snackbar,
   },
   computed: {
     ...mapGettersAccount([
       'isLogin',
+      'onLine',
     ]),
     displayBackArrow () {
       switch (this.$route.path) {
@@ -92,6 +102,7 @@ export default {
     }),
     ...mapActionsAccount([
       'updateToken',
+      'updateOnlineStatus',
     ]),
     menu () {
       this.slideoutOpen = !this.slideoutOpen;
@@ -104,9 +115,19 @@ export default {
       return this.$router.go(-1);
     },
   },
-  mounted: function mounted () {
-    this.updateToken();
-    this.loadObservation();
+  mounted: async function mounted () {
+    const vm = this;
+    window.addEventListener('load', () => {
+      vm.updateOnlineStatus();
+      window.addEventListener('online', vm.updateOnlineStatus);
+      window.addEventListener('offline', vm.updateOnlineStatus);
+    });
+    try {
+      await this.updateToken();
+      this.loadObservation();
+    } catch (error) {
+      console.log(error);
+    }
   },
   watch: {
     isLogin: function refreshOnLogin (value) {
@@ -118,7 +139,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 @font-face {
   font-family: 'vic';
   src: 
@@ -329,4 +350,24 @@ header {
   font-size: 1.5rem;
   margin-left: 1rem;
 }
+
+.header-container-right {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  .online-status {
+    margin-right: 2.5rem;
+    color: #f5f5f5;
+    font-size: .8rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    i {
+      margin: 0;
+    }
+  }
+}
+
 </style>

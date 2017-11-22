@@ -197,8 +197,8 @@ const actions = {
       commit(types.SET_RECORDED_ID, { obsId: observation.id, taxonRecordedId });
       dispatch('getGeneralObs');
     } catch (error) {
-      alert(error.message);
-      console.log(error);
+      dispatch('errors/addSnackbar', { message: error.message, timeout: 3500 }, { root: true });
+      return error;
     }
   },
   async removeImage ({commit, getters}, { imageId, obsId }) {

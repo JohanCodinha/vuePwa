@@ -66,6 +66,7 @@ const actions = {
       });
     } catch (error) {
       console.log(error);
+      dispatch('errors/addSnackbar', { message: error.message, timeout: 3500 }, { root: true });
     }
   },
 };

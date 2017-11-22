@@ -5,7 +5,7 @@ export const SAVE_TOKEN = 'SAVE_TOKEN';
 export const SAVE_USER_INFO = 'SAVE_USER_INFO';
 export const STATUS = 'STATUS';
 export const RESET_USER_INFO = 'RESET_USER_INFO';
-
+export const UPDATE_ONLINE_STATUS = 'UPDATE_ONLINE_STATUS';
 /*
  *  Explore
  * */
@@ -44,3 +44,11 @@ export const DELETE_SURVEY = 'DELETE_SURVEY';
  * */
 export const POSITION_ERROR = 'POSITION_ERROR';
 export const SET_POSITION = 'SET_POSITION';
+
+/*
+ *  Errors  
+ * */
+export const UPDATE_SNACKBAR = 'UPDATE_SNACKBAR';
+export const ADD_SNACKBAR = 'ADD_SNACKBAR';
+export const CLEAR_DISPLAYED_SNACKBAR = 'CLEAR_DISPLAYED_SNACKBAR';
+

@@ -21,7 +21,7 @@ const getters = {
   },
 };
 const actions = {
-  async getPosition ({ commit }) {
+  async getPosition ({ commit, dispatch }) {
     const options = {
       enableHighAccuracy: true,
       timeout: 10000,
@@ -40,7 +40,20 @@ const actions = {
           resolve({ accuracy, latitude, longitude });
         },
         (err) => {
-          reject(err.message);
+          switch (err.code) {
+            case 1:
+              reject(new Error('Enable permission to access geolocation information.'));
+              break;
+            case 2:
+              reject(new Error('The acquisition of the geolocation failed.'));
+              break;
+            case 3:
+              reject(new Error('The acquisition of the geolocation took too long.'));
+              break;
+            default:
+              reject(new Error('Could not find geolocation'));
+              break;
+          }
         }, options);
     });
     try {
@@ -49,7 +62,7 @@ const actions = {
       commit(types.SET_POSITION, position);
       return position;
     } catch (error) {
-      console.log(error);
+      dispatch('errors/addSnackbar', { message: error.message, timeout: 3500 }, { root: true });
       commit(types.POSITION_ERROR, error);
       throw error;
     }
