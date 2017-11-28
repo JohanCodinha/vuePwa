@@ -1,37 +1,43 @@
 <template>
   <div id="app">
-    <div class="main slideLeft" 
-         :style="{ transform: slideoutOpen ? 'translateX(-268px)' : 'translateX(0px)' }">
-      <header>
-        <snackbar></snackbar>
-        <div class="header-menu-background"></div>
-        <div class="header-container">
-          <div class="header-container-left" v-if="displayBackArrow" @click="backArrow">
-            <i class="material-icons">arrow_back</i>
-            <p class="header-back-route" >{{backButtonText}}</p>
-          </div>
-          <img v-if="!displayBackArrow" class="logo" src="./assets/logo-delwp.png">
-          <div class="header-container-right">
-            <div class="online-status" v-if="!onLine">
-              <i class="material-icons">signal_wifi_off</i>
-              <p>Offline</p>
-            </div>
-            <a @click="menu" class="header-menu-burger">
-              <div class="menu-burger-box">
-                <div class="menu-burger-inner"
-                     :class="{
-                     'menu-burger-inner-active': slideoutOpen,
-                     'menu-burger-inner-active': slideoutOpen,
-                     }">
-                </div>
-              </div>
-            </a>
-          </div>
+    <header 
+     :class="{ slideLeft: slideoutOpen }">
+     <snackbar></snackbar>
+      <div class="header-container">
+        <div class="header-container-left" v-if="displayBackArrow" @click="backArrow">
+          <i class="material-icons">arrow_back</i>
+          <p class="header-back-route" >{{backButtonText}}</p>
         </div>
-      </header>
-      <router-view class="app-content"></router-view>
-    </div>
-    <bottomNav :style="{ transform: slideoutOpen ? 'translateX(-268px)' : 'translateX(0px)' }" class="bottom-nav slideLeft"></bottomNav>
+        <img v-if="!displayBackArrow" class="logo" src="./assets/logo-delwp.png">
+        <div class="header-container-right">
+          <div class="online-status" v-if="!onLine">
+            <i class="material-icons">signal_wifi_off</i>
+            <p>Offline</p>
+          </div>
+          <a @click="menu" class="header-menu-burger">
+            <div class="menu-burger-box">
+              <div class="menu-burger-inner"
+                   :class="{
+                   'menu-burger-inner-active': slideoutOpen,
+                   'menu-burger-inner-active': slideoutOpen,
+                   }">
+              </div>
+            </div>
+          </a>
+        </div>
+      </div>
+      <head-nav v-if="activeRoute" :activeRoute="activeRoute" 
+        :class="{ 'sticky-nav': hideTop }" 
+        class="bottom-nav"></head-nav>
+    </header>
+    <!--<div class="main slideLeft" -->
+         <!--:style="{ transform: slideoutOpen ? 'translateX(-268px)' : 'translateX(0px)' }">-->
+      <router-view
+        :style="{ 'padding-top': activeRoute ? '6.25rem !important' : '3.125rem !important' }"
+        :class="{ slideLeft: slideoutOpen }"
+        class="main app-content">
+      </router-view>
+    <!--</div>-->
     <sidePanel :style="{ display: slideoutOpen ? 'block' : 'none' }" @closeMenu="menu"></sidePanel>
   </div>
   </div>
@@ -39,8 +45,9 @@
 
 <script>
 import sidePanel from '@/views/sidePanel';
-import bottomNav from '@/views/bottomNav';
+import navigation from '@/views/navigation';
 import snackbar from '@/views/components/snackbar';
+import { debounce } from 'lodash';
 import { mapActions, createNamespacedHelpers } from 'vuex';
 
 const {
@@ -53,11 +60,12 @@ export default {
   data () {
     return {
       slideoutOpen: false,
+      scrollPosition: 0,
     };
   },
   components: {
     sidePanel,
-    bottomNav,
+    'head-nav': navigation,
     snackbar,
   },
   computed: {
@@ -65,6 +73,22 @@ export default {
       'isLogin',
       'onLine',
     ]),
+    activeRoute () {
+      const route = this.$store.state.route.path;
+      switch (route) {
+        case '/observations':
+          return 'observations';
+        case '/observations/drafts':
+          return 'drafts';
+        case '/explore':
+          return 'explore';
+        default:
+          return null;
+      }
+    },
+    hideTop () {
+      return this.scrollPosition > 55;
+    },
     displayBackArrow () {
       switch (this.$route.path) {
         case '/':
@@ -73,7 +97,6 @@ export default {
         case '/observations/drafts':
         case '/explore':
           return false;
-          // break;
         default:
           return this.$route;
       }
@@ -114,6 +137,9 @@ export default {
       }
       return this.$router.go(-1);
     },
+    updateScroll () {
+      this.scrollPosition = window.pageYOffset || document.documentElement.scrollTop;
+    },
   },
   mounted: async function mounted () {
     const vm = this;
@@ -121,13 +147,10 @@ export default {
       vm.updateOnlineStatus();
       window.addEventListener('online', vm.updateOnlineStatus);
       window.addEventListener('offline', vm.updateOnlineStatus);
+      window.addEventListener('scroll', debounce(vm.updateScroll, 15), true);
     });
-    try {
-      await this.updateToken();
-      this.loadObservation();
-    } catch (error) {
-      console.log(error);
-    }
+    this.loadObservation();
+    this.updateToken();
   },
   watch: {
     isLogin: function refreshOnLogin (value) {
@@ -173,15 +196,18 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
   height: 100%;
+  position: absolute;
+  width: 100%;
 }
 
 header {
   background-color: #201647;
-  min-height: 3.125rem;
   display: flex;
-  align-items: center;
-  position: relative;
+  flex-direction: column;
+  position: absolute;
+  width: 100%;
   z-index: 10;
+  transition: transform 300ms ease;
 }
 
 .header-menu-background {
@@ -213,6 +239,7 @@ header {
 }
 
 .header-container {
+  min-height: 3.125rem;
   padding-left: .5rem;
   padding-right: .5rem;
   display: flex;
@@ -220,6 +247,7 @@ header {
   justify-content: space-between;
   align-items: center;
   z-index: 2;
+  background: linear-gradient(45deg, rgba(0,178,169,1) 0%, rgba(0,178,169,1) 38%, rgba(32,21,71,1) 88%, rgba(32,21,71,1) 100%);
 }
 
 .header-container-left {
@@ -249,7 +277,7 @@ header {
 
 .menu-burger-inner {
   transition: all 0.35s ease;
-  background: #201647;
+  background: white;
   display: block;
   height: 0.125rem;
   position: absolute;
@@ -258,7 +286,7 @@ header {
 }
 
 .menu-burger-inner-active {
-  background: #00b7bd;
+  background: white;
   width: 0;
 }
 
@@ -287,7 +315,7 @@ header {
   -webkit-transition: all 0.15s ease;
   -moz-transition: all 0.15s ease;
   transition: all 0.15s ease;
-  background: #201647;
+  background: white;
   content: '';
   display: block;
   height: 0.125rem;
@@ -314,17 +342,15 @@ header {
 
 .app-content {
   flex: 1;
-  overflow: auto;
-  // margin-bottom: 3rem;
+}
 
-}
-.bottom-nav {
+.sticky-nav {
   position: fixed;
+  top: 0;
   right: 0;
-  bottom: 0;
   left: 0;
-  z-index: 800;
 }
+
 .btn {
   text-decoration: none;
   color: #fff;
@@ -370,4 +396,19 @@ header {
   }
 }
 
+.hideTop {
+  position: fixed;
+  width: 100%;
+  top: 0;
+  transform: translateY(-50%);
+}
+
+.overflow {
+  overflow: auto;
+}
+
+.slideLeft {
+  transform: translateX(-268px);
+}
 </style>
+

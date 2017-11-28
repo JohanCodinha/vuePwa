@@ -86,7 +86,6 @@ export default {
 
 .container {
   margin: 0 .5rem 0 .5rem;
-  margin-bottom: 3rem;
   display: flex;
   flex-direction: column;
   flex: 1 0 auto;

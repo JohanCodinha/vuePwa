@@ -1,6 +1,8 @@
 <template>
   <div class="static-map">
-    <div id="map" class="mapboxgl-map"></div>
+    <div id="map" class="mapboxgl-map">
+      <div class="map-gradient"></div>
+    </div>
   </div>
 </template>
 
@@ -112,7 +114,16 @@ export default {
 
 <style scoped>
 .static-map {
-  height: 20rem;
+  min-height: 20rem;
+}
+.map-gradient {
+  background: linear-gradient(to bottom,rgba(255,255,255,0),#f5f5f5);
+  border-bottom: 12px solid #f5f5f5;
+  bottom: 0;
+  height: 90px;
+  position: absolute;
+  width: 100%;
+  z-index: 1;
 }
 
 #map {

@@ -77,7 +77,6 @@ export default {
     display: flex;
     flex-wrap: wrap;
     align-items: flex-start;
-   // justify-content: space-between;
   }
 
   .container {
@@ -85,7 +84,6 @@ export default {
     padding-bottom: .5rem;
     display: flex;
     flex-direction: column;
-    margin-bottom: 3rem;
   }
 
   h1 {

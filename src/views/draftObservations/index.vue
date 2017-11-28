@@ -1,11 +1,8 @@
 <template>
   <div :class="{center: !observations.length}" class="container">
     <div class="description">
-      <p v-if="!observations.length">Contribute by adding a</p>
-      <a class="button"  @click='newObservation'>
-        <i class="material-icons">add_circle</i>
-        <p>New general observation</p>
-      </a>
+      <p v-if="!observations.length">Contribute with your own observations</p>
+      <p>General observations</p>
     </div>
     <ul class="observationsList">
       <draft-observation-card class="observationCard" v-for="obs in observations"
@@ -17,6 +14,9 @@
         :key="obs.id">
       </draft-observation-card>
     </ul>
+    <a class="action-button" @click='newObservation'>
+      <i class="material-icons">add</i>
+    </a>
   </div>
 </template>
 
@@ -38,12 +38,8 @@ export default {
   },
   computed: {
     ...mapGettersObserve({
-      // generalObs: 'general',
       observations: 'allitems',
     }),
-    // observations () {
-    //   return this.$store.state.newObservations.items;
-    // },
   },
   methods: {
     // ...mapActions([
@@ -67,7 +63,6 @@ export default {
   padding-bottom: .5rem;
   display: flex;
   flex-direction: column;
-  margin-bottom: 3rem;
 }
 
 .button {
@@ -112,26 +107,43 @@ h1 {
 }
 
 
-  .observationCard  {
-    width: 49%;
-    align-self: stretch;
-    margin: .1rem;
-    @media screen and (max-width:320px) {
-      width: 100%; 
-    }
-    @media screen and (min-width:768px) {
-      width: 32%; 
-    }
-    @media screen and (min-width:1024px) {
-      width: 24.5%; 
-    }
+.observationCard  {
+  width: 49%;
+  align-self: stretch;
+  margin: .1rem;
+  @media screen and (max-width:320px) {
+    width: 100%; 
   }
-
-
-  .observationsList {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: flex-start;
-    // justify-content: space-between;
+  @media screen and (min-width:768px) {
+    width: 32%; 
   }
+  @media screen and (min-width:1024px) {
+    width: 24.5%; 
+  }
+}
+
+.observationsList {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.action-button {
+  width: 3.5rem;
+  height: 3.5rem;
+  position: fixed;
+  bottom: 2rem;
+  right: .8rem;
+  border-radius: 50%;
+  background-color: #26a69a;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2); 
+  i {
+    font-size: 1.75rem;
+  }
+}
+
 </style>

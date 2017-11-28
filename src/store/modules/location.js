@@ -62,7 +62,7 @@ const actions = {
       commit(types.SET_POSITION, position);
       return position;
     } catch (error) {
-      dispatch('errors/addSnackbar', { message: error.message, timeout: 3500 }, { root: true });
+      dispatch('alerts/addSnackbar', { message: error.message, timeout: 3500 }, { root: true });
       commit(types.POSITION_ERROR, error);
       throw error;
     }

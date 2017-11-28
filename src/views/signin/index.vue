@@ -73,7 +73,7 @@ export default {
         }
       } catch (error) {
         console.log(this);
-        this.$store.dispatch('errors/addSnackbar', { message: error.message, timeout: 2000 }, { root: true });
+        this.$store.dispatch('alerts/addSnackbar', { message: error.message, timeout: 2000 }, { root: true });
         console.log(error);
       }
     },

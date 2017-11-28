@@ -71,7 +71,20 @@ select {
 }
 
 html, body {
-
  /*To smooth any scrolling behavior */
 -webkit-overflow-scrolling: touch;
+}
+
+2
+3
+4
+5
+6
+7
+/* apply a natural box layout model to all elements, but allowing components to change */
+html {
+  box-sizing: border-box;
+}
+*, *:before, *:after {
+  box-sizing: inherit;
 }

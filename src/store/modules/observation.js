@@ -22,12 +22,14 @@ const getters = {
 
 // Actions
 const actions = {
-  async getGeneralObs ({ rootGetters, commit }) {
+  async getGeneralObs ({ rootGetters, commit, dispatch }) {
     try {
       const jwt = rootGetters['account/isLogin'];
+      if (!jwt) throw new Error('Login required to access observations');
       const { records } = await getGeneralObservation(jwt);
       commit(SAVE_GENERAL_OBS, records);
     } catch (error) {
+      dispatch('alerts/addSnackbar', { message: error.message, timeout: 2000 }, { root: true });
       console.log(error);
     }
   },

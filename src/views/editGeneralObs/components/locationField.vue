@@ -1,29 +1,28 @@
 <template>
   <div class="location-picker">
-    <div>
-     <i class="material-icons">pin_drop</i>
-    <div v-if="latitude && longitude"
-         class="location"
-         @click="$router.push({ name: 'LocationPicker', params : { observationId }})">
-      <p class="description">{{description}}</p>
-      <div class="coordinates">
-        <p>{{coordinates}}</p>
+    <div class="container">
+      <i class="material-icons">pin_drop</i>
+      <div v-if="latitude && longitude"
+           class="location"
+           @click="$router.push({ name: 'LocationPicker', params : { observationId }})">
+        <p class="description">{{description}}</p>
+        <div class="coordinates">
+          <p>{{coordinates}}</p>
+        </div>
+      </div>
+      <div v-else
+             class="buttons">
+        <button class="button"
+                @click="getLocation">
+          Use GPS
+        </button>
+        <button class="button"
+                @click="$router.push({ name: 'LocationPicker', params : { observationId }})">
+          Edit location
+        </button>
       </div>
     </div>
-    <div v-else
-         class="buttons">
-      <button class="button"
-              @click="getLocation">
-        Use GPS
-      </button>
-      <button class="button"
-              @click="$router.push({ name: 'LocationPicker', params : { observationId }})">
-        Edit location
-      </button>
-    </div>
-    
-    </div>
-   <div>
+    <div>
       <i class="material-icons">chevron_right</i>
     </div>
   </div>
@@ -93,6 +92,10 @@ export default {
     justify-content: space-between;
     .description {
       font-weight: 500; 
+    }
+
+    .container {
+      flex: 1;
     }
   }
 

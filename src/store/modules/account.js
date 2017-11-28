@@ -60,8 +60,7 @@ const actions = {
       return Promise.resolve(jwt.value);
     } catch (error) {
       console.log(error);
-      // alert('Network error');
-      dispatch('errors/addSnackbar', { message: error.message, timeout: 2000 }, { root: true });
+      dispatch('alerts/addSnackbar', { message: error.message, timeout: 2000 }, { root: true });
       return Promise.reject(error);
     }
   },

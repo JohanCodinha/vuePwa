@@ -2,7 +2,7 @@
   <transition name="slide-fade">
     <div v-if="snackbar" :class="{ visible: isVisible}" class="snackbar">
       <div class="container">
-        <p>{{snackbar.message}}</p> 
+        <p>{{message }}</p> 
         <button @click="close">
           <span>CLOSE</span>
         </button> 
@@ -15,9 +15,9 @@
 import { createNamespacedHelpers } from 'vuex';
 
 const {
-  mapActions: mapActionsErrors,
-  mapGetters: mapGettersErrors,
-} = createNamespacedHelpers('errors');
+  mapActions: mapActionsAlerts,
+  mapGetters: mapGettersAlerts,
+} = createNamespacedHelpers('alerts');
 
 export default {
   name: 'snackbar',
@@ -29,12 +29,15 @@ export default {
     };
   },
   computed: {
-    ...mapGettersErrors([
+    ...mapGettersAlerts([
       'snackbar',
     ]),
+    message () {
+      return this.snackbar.message || '';
+    },
   },
   methods: {
-    ...mapActionsErrors([
+    ...mapActionsAlerts([
       'deleteSnackbar',
     ]),
     close () {
