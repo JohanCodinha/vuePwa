@@ -91,6 +91,7 @@ export default {
 <style lang="scss" scoped>
   .taxonomy {
     padding: .5rem 1rem .5rem 1rem;
+    min-height: 4rem;
   }
   dl {
     padding: 1rem;

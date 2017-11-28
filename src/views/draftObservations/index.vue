@@ -126,7 +126,7 @@ h1 {
   display: flex;
   flex-wrap: wrap;
   align-items: flex-start;
-  justify-content: center;
+  //justify-content: center;
 }
 
 .action-button {
