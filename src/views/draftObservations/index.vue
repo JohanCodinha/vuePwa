@@ -2,7 +2,7 @@
   <div :class="{center: !observations.length}" class="container">
     <div class="description">
       <p v-if="!observations.length">Contribute with your own observations</p>
-      <p>General observations</p>
+      <p v-else>Draft general observations</p>
     </div>
     <ul class="observationsList">
       <draft-observation-card class="observationCard" v-for="obs in observations"

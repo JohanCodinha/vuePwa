@@ -195,9 +195,10 @@ const actions = {
       console.log(taxonRecordedId);
       if (!taxonRecordedId) throw new Error('upload failed');
       commit(types.SET_RECORDED_ID, { obsId: observation.id, taxonRecordedId });
+      dispatch('alerts/addSnackbar', { message: 'Upload success !', timeout: 3500 }, { root: true });
       dispatch('getGeneralObs');
     } catch (error) {
-      dispatch('errors/addSnackbar', { message: error.message, timeout: 3500 }, { root: true });
+      dispatch('alerts/addSnackbar', { message: error.message, timeout: 3500 }, { root: true });
       return error;
     }
   },

@@ -12,7 +12,7 @@
       </div>
       <div v-else
              class="buttons">
-        <button class="button"
+        <button v-if="false" class="button"
                 @click="getLocation">
           Use GPS
         </button>
@@ -61,6 +61,7 @@ export default {
     ]),
     description () {
       const csv = this.locationDescription.split(',');
+      if (!csv[1]) return '';
       return `${csv[0]}, ${csv[1]}`;
     },
     coordinates () {
@@ -74,6 +75,7 @@ export default {
     async getLocation () {
       try {
         const position = await this.getPosition();
+        console.log(position, this.observationId);
         const { latitude, longitude, accuracy } = position;
         this.$store.dispatch('observe/saveLocation', { latitude, longitude, accuracy, obsId: this.observationId });
       } catch (error) {

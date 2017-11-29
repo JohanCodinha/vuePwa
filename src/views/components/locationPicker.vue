@@ -237,6 +237,7 @@ export default {
 .mapboxgl-map {
   position: relative;
   width: 100vw;
+  height: 100%;
   overflow-x: hidden; 
   overflow-y: auto;
 }
@@ -291,11 +292,11 @@ export default {
 }
 
 .myLocation {
-    width: 56px;
-    height: 56px;
-    border-radius: 28px;
-    background-color: white;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.3);
-    border: white;
+  width: 56px;
+  height: 56px;
+  border-radius: 28px;
+  background-color: white;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+  border: white;
 }
 </style>

@@ -62,6 +62,7 @@ const actions = {
           commit(types.ADD_SPECIE, specie);
         }
         const { records } = await searchSpecieRecords(searchArea, specie.taxonId, token);
+        commit(types.CLEAR_SPECIE_RECORDS, { taxonId: specie.taxonId });
         commit('ADD_RECORDS', records);
       });
     } catch (error) {
@@ -84,7 +85,9 @@ const mutations = {
   },
   [types.ADD_RECORDS] (state, records) {
     state.records.push(...records);
-    // Vue.set(state, 'records', [...state.records, ...records]);
+  },
+  [types.CLEAR_SPECIE_RECORDS] (state, { taxonId }) {
+    state.records = state.records.filter(record => record.taxonId !== taxonId);
   },
 };
 
