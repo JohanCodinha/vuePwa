@@ -53,7 +53,13 @@ export default {
       });
       this.$data.map = map;
       map.on('load', () => {
-        console.log('adding sources');
+        map.addSource('location', {
+          type: 'geojson',
+          data: {
+            type: 'Point',
+            coordinates: [longitude, latitude],
+          },
+        });
         map.addSource('records', {
           type: 'geojson',
           data: {
@@ -62,12 +68,31 @@ export default {
           },
         });
         map.addLayer({
+          id: 'location-glow',
+          type: 'circle',
+          source: 'location',
+          paint: {
+            'circle-radius': 60,
+            'circle-color': '#fff',
+            'circle-opacity': 0.4,
+          },
+        });
+        map.addLayer({
+          id: 'location-dot',
+          type: 'circle',
+          source: 'location',
+          paint: {
+            'circle-radius': 6,
+            'circle-color': '#191038',
+          },
+        });
+        map.addLayer({
           id: 'point',
           source: 'records',
           type: 'circle',
           paint: {
-            'circle-radius': 6,
-            'circle-color': '#007cbf',
+            'circle-radius': 5,
+            'circle-color': '#00B2A9',
           },
         });
         this.addRecordData();
