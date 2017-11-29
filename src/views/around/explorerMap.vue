@@ -115,7 +115,9 @@ export default {
 <style scoped>
 .static-map {
   min-height: 20rem;
+  margin-bottom: -3rem;
 }
+
 .map-gradient {
   background: linear-gradient(to bottom,rgba(255,255,255,0),#f5f5f5);
   border-bottom: 12px solid #f5f5f5;
@@ -132,5 +134,11 @@ export default {
   width: 100%;
   min-height: 20rem;
 }
+</style>
 
+<style>
+.mapboxgl-ctrl-bottom-left,
+.mapboxgl-ctrl-bottom-right {
+  bottom: 3rem;
+}
 </style>

@@ -6,24 +6,22 @@
         <h1>Explore flora &amp; fauna near you </h1>
         <i class="material-icons">location_searching</i>
       </div>
-      <template v-else>
-        <div v-if="species" @click="searchSpecies" class="reload">
-          <i class="material-icons">autorenew</i>
-          <h1>{{species.length}} species found</h1>
-        </div>
-        <ul class="collection">
-          <li v-for="suggestion in species">
-            <specieSearchItem
-              :commonName="suggestion.commonName"
-              :scientificName="suggestion.scientificName"
-              :conservationStatus="suggestion.conservationStatus.vicAdvisory"
-              :imageSource="get(suggestion, 'images[0].s3Url')"
-              :records="records.filter(r => r.taxonId === suggestion.taxonId)"
-              @click.native="select(suggestion)"
+      <ol class="collection"v-else>
+        <li v-if="species" class="reload">
+          <p>{{species.length}} species found</p>
+          <i @click="searchSpecies" class="material-icons">autorenew</i>
+        </li>
+        <li v-for="suggestion in species">
+          <specieSearchItem
+            :commonName="suggestion.commonName"
+            :scientificName="suggestion.scientificName"
+            :conservationStatus="suggestion.conservationStatus.vicAdvisory"
+            :imageSource="get(suggestion, 'images[0].s3Url')"
+            :records="records.filter(r => r.taxonId === suggestion.taxonId)"
+            @click.native="select(suggestion)"
             ></specieSearchItem>
-          </li>
-        </ul>
-      </template>
+        </li>
+      </ol>
     </div>
   </div>
 </template>
@@ -74,7 +72,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .description {
   display: flex;
   flex: 1;
@@ -85,32 +83,35 @@ export default {
 }
 
 .container {
-  margin: 0 .5rem 0 .5rem;
+  margin: 0 .8rem 0 .8rem;
   display: flex;
   flex-direction: column;
   flex: 1 0 auto;
-  height: 100%;
   overflow: auto;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
 }
 
 .collection {
   background: white;
   max-width: 100%;
-}
+  z-index: 1;
+  background: #eee;
 
-.collection li:nth-child(even) {
-  background-color: #f7f7f7;
+  li {
+    background: white;
+    margin: 0 0 1px;
+  }
 }
 
 .reload {
   display: flex;
   align-items: center;
-  justify-content: center;
-  margin: .5rem;
+  justify-content: space-between;
+  padding: 1rem;
   min-height: 2rem;
+  font-size: 1.2rem;
+  font-weight: 500;
 }
 
-.reload > i {
-  margin-right: 2rem;
-}
 </style>
