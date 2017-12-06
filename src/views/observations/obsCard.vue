@@ -17,11 +17,11 @@
     </dl>
     <div slot="reveal">
       <a class="btn red_"
-         @click='deleteRecord(surveyId)'>Delete
+         @click.stop='deleteRecord(surveyId)'>Delete
          <!-- <i class="material-icons right">delete</i> -->
       </a>
-      <a class="btn_"
-         @click=''>Edit</a>
+      <!-- <a class="btn_"
+        @click=''>Edit</a> -->
     </div>
   </card>
 </template>

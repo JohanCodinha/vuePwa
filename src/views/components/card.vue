@@ -33,11 +33,9 @@ export default {
   methods: {
     cardReveal () {
       this.$data.cardRevealed = true;
-      console.log(this.$data.cardRevealed);
     },
     cardHide () {
       this.$data.cardRevealed = false;
-      console.log(this.$data.cardRevealed);
     },
   },
 };
