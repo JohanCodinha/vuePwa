@@ -6,6 +6,7 @@
         <h2>{{species.commonName}}</h2>
       </div>
     </div>
+    <button class="add-obs-button" @click="addObservation">Add observation</button>
     <imgSlider :images="species.images" class="imgSlider"></imgSlider>
     <dl v-if="description" class="descripton">
       <div v-if="description.habitat">
@@ -40,6 +41,7 @@ import { createNamespacedHelpers } from 'vuex';
 import imgSlider from './imgSlider';
 
 const { mapGetters } = createNamespacedHelpers('explore');
+const { mapActions: mapActionsObserve } = createNamespacedHelpers('observe');
 
 export default {
   components: {
@@ -80,9 +82,18 @@ export default {
     },
   },
   methods: {
+    ...mapActionsObserve([
+      'createObservation',
+      'selectSpecie',
+    ]),
     close () {
       console.log('closing details page');
       this.$store.dispatch('setSpecieDetail', null);
+    },
+    async addObservation () {
+      const obsId = await this.createObservation();
+      this.selectSpecie({ specie: this.species, obsId });
+      this.$router.push({ name: 'GeneralObs', params: { observationId: obsId } });
     },
   },
 };
@@ -196,5 +207,19 @@ export default {
 #data-list .li-expand:after {
   height: 0;
 }
-
+.add-obs-button {
+  text-decoration: none;
+  color: #26a69a;
+  background-color: #f5f5f5;
+  text-align: center;
+  letter-spacing: .5px;
+  border: none;
+  border-radius: 2px;
+  height: 36px;
+  line-height: 36px;
+  padding: 0 2rem;
+  text-transform: uppercase;
+  margin: .5rem;
+  font-weight: 600;
+}
 </style>

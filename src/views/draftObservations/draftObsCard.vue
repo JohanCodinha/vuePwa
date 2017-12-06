@@ -1,8 +1,8 @@
 <template>
-  <card>
+  <card @click.native="$router.push({ name: 'GeneralObs', params: { observationId: obsId } })">
     <img v-if="imageUrl" slot="image" :src="imageUrl">
     <div class="content" slot="content">
-      <dl @click="$router.push({ name: 'GeneralObs', params: { observationId: obsId } })">
+      <dl>
           <dt>Species</dt>
           <dd>{{specieName || 'Unidentified'}}</dd>
           <dt>Site name</dt>
@@ -17,7 +17,7 @@
       </div>
     </div>
     <div slot="reveal">
-      <a class="btn red_" @click='deleteDraft'>Delete </a>
+      <a class="btn red_" @click.stop='deleteDraft'>Delete </a>
     </div>
   </card>
 </template>

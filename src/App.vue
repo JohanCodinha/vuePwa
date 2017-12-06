@@ -3,7 +3,8 @@
     <header 
      :class="{ slideLeft: slideoutOpen }">
      <snackbar></snackbar>
-      <div class="header-container">
+      <div class="header-container"
+           :class="{ 'sticky-header': !activeRoute }">
         <div class="header-container-left" v-if="displayBackArrow" @click="backArrow">
           <i class="material-icons">arrow_back</i>
           <p class="header-back-route" >{{backButtonText}}</p>
@@ -30,14 +31,11 @@
         :class="{ 'sticky-nav': hideTop }" 
         class="bottom-nav"></head-nav>
     </header>
-    <!--<div class="main slideLeft" -->
-         <!--:style="{ transform: slideoutOpen ? 'translateX(-268px)' : 'translateX(0px)' }">-->
       <router-view
         :style="{ 'padding-top': activeRoute ? '6.25rem !important' : '3.125rem !important' }"
         :class="{ slideLeft: slideoutOpen }"
         class="main app-content">
       </router-view>
-    <!--</div>-->
     <sidePanel :style="{ display: slideoutOpen ? 'block' : 'none' }" @closeMenu="menu"></sidePanel>
   </div>
   </div>
@@ -409,6 +407,10 @@ header {
 
 .slideLeft {
   transform: translateX(-268px);
+}
+.sticky-header{
+  position: fixed;
+  width: 100%;
 }
 </style>
 

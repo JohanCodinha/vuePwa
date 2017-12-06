@@ -92,7 +92,7 @@ export default {
   display: flex;
   justify-content: space-between;
   flex: 1;
-  margin: 1.5rem;
+  margin: .5rem;
 }
 
 

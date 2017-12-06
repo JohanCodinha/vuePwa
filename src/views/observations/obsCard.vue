@@ -1,5 +1,5 @@
 <template>
-  <card @click="$router.push({ name: 'survey', params: { surveyId } })">
+  <card @click.native="$router.push({ name: 'survey', params: { surveyId } })">
     <img v-if="imageSources" slot="image" :src="imageSources">
     <dl slot="content">
       <div class="content">

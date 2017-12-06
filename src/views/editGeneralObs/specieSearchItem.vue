@@ -9,6 +9,7 @@
         <p>{{scientificName}}</p>
       </div>
       <p v-if="records.length">Count: {{records.reduce((acc, r) => { return (r.totalCountInt || 1 ) + acc}, 0)}}</p>
+      <p>Last seen {{lastSeen}}</p>
       <p v-if="conservationStatus" class="status">{{conservationStatus}}</p>
     </div>
     </div>
@@ -16,6 +17,8 @@
 </template>
 
 <script>
+import { format } from 'date-fns';
+
 export default {
   props: {
     commonName: {
@@ -42,7 +45,17 @@ export default {
   methods: {
   },
   computed: {
-
+    lastSeen () {
+      if (!this.records.length) return null;
+      function compareDate (a, b) {
+        return b.surveyEndSdt - a.surveyEndSdt;
+      }
+      const mostRecentRecord = this.records.sort(compareDate)[0];
+      return format(
+        new Date(mostRecentRecord.surveyStartSdt),
+        'MMM YYYY',
+      );
+    },
   },
 };
 </script>
@@ -51,7 +64,7 @@ export default {
 .specie-li {
   display: flex;
   align-items: center;
-  height: 15vh;
+  //height: 15vh;
   padding: .5rem;
 }
 
@@ -120,10 +133,7 @@ export default {
   font-weight: 500;
   padding: 0 5px 0 5px;
   border-radius: 5px;
-  /*flex: 0 0 auto;*/
-  /*flex-grow: 0;*/
   display: flex;
-  /*display: flex;*/
   justify-content: flex-end;
   align-items: flex-end;
 }
