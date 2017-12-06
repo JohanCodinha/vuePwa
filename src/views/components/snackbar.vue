@@ -89,6 +89,8 @@ export default {
 }
 .visible {
   transform: translateY(0%);
+  position: fixed;
+  max-height: 3.125rem;
 }
 
 .slide-fade-enter-active {
