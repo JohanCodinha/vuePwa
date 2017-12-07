@@ -49,7 +49,9 @@ export default {
 
 <style lang="scss" scoped>
 .snackbar {
-  position: absolute;
+  //position: absolute;
+  position: fixed;
+  max-height: 3.125rem;
   background: #323232;
   color: white;
   width: 100%;
@@ -89,8 +91,6 @@ export default {
 }
 .visible {
   transform: translateY(0%);
-  position: fixed;
-  max-height: 3.125rem;
 }
 
 .slide-fade-enter-active {

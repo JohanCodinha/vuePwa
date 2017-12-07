@@ -333,8 +333,8 @@ header {
   z-index: 1;
   display: flex;
   flex-direction: column;
-  height: 100vh;
-  max-height: 100vh;
+  //height: 100vh;
+  min-height: 100vh;
   position: relative;
 }
 

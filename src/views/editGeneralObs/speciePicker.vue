@@ -129,7 +129,7 @@ export default {
 .discipline ul {
   display: flex;
   justify-content: space-around;
-  margin: .5rem;
+  //margin: .5rem;
 }
 
 .discipline li {

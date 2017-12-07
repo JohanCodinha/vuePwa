@@ -267,7 +267,7 @@ export default {
     margin: .5rem 0 .5rem;
     padding-bottom: .5rem;
     h1 {
-      margin: 1rem;
+      margin: .5rem;
       font-size: 1.5rem;
     }
   }
