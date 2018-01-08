@@ -153,6 +153,7 @@ const actions = {
       },
       datetime: null,
       count: 0,
+      discipline: null,
     };
     await db.observe.add(observation);
     commit(types.SAVE_OBSERVATION, observation);
@@ -260,7 +261,12 @@ const actions = {
     }
   },
   async selectSpecie ({ commit, getters }, { specie, obsId }) {
-    const { taxonId, commonName = null, scientificName = null } = specie;
+    const { 
+      taxonId,
+      commonName = null,
+      scientificName = null,
+      discipline : { primary : discipline }, // extract specie.discipline.primary into discipline
+    } = specie;
     const observation = getters.getObservationById(obsId);
     const taxonomy = {
       taxonId,
@@ -270,6 +276,7 @@ const actions = {
     const updatedObservation = Object.assign({}, observation, { taxonomy });
     await db.observe.where('id').equals(obsId).modify(obs => 
       obs.taxonomy = taxonomy);
+    commit('SET_DISCIPLINE', { discipline, observation });
     commit('SELECT_SPECIE', { taxonomy, observation });
   },
   setActiveDraft ({ commit }, { obsId }) {
@@ -337,6 +344,9 @@ const mutations = {
   [types.SET_RECORDED_ID] (state, { obsId, taxonRecordedId }) {
     const observation = state.items.find(obs => obs.id === obsId);
     Vue.set(observation, 'recordedId', taxonRecordedId);
+  },
+  [types.SET_DISCIPLINE] (state, { discipline, observation }) {
+    Vue.set(observation, 'discipline', discipline);
   },
 };
 

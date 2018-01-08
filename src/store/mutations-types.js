@@ -21,6 +21,7 @@ export const SAVE_SPECIES = 'SAVE_SPECIES';
 export const SAVE_IMAGE = 'SAVE_IMAGE';
 export const DELETE_IMAGE = 'DELETE_IMAGE';
 export const SET_NOTES = 'SET_NOTES';
+export const SET_DISCIPLINE = 'SET_DISCIPLINE';
 
 /*
  *  Observation
