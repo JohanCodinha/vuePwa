@@ -175,7 +175,7 @@ const actions = {
       description,
     } = observation.position;
     const { commonName, scientificName, taxonId } = observation.taxonomy;
-    const { count, extraInfoCode, datetime } = observation;
+    const { count, extraInfoCode, datetime, discipline } = observation;
 
     const formData = new FormData();
     images.forEach(image => formData.append('images', image));
@@ -191,6 +191,8 @@ const actions = {
     formData.append('userId', userId);
     formData.append('obsName', username);
     formData.append('locationDescription', description);
+    formData.append('discipline', discipline);
+
     try {
       const { taxonRecordedId } = await postObservation(formData, jwt);
       console.log(taxonRecordedId);
