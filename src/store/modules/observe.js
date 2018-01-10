@@ -278,8 +278,10 @@ const actions = {
       scientificName,
     };
     const updatedObservation = Object.assign({}, observation, { taxonomy });
-    await db.observe.where('id').equals(obsId).modify(obs => 
-      obs.taxonomy = taxonomy);
+    await db.observe.where('id').equals(obsId).modify((obs) => {
+      obs.discipline = discipline;
+      obs.taxonomy = taxonomy;
+    });
     commit('SET_DISCIPLINE', { discipline, observation });
     commit('SELECT_SPECIE', { taxonomy, observation });
   },
