@@ -6,6 +6,7 @@ import * as types from '../mutations-types';
 
 const { reverseGeocoding } = mapboxApi;
 const { postObservation } = vbapi;
+
 // initial state
 const state = {
   items: [],
@@ -175,7 +176,7 @@ const actions = {
       description,
     } = observation.position;
     const { commonName, scientificName, taxonId } = observation.taxonomy;
-    const { count, extraInfoCode, datetime, discipline } = observation;
+    const { count, extraInfoCode, datetime, discipline, notes } = observation;
 
     const formData = new FormData();
     images.forEach(image => formData.append('images', image));
@@ -192,6 +193,7 @@ const actions = {
     formData.append('obsName', username);
     formData.append('locationDescription', description);
     formData.append('discipline', discipline);
+    formData.append('notes', notes);
 
     try {
       const { taxonRecordedId } = await postObservation(formData, jwt);
