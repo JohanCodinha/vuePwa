@@ -38,7 +38,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      observations: 'observation/general',
+      observations: 'observation/generalObs',
     }),
     survey () {
       return this.observations.find(obs => obs.surveyId === this.surveyId);
