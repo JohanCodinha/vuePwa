@@ -77,7 +77,7 @@ export default {
       return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
     },
     imageSources () {
-      if (!this.imagesId) return null;
+      if (!this.imagesId || !this.imagesId.length) return null;
       return this.imagesId.map(id => `https://res.cloudinary.com/vba/image/fetch/w_300,f_auto/https://vba.dse.vic.gov.au/vba/getFile.do%3Fid%3D${id}`);
     },
   },

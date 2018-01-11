@@ -124,9 +124,10 @@ export default {
   justify-content: center;
 }
 .image img {
+  max-height: 40vh;
+  object-fit: contain;
+  height: 100%;
   width: 100%;
-  //height: 100%;
-  max-height: 40vh
 }
 
 .material-icons {

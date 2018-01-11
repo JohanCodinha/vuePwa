@@ -15,8 +15,8 @@ const state = {
 
 // Getters
 const getters = {
-  general: state => state.general.reverse(),
-  observationsByDate: state => state.general
+  generalObs: state => state.general.reverse(),
+  observationsByDate: state => [...state.general]
     .sort((a, b) => new Date(b.surveyStartSdt) - new Date(a.surveyStartSdt)),
 };
 

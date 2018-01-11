@@ -47,7 +47,7 @@ export default {
   computed: {
     ...mapGetters({
       observationsByDate: 'observation/observationsByDate',
-      generalObs: 'observation/general',
+      generalObs: 'observation/generalObs',
       logedIn: 'account/isLogin',
     }),
   },
