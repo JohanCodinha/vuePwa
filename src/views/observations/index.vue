@@ -12,8 +12,8 @@
     </div>
     <div>
     <ul class="observationsList">
-      <observation-card class="observationCard"  
-        v-for="record in generalObs"
+      <observation-card class="observationCard"
+        v-for="record in observationsByDate"
         :scientificName="record.species && record.species.length && record.species[0].scientificNme"
         :commonName="record.species && record.species.length && record.species[0].commonNme"
         :imagesId="record.species[0] && record.species[0].images.map(i=>i.id)"

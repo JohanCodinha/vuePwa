@@ -6,16 +6,16 @@
     <div class="card-content_">
       <div class="visible-content">
         <slot name="content"></slot>
-        <a v-if="this.$slots['reveal']" href="#">
+        <div v-if="this.$slots['reveal']">
           <i @click.stop="cardReveal" class="material-icons">more_vert</i>
-        </a>
+        </div>
       </div>
       <div class="card-reveal_" v-bind:class="{'card-revealed': cardRevealed}">
         <div class="card-reveal-content">
           <slot name="reveal"></slot>
-          <a href="#">
+          <div>
             <i @click.stop="cardHide" class="material-icons">close</i>
-          </a>
+          </div>
         </div>
       </div>
     </div>
