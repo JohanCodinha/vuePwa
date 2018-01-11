@@ -2,6 +2,7 @@ import Vue from 'vue';
 import mapboxApi from '@/api/mapbox';
 import vbapi from '@/api/vbapi';
 import db from '@/store/db';
+import router from '@/router';
 import * as types from '../mutations-types';
 
 const { reverseGeocoding } = mapboxApi;
@@ -201,10 +202,11 @@ const actions = {
       if (!taxonRecordedId) throw new Error('upload failed');
       commit(types.SET_RECORDED_ID, { obsId: observation.id, taxonRecordedId });
       dispatch('alerts/addSnackbar', { message: 'Upload success !', timeout: 3500 }, { root: true });
-      console.log(observation.obsId);
       dispatch('deleteObservation', observation.id);
       dispatch('observation/getGeneralObs', {}, { root: true });
+      router.replace({ name: 'observations' });
     } catch (error) {
+      console.log(error);
       dispatch('alerts/addSnackbar', { message: error.message, timeout: 3500 }, { root: true });
       return error;
     }
@@ -263,7 +265,7 @@ const actions = {
       await db.observe.where('id').equals(obsId)
         .modify(obs => obs.images.push(image));
     } catch (error) {
-      console.log('here', error);
+      console.log(error);
     }
   },
   async selectSpecie ({ commit, getters }, { specie, obsId }) {
