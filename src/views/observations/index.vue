@@ -19,7 +19,7 @@
         :imagesId="record.species[0] && record.species[0].images.map(i=>i.id)"
         :siteName="record.siteNme"
         :surveyId="record.surveyId"
-        :status="record.expertReviewStatusCde"
+        :status="record.expertReviewStatus"
         :startDate="record.surveyStartSdt"
         :key="record.surveyId">
       </observation-card>
@@ -50,10 +50,6 @@ export default {
       generalObs: 'observation/general',
       logedIn: 'account/isLogin',
     }),
-    obsByDate () {
-      const observations = this.generalObs;
-      return observations.sort((a, b) => new Date(b.surveyStartSdt) - new Date(a.surveyStartSdt));
-    },
   },
   methods: {
     ...mapActions({

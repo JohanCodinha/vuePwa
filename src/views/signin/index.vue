@@ -28,7 +28,6 @@
         <input type="submit" name="" value="Log in" class="button">
       </div>
     </form>
-      <p>{{status}}</p>
   </div>
 </template>
 
