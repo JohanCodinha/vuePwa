@@ -330,11 +330,11 @@ header {
 }
 .main {
   position: relative;
-  z-index: 1;
+  z-index: 3;
   display: flex;
   flex-direction: column;
-  //height: 100vh;
-  min-height: 100vh;
+  // height: 101vh;
+  // min-height: 100vh;
   position: relative;
 }
 
