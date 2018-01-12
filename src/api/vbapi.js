@@ -1,8 +1,8 @@
 import axios from 'axios';
 import store from '@/store';
 
-const baseURL = 'https://vbago.science/vbapi';
-// const baseURL = 'http://localhost:9000';
+// const baseURL = 'https://vbago.science/vbapi';
+const baseURL = 'http://localhost:9000';
 
 const http = axios.create({
   baseURL,
@@ -60,6 +60,12 @@ export default {
 
   deleteSurvey: (surveyId, jwt) => http
     .delete(`/surveys/${surveyId}`, {
+      headers: { 'x-access-token': jwt },
+    })
+    .then(res => res.data),
+
+  expertReviewSurvey: (surveyId, jwt) => http
+    .post(`/surveys/${surveyId}/review`, {}, {
       headers: { 'x-access-token': jwt },
     })
     .then(res => res.data),

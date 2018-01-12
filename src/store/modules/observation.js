@@ -6,6 +6,7 @@ import { SAVE_GENERAL_OBS, DELETE_SURVEY, SAVE_SPECIES } from '../mutations-type
 const {
   getGeneralObservation,
   deleteSurvey,
+  expertReviewSurvey,
 } = vbapi;
 
 // initial state
@@ -39,6 +40,17 @@ const actions = {
       const jwt = rootState.account.jwt.value;
       const { deletedSurveyId } = await deleteSurvey(surveyId, jwt);
       commit(DELETE_SURVEY, Number(deletedSurveyId));
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  async expertReviewSurvey ({ rootState }, surveyId) {
+    try {
+      const jwt = rootState.account.jwt.value;
+      const response = await expertReviewSurvey(surveyId, jwt);
+      console.log(`${surveyId} was sent for expert review`);
+      console.log(response);
     } catch (error) {
       console.log(error);
     }

@@ -20,6 +20,10 @@
          @click.stop='deleteRecord(surveyId)'>Delete
          <!-- <i class="material-icons right">delete</i> -->
       </a>
+      <a class="btn"
+         @click.stop='expertReview(surveyId)'>Review
+         <!-- <i class="material-icons right">delete</i> -->
+      </a>
       <!-- <a class="btn_"
         @click=''>Edit</a> -->
     </div>
@@ -86,6 +90,9 @@ export default {
     // ]),
     deleteRecord (surveyId) {
       this.$store.dispatch('observation/deleteSurvey', surveyId);
+    },
+    expertReview (surveyId) {
+      this.$store.dispatch('observation/expertReviewSurvey', surveyId);
     },
   },
 };
