@@ -1,17 +1,26 @@
 <template>
-  <div class="spinner-container">
-    <svg class="spinner" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
-     <circle class="path" fill="none" stroke-width="6" stroke-linecap="round" cx="33" cy="33" r="30"></circle>
-    </svg>
-  </div>
+  <transition name="slide-up">
+    <div v-if="spinner" class="spinner-container">
+      <svg class="spinner" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
+        <circle class="path" fill="none" stroke-width="6" stroke-linecap="round" cx="33" cy="33" r="30"></circle>
+      </svg>
+    </div>
+  </transition>
 </template>
 
 <script>
+import { createNamespacedHelpers } from 'vuex';
+
+const {
+  mapGetters: mapGettersLoading,
+} = createNamespacedHelpers('loading');
+
 export default {
-  name: 'templateComponent',
-  props: {
-  },
+  name: 'loading',
   computed: {
+    ...mapGettersLoading([
+      'spinner',
+    ]),
   },
 };
 </script>
@@ -32,6 +41,11 @@ $duration: 1.4s;
   padding: .5rem;
   width: 4rem;
   height: 4rem;
+  position: fixed;
+  z-index: 3;
+  bottom: 1rem;
+  right: 50%;
+  margin-right: -2.5rem;
 }
 
 @keyframes rotator {
@@ -49,11 +63,10 @@ $duration: 1.4s;
 }
 
 @keyframes colors {
-  0% { stroke: #4285F4; }
-  25% { stroke: #DE3E35; }
-  50% { stroke: #F7C223; }
-  75% { stroke: #1B9A59; }
-  100% { stroke: #4285F4; }
+  0% { stroke: #642667; }
+  33% { stroke: #CEDC00; }
+  66% { stroke: #71C5E8; }
+  100% { stroke: #FDDA24; }
 }
 
 @keyframes dash {
@@ -66,5 +79,16 @@ $duration: 1.4s;
     stroke-dashoffset: $offset;
     transform:rotate(450deg);
   }
+}
+
+.slide-up-enter-active {
+  transition: all .3s ease;
+}
+.slide-up-leave-active {
+  transition: all .3s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+}
+.slide-up-enter, .slide-up-leave-to {
+  opacity: .5;
+  transform: translateY(200%);
 }
 </style>

@@ -70,11 +70,15 @@ export default {
     })
     .then(res => res.data),
 
-  getGeneralObservation: jwt => http
-    .get('/search/userObservations', {
-      headers: { 'x-access-token': jwt },
-    })
-    .then(res => res.data),
+  getGeneralObservation: async (jwt) => {
+    store.dispatch('loading/showSpinner', { root: true });
+    const { data } = await http
+      .get('/search/userObservations', {
+        headers: { 'x-access-token': jwt },
+      });
+    store.dispatch('loading/hideSpinner', { root: true });
+    return data;
+  },
 
   getMethods: (surveyId, jwt) => http
     .get(`/surveys/${surveyId}/methods`, {

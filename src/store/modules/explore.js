@@ -38,6 +38,7 @@ const getters = {
 
 const actions = {
   async searchSpecies ({ commit, getters, rootGetters, dispatch }) {
+    dispatch('loading/showSpinner', { root: true });
     if (!rootGetters['account/isLoginAsGuest'] || !rootGetters['account/isLogin']) {
       await dispatch('account/loginAsGuest', null, { root: true });
     }
@@ -65,8 +66,10 @@ const actions = {
         commit(types.CLEAR_SPECIE_RECORDS, { taxonId: specie.taxonId });
         commit('ADD_RECORDS', records);
       });
+      dispatch('loading/hideSpinner', { root: true });
     } catch (error) {
       console.log(error);
+      dispatch('loading/hideSpinner', { root: true });
       dispatch('errors/addSnackbar', { message: error.message, timeout: 3500 }, { root: true });
     }
   },

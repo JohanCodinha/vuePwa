@@ -54,3 +54,9 @@ export const UPDATE_SNACKBAR = 'UPDATE_SNACKBAR';
 export const ADD_SNACKBAR = 'ADD_SNACKBAR';
 export const CLEAR_DISPLAYED_SNACKBAR = 'CLEAR_DISPLAYED_SNACKBAR';
 
+/*
+ *  Loading
+ * */
+export const SHOW_SPINNER = 'SHOW_SPINNER';
+export const HIDE_SPINNER = 'HIDE_SPINNER';
+

@@ -6,6 +6,7 @@ import account from './modules/account';
 import explore from './modules/explore';
 import location from './modules/location';
 import alerts from './modules/alerts';
+import loading from './modules/loading';
 
 Vue.use(Vuex);
 
@@ -17,6 +18,7 @@ const store = {
     observe,
     explore,
     alerts,
+    loading,
   },
 };
 
