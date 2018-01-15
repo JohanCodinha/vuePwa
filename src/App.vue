@@ -37,7 +37,7 @@
         class="main app-content">
       </router-view>
     <sidePanel :style="{ display: slideoutOpen ? 'block' : 'none' }" @closeMenu="menu"></sidePanel>
-  </div>
+    <loading-indicator></loading-indicator>
   </div>
 </template>
 
@@ -45,6 +45,7 @@
 import sidePanel from '@/views/sidePanel';
 import navigation from '@/views/navigation';
 import snackbar from '@/views/components/snackbar';
+import loading from '@/views/loading';
 import { debounce } from 'lodash';
 import { mapActions, createNamespacedHelpers } from 'vuex';
 
@@ -65,6 +66,7 @@ export default {
     sidePanel,
     'head-nav': navigation,
     snackbar,
+    'loading-indicator': loading,
   },
   computed: {
     ...mapGettersAccount([
