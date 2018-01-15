@@ -1,6 +1,6 @@
 <template>
   <div>
-    <explorer-map v-if="species.length"></explorer-map>
+    <explorer-map></explorer-map>
     <div class="container">
       <div v-if="!status.searched" class="description">
         <h1>Explore flora &amp; fauna near you </h1>
