@@ -1,5 +1,5 @@
 <template>
-  <card @click.native="$router.push({ name: 'survey', params: { surveyId } })"
+  <card @click.native="$router.push({ name: 'record', params: { surveyId } })"
     :triggerReveal="triggerReveal">
     <img v-if="imageSources" slot="image" :src="imageSources">
     <dl slot="content">

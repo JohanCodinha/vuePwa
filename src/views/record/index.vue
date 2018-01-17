@@ -1,33 +1,39 @@
 <template>
   <div class="container">
-    <h1 v-if="species && !species.length">No species found for survey {{surveyId}}</h1>
-    <ul>
-      <specie-card v-for="specie in species"
-        :commonName="specie.commonNme"
-        :scientificName="specie.scientificNme"
-        :count="specie.totalCountInt"
-        :imagesId="specie.images.map(i=>i.id)"
-        :status="specie.reliabilityDesc"
-        :extraDescription="specie.extraDesc"
-        :siteName="survey.siteNme"
-        :key="specie.surveyId">
-      </specie-card> 
-    </ul>
+    <record-images
+     :imagesId="specie.images.map(i=>i.id)">
+    </record-images>
+    <record-species
+       :commonName="specie.commonNme"
+       :scientificName="specie.scientificNme"
+       :observer="specie.observerFullName"
+       :type="specie.typeDesc"
+       :count="specie.totalCountInt"
+       :countAccuracy="specie.countAccuracyCde"
+       :reliability="specie.reliabilityDesc"
+       :comments="'Insert comment'"
+       >
+    </record-species>
+    <record-location></record-location>
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex';
-import specieCard from './specieCard';
+import species from './species';
+import images from './images';
+import location from './location';
 
 export default {
-  name: 'observation-card',
+  name: 'record',
   data () {
     return {
     };
   },
   components: {
-    'specie-card': specieCard,
+    'record-species': species,
+    'record-location': location,
+    'record-images': images,
   },
   props: {
     surveyId: {
@@ -44,6 +50,9 @@ export default {
     },
     species () {
       return this.survey.species;
+    },
+    specie () {
+      return this.survey.species[0];
     },
   },
   methods: {
