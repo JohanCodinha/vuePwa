@@ -1,5 +1,6 @@
 <template>
-  <card @click.native="$router.push({ name: 'survey', params: { surveyId } })">
+  <card @click.native="$router.push({ name: 'survey', params: { surveyId } })"
+    :triggerReveal="triggerReveal">
     <img v-if="imageSources" slot="image" :src="imageSources">
     <dl slot="content">
       <div class="content">
@@ -18,14 +19,10 @@
     <div slot="reveal">
       <a class="btn red_"
          @click.stop='deleteRecord(surveyId)'>Delete
-         <!-- <i class="material-icons right">delete</i> -->
       </a>
       <a class="btn"
          @click.stop='expertReview(surveyId)'>Review
-         <!-- <i class="material-icons right">delete</i> -->
       </a>
-      <!-- <a class="btn_"
-        @click=''>Edit</a> -->
     </div>
   </card>
 </template>
@@ -40,6 +37,7 @@ export default {
   },
   data () {
     return {
+      triggerReveal: false,
     };
   },
   props: {
@@ -73,9 +71,6 @@ export default {
     },
   },
   computed: {
-    // ...mapGetters({
-    //   generalObs: 'general',
-    // }),
     formatedDate () {
       const date = new Date(this.startDate);
       return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
@@ -86,13 +81,13 @@ export default {
     },
   },
   methods: {
-    // ...mapActions([
-    // ]),
     deleteRecord (surveyId) {
       this.$store.dispatch('observation/deleteSurvey', surveyId);
+      this.triggerReveal = !this.triggerReveal;
     },
     expertReview (surveyId) {
       this.$store.dispatch('observation/expertReviewSurvey', surveyId);
+      this.triggerReveal = !this.triggerReveal;
     },
   },
 };

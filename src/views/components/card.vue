@@ -25,6 +25,9 @@
 <script>
 export default {
   name: 'card',
+  props: {
+    triggerReveal: false,
+  },
   data () {
     return {
       cardRevealed: false,
@@ -35,6 +38,11 @@ export default {
       this.$data.cardRevealed = true;
     },
     cardHide () {
+      this.$data.cardRevealed = false;
+    },
+  },
+  watch: {
+    triggerReveal: function triggerReveal () {
       this.$data.cardRevealed = false;
     },
   },

@@ -45,10 +45,12 @@ const actions = {
     }
   },
 
-  async expertReviewSurvey ({ rootState }, surveyId) {
+  async expertReviewSurvey ({ rootState, dispatch }, surveyId) {
     try {
+      dispatch('loading/showSpinner', null, { root: true });
       const jwt = rootState.account.jwt.value;
       const response = await expertReviewSurvey(surveyId, jwt);
+      dispatch('getGeneralObs');
       console.log(`${surveyId} was sent for expert review`);
       console.log(response);
     } catch (error) {

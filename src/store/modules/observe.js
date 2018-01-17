@@ -197,13 +197,15 @@ const actions = {
     formData.append('notes', notes);
 
     try {
+      dispatch('loading/showSpinner', null, { root: true });
       const { taxonRecordedId } = await postObservation(formData, jwt);
-      console.log(taxonRecordedId);
+      console.log(`Observation upload OK, taxonRecordedId: ${taxonRecordedId}`);
+      dispatch('loading/hideSpinner', null, { root: true });
       if (!taxonRecordedId) throw new Error('upload failed');
       commit(types.SET_RECORDED_ID, { obsId: observation.id, taxonRecordedId });
       dispatch('alerts/addSnackbar', { message: 'Upload success !', timeout: 3500 }, { root: true });
       dispatch('deleteObservation', observation.id);
-      dispatch('observation/getGeneralObs', {}, { root: true });
+      dispatch('observation/getGeneralObs', null, { root: true });
       router.replace({ name: 'observations' });
     } catch (error) {
       console.log(error);
@@ -213,7 +215,6 @@ const actions = {
   },
   async removeImage ({commit, getters}, { imageId, obsId }) {
     const observation = getters.getObservationById(obsId);
-    console.log('madeit', observation, obsId);
     commit('DELETE_IMAGE', { imageId, observation });
   },
   async addImage ({ commit, getters }, { image: imageFile, metadata, obsId }) {
@@ -297,14 +298,12 @@ const actions = {
   },
   setNotes ({ commit, getters }, { notes, obsId }) {
     const observation = getters.getObservationById(obsId)
-    console.log(observation, notes, obsId);
     db.observe.where('id').equals(obsId).modify(obs => 
       obs.notes = notes );
     commit('SET_NOTES', { notes, observation });
   },
   setDatetime ({ commit, getters }, { datetimeString, obsId }) {
     const observation = getters.getObservationById(obsId);
-    console.log(observation);
     commit(types.SET_DATETIME, { datetime: datetimeString, observation });
   },
 };

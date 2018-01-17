@@ -11,19 +11,19 @@
       <i @click="refresh" class="material-icons menu-item">refresh</i>
     </div>
     <div>
-    <ul class="observationsList">
-      <observation-card class="observationCard"
-        v-for="record in observationsByDate"
-        :scientificName="record.species && record.species.length && record.species[0].scientificNme"
-        :commonName="record.species && record.species.length && record.species[0].commonNme"
-        :imagesId="record.species[0] && record.species[0].images.map(i=>i.id)"
-        :siteName="record.siteNme"
-        :surveyId="record.surveyId"
-        :status="record.expertReviewStatus"
-        :startDate="record.surveyStartSdt"
-        :key="record.surveyId">
-      </observation-card>
-    </ul>
+      <transition-group name="obsCard-list" tag="ul" class="observationsList">
+        <observation-card class="observationCard"
+          v-for="record in observationsByDate"
+          :scientificName="record.species && record.species.length && record.species[0].scientificNme"
+          :commonName="record.species && record.species.length && record.species[0].commonNme"
+          :imagesId="record.species[0] && record.species[0].images.map(i=>i.id)"
+          :siteName="record.siteNme"
+          :surveyId="record.surveyId"
+          :status="record.expertReviewStatus"
+          :startDate="record.surveyStartSdt"
+          :key="record.surveyId">
+        </observation-card>
+      </transition-group>
     </div>
   </div>
 </template>
@@ -159,5 +159,20 @@ export default {
       align-items: center;
 
     }
+  }
+  .obsCard-list-item {
+    transition: all 10s;
+    display: inline-block;
+    margin-right: 10px;
+  }
+  .obsCard-list-enter, .obsCard-list-leave-to {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  .obsCard-list-leave-active {
+    position: absolute;
+  }
+  .obsCard-list-move {
+    transition: transform 2s;
   }
 </style>
