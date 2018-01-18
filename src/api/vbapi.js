@@ -1,8 +1,8 @@
 import axios from 'axios';
 import store from '@/store';
 
-// const baseURL = 'https://vbago.science/vbapi';
-const baseURL = 'http://localhost:9000';
+const baseURL = 'https://vbago.science/vbapi';
+// const baseURL = 'http://localhost:9000';
 
 const http = axios.create({
   baseURL,
@@ -109,6 +109,12 @@ export default {
     .get('/search/point', {
       headers: { 'x-access-token': jwt },
       params: Object.assign({}, position, { detail: true, taxonId }),
+    })
+    .then(res => res.data),
+
+  getRecord: (taxonRecordedId, jwt) => http
+    .get(`/record/${taxonRecordedId}`, {
+      headers: { 'x-access-token': jwt },
     })
     .then(res => res.data),
 };

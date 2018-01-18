@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <record-images
-     :imagesId="specie.images.map(i=>i.id)">
+     :imageId="specie.images.map(i=>i.id)[0]">
     </record-images>
     <record-species
        :commonName="specie.commonNme"
@@ -14,11 +14,15 @@
        :comments="'Insert comment'"
        >
     </record-species>
-    <record-location></record-location>
+    <record-location
+      :latitude="latitude"
+      :longitude="longitude"
+    ></record-location>
   </div>
 </template>
 
 <script>
+import { get } from 'lodash';
 import { mapGetters } from 'vuex';
 import species from './species';
 import images from './images';
@@ -37,16 +41,19 @@ export default {
   },
   props: {
     surveyId: {
-      type: Number,
+      type: [Number, String],
+      required: true,
       default () { return undefined; },
     },
   },
   computed: {
     ...mapGetters({
       observations: 'observation/generalObs',
+      recordById: 'observation/recordById',
     }),
     survey () {
-      return this.observations.find(obs => obs.surveyId === this.surveyId);
+      const coercedSurveyId = Number(this.surveyId);
+      return this.observations.find(obs => obs.surveyId === coercedSurveyId);
     },
     species () {
       return this.survey.species;
@@ -54,13 +61,22 @@ export default {
     specie () {
       return this.survey.species[0];
     },
+    record () {
+      return this.recordById(this.specie.id);
+    },
+    latitude () {
+      return get(this.record, 'surveyComponent.survey.site.latitudeddNum', null);
+    },
+    longitude () {
+      return get(this.record, 'surveyComponent.survey.site.longitudeddNum', null);
+    },
   },
   methods: {
     // ...mapActions([
     // ]),
   },
   mounted () {
-    // this.$store.dispatch('observation/getSurveySpecies', this.surveyId);
+    this.$store.dispatch('observation/getRecord', this.specie.id);
   },
 };
 </script>

@@ -1,17 +1,24 @@
 /* eslint-disable no-shadow */
 import Vue from 'vue';
 import vbapi from '@/api/vbapi';
-import { SAVE_GENERAL_OBS, DELETE_SURVEY, SAVE_SPECIES } from '../mutations-types';
+import {
+  SAVE_GENERAL_OBS,
+  DELETE_SURVEY,
+  SAVE_SPECIES,
+  SAVE_RECORD,
+} from '../mutations-types';
 
 const {
   getGeneralObservation,
   deleteSurvey,
   expertReviewSurvey,
+  getRecord,
 } = vbapi;
 
 // initial state
 const state = {
   general: [],
+  record: [],
 };
 
 // Getters
@@ -19,6 +26,8 @@ const getters = {
   generalObs: state => state.general.reverse(),
   observationsByDate: state => [...state.general]
     .sort((a, b) => new Date(b.surveyStartSdt) - new Date(a.surveyStartSdt)),
+  recordById: state => taxonRecordedId =>
+    state.record.find(record => record.taxonRecordedId === taxonRecordedId),
 };
 
 // Actions
@@ -34,7 +43,16 @@ const actions = {
       console.log(error);
     }
   },
-
+  async getRecord ({ rootState, commit }, recordedTaxonId) {
+    const jwt = rootState.account.jwt.value;
+    try {
+      const { data: [record] } = await getRecord(recordedTaxonId, jwt);
+      console.log(record);
+      commit(SAVE_RECORD, record);
+    } catch (error) {
+      console.log(error);
+    }
+  },
   async deleteSurvey ({ rootState, commit }, surveyId) {
     try {
       const jwt = rootState.account.jwt.value;
@@ -71,6 +89,12 @@ const mutations = {
   [SAVE_SPECIES] (state, { surveyId, species }) {
     const survey = state.general.find(obs => obs.surveyId === surveyId);
     Vue.set(survey, 'species', species);
+  },
+  [SAVE_RECORD] (state, record) {
+    const savedRecord = state.record.find(
+      savedRecord => savedRecord.taxonRecordedId === record.taxonRecordedId);
+    console.log(savedRecord);
+    if (!savedRecord) state.record.push(record);
   },
 };
 

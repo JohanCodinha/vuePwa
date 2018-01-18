@@ -7,7 +7,10 @@
       </dl>
     </div>
     <div class="observer">
-      <p>{{observer}}</p>
+      <dl>
+        <dt>observed by</dt>
+        <dd>{{observer}}</dd>
+      </dl>
     </div>
     <div class="count">
       <dl>
