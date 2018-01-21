@@ -24,16 +24,10 @@
           :key="record.surveyId">
         </observation-card>
       </transition-group>
-    <template v-if="filteredObservation.length >= numberOfDisplayedObs">
-      <div class="expand-trigger" v-if="!showAll" @click="showMore">
+      <div class="expand-trigger" v-if="numOfHidden > 0" @click="showMore">
         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18"><path d="M12.44 6.44L9 9.88 5.56 6.44 4.5 7.5 9 12l4.5-4.5z"/></svg>                
-        <p>Show {{numOfHidden}} more observations</p>
+        <p>Show {{showMoreCount}} more observations</p>
       </div>
-      <div class="expand-trigger" v-else @click="showLess">
-        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18"><path d="M9 6l-4.5 4.5 1.06 1.06L9 8.12l3.44 3.44 1.06-1.06z"/></svg>
-        <p>Hide {{filteredObservation.length - initialNumOfDisplayedObs}} less observations</p>
-      </div>
-    </template>
     </div>
   </div>
 </template>
@@ -49,9 +43,8 @@ export default {
   name: 'saved-observations',
   data () {
     return {
-      initialNumOfDisplayedObs: 25,
       numberOfDisplayedObs: 25,
-      showAll: false,
+      showMoreIncrement: 25,
     };
   },
   components: {
@@ -72,6 +65,11 @@ export default {
     numOfHidden () {
       return this.filteredObservation.length - this.numberOfDisplayedObs;
     },
+    showMoreCount () {
+      return this.numOfHidden < this.showMoreIncrement
+        ? this.numOfHidden
+        : this.showMoreIncrement;
+    },
   },
   methods: {
     ...mapActions({
@@ -87,12 +85,7 @@ export default {
       this.$store.dispatch('observation/deleteSurvey', surveyId);
     },
     showMore () {
-      this.numberOfDisplayedObs = this.filteredObservation.length;
-      this.showAll = true;
-    },
-    showLess () {
-      this.numberOfDisplayedObs = this.initialNumOfDisplayedObs;
-      this.showAll = false;
+      this.numberOfDisplayedObs += this.showMoreIncrement;
     },
   },
 };
@@ -205,5 +198,15 @@ export default {
   }
   .obsCard-list-move {
     transition: transform 2s;
+  }
+  .expand-trigger {
+    display: flex;
+    background: white;
+    padding: 1rem;
+    box-shadow: 0 0 2px rgba(0,0,0,0.12), 0 2px 4px rgba(0,0,0,0.24);
+
+    svg {
+      margin-right: 1rem;
+    }
   }
 </style>
