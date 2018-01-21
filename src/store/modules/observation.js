@@ -48,7 +48,7 @@ const actions = {
   async getRecord ({ rootState, commit }, recordedTaxonId) {
     const jwt = rootState.account.jwt.value;
     try {
-      const { data: [record] } = await getRecord(recordedTaxonId, jwt);
+      const record = await getRecord(recordedTaxonId, jwt);
       console.log(record);
       commit(SAVE_RECORD, record);
     } catch (error) {
@@ -95,7 +95,6 @@ const mutations = {
   [SAVE_RECORD] (state, record) {
     const savedRecord = state.record.find(
       savedRecord => savedRecord.taxonRecordedId === record.taxonRecordedId);
-    console.log(savedRecord);
     if (!savedRecord) state.record.push(record);
   },
 };

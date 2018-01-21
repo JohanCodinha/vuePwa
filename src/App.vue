@@ -155,6 +155,7 @@ export default {
   watch: {
     isLogin: function refreshOnLogin (value) {
       if (value) {
+        console.log(value);
         this.getGeneralObs();
       }
     },
