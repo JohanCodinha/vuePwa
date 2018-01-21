@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const apiUrl = 'https://vbago.science/api';
-// const apiUrl = 'http://localhost:9000';
+// const apiUrl = 'http://localhost:3131';
 
 const searchSpecies = (query, discipline) => axios
   .get(`${apiUrl}/search`, {

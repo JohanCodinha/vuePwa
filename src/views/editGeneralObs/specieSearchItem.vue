@@ -9,7 +9,7 @@
         <p>{{scientificName}}</p>
       </div>
       <p v-if="records.length">Count: {{records.reduce((acc, r) => { return (r.totalCountInt || 1 ) + acc}, 0)}}</p>
-      <p>Last seen {{lastSeen}}</p>
+      <p v-if="last-seen">Last seen {{lastSeen}}</p>
       <p v-if="conservationStatus" class="status">{{conservationStatus}}</p>
     </div>
     </div>
