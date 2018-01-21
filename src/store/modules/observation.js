@@ -34,9 +34,11 @@ const getters = {
 const actions = {
   async getGeneralObs ({ rootGetters, commit, dispatch }) {
     try {
+      dispatch('loading/showSpinner', null, { root: true });
       const jwt = rootGetters['account/isLogin'];
       if (!jwt) throw new Error('Login required to access observations');
       const { records } = await getGeneralObservation(jwt);
+      dispatch('loading/hideSpinner', null, { root: true });
       commit(SAVE_GENERAL_OBS, records);
     } catch (error) {
       dispatch('alerts/addSnackbar', { message: error.message, timeout: 2000 }, { root: true });

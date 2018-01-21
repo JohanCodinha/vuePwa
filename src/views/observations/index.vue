@@ -1,7 +1,7 @@
 <template>
   <div :class="{ center: (logedIn && generalObs.length < 1)}" class="container">
     <div class="no-obs" v-if="logedIn && generalObs.length < 1">
-      <p>No observation</p>
+      <p>We could not find any...</p>
       <router-link to='/observations/drafts'>
         let's get started
       </router-link>
@@ -11,9 +11,9 @@
       <i @click="refresh" class="material-icons menu-item">refresh</i>
     </div>
     <div>
-      <transition-group name="obsCard-list" tag="ul" class="observationsList">
+      <transition-group name="obsCard-list" tag="ol" class="observationsList">
         <observation-card class="observationCard"
-          v-for="record in observationsByDate"
+          v-for="record in displayedObservation"
           :scientificName="record.species && record.species.length && record.species[0].scientificNme"
           :commonName="record.species && record.species.length && record.species[0].commonNme"
           :imagesId="record.species[0] && record.species[0].images.map(i=>i.id)"
@@ -24,6 +24,16 @@
           :key="record.surveyId">
         </observation-card>
       </transition-group>
+    <template v-if="filteredObservation.length >= numberOfDisplayedObs">
+      <div class="expand-trigger" v-if="!showAll" @click="showMore">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18"><path d="M12.44 6.44L9 9.88 5.56 6.44 4.5 7.5 9 12l4.5-4.5z"/></svg>                
+        <p>Show {{numOfHidden}} more observations</p>
+      </div>
+      <div class="expand-trigger" v-else @click="showLess">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18"><path d="M9 6l-4.5 4.5 1.06 1.06L9 8.12l3.44 3.44 1.06-1.06z"/></svg>
+        <p>Hide {{filteredObservation.length - initialNumOfDisplayedObs}} less observations</p>
+      </div>
+    </template>
     </div>
   </div>
 </template>
@@ -39,6 +49,9 @@ export default {
   name: 'saved-observations',
   data () {
     return {
+      initialNumOfDisplayedObs: 25,
+      numberOfDisplayedObs: 25,
+      showAll: false,
     };
   },
   components: {
@@ -50,6 +63,15 @@ export default {
       generalObs: 'observation/generalObs',
       logedIn: 'account/isLogin',
     }),
+    filteredObservation () {
+      return this.observationsByDate;
+    },
+    displayedObservation () {
+      return this.filteredObservation.slice(0, this.numberOfDisplayedObs);
+    },
+    numOfHidden () {
+      return this.filteredObservation.length - this.numberOfDisplayedObs;
+    },
   },
   methods: {
     ...mapActions({
@@ -64,6 +86,14 @@ export default {
     deleteRecord (surveyId) {
       this.$store.dispatch('observation/deleteSurvey', surveyId);
     },
+    showMore () {
+      this.numberOfDisplayedObs = this.filteredObservation.length;
+      this.showAll = true;
+    },
+    showLess () {
+      this.numberOfDisplayedObs = this.initialNumOfDisplayedObs;
+      this.showAll = false;
+    },
   },
 };
 </script>
@@ -76,6 +106,7 @@ export default {
   }
 
   .container {
+    min-height: 100vh;
     margin: 0 .5rem 0 .5rem;
     padding-bottom: .5rem;
     display: flex;

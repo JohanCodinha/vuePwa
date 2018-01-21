@@ -1,8 +1,8 @@
 import axios from 'axios';
 import store from '@/store';
 
-const baseURL = 'https://vbago.science/vbapi';
-// const baseURL = 'http://localhost:9000';
+// const baseURL = 'https://vbago.science/vbapi';
+const baseURL = 'http://localhost:9000';
 
 const http = axios.create({
   baseURL,
@@ -70,15 +70,11 @@ export default {
     })
     .then(res => res.data),
 
-  getGeneralObservation: async (jwt) => {
-    store.dispatch('loading/showSpinner', { root: true });
-    const { data } = await http
-      .get('/search/userObservations', {
-        headers: { 'x-access-token': jwt },
-      });
-    store.dispatch('loading/hideSpinner', { root: true });
-    return data;
-  },
+  getGeneralObservation: jwt => http
+    .get('/search/userObservations', {
+      headers: { 'x-access-token': jwt },
+    })
+    .then(res => res.data),
 
   getMethods: (surveyId, jwt) => http
     .get(`/surveys/${surveyId}/methods`, {

@@ -51,7 +51,6 @@ const actions = {
   async updateToken ({ commit, dispatch }) {
     try {
       const [account] = await db.account.toArray();
-      if (!account) throw new Error('No locally saved account');
       const { userId, displayName, jwt, username, password } = account;
       console.log('found acc', displayName);
       console.log('is still valid');
@@ -90,7 +89,6 @@ const actions = {
       commit(types.STATUS, { message });
       throw error;
     }
-    return 'done';
   },
   async loginAsGuest ({ commit }) {
     try {
