@@ -1,33 +1,36 @@
 import axios from 'axios';
+import get from 'lodash/get';
 import store from '@/store';
 
-const baseURL = 'https://vbago.science/vbapi';
-// const baseURL = 'http://localhost:9000';
+// const baseURL = 'https://vbago.science/vbapi';
+const baseURL = 'http://localhost:9000';
 
 const http = axios.create({
   baseURL,
 });
 
 http.interceptors.response.use(response => response,
-  async (error) => {
+  async (requestError) => {
     /* eslint-disable no-underscore-dangle */
-    const originalRequest = error.config;
-    if (error.message === 'Network Error') {
-      return Promise.reject(error);
-    }
-    if (originalRequest._retry) return Promise.reject(error);
-    if (originalRequest.url === `${originalRequest.baseURL}/auth`) return Promise.reject(error);
-    console.log(error.config);
-    originalRequest._retry = true;
     try {
+      const originalRequest = requestError.config;
+      const responseStatus = get(requestError, 'response.status');
+      const networkError = (requestError.message === 'Network Error');
+      console.log(responseStatus, networkError);
+      if (responseStatus === 401 || originalRequest._retry || networkError) throw requestError;
+      console.log(responseStatus, originalRequest._retry);
       await store.dispatch('account/updateToken');
       const jwt = store.getters['account/isLogin'];
       originalRequest.headers['x-access-token'] = jwt;
+      originalRequest._retry = true;
       return http(originalRequest);
-    } catch ({ message }) {
-      store.dispatch('errors/addSnackbar', { message, timeout: 3500 }, { root: true });
+    } catch (error) {
+      console.log(error);
+      return Promise.reject(error);
     }
-    return Promise.reject(error);
+    // if (error.message === 'Network Error') {
+    //   return Promise.reject(error);
+    // }
   });
 
 export default {
