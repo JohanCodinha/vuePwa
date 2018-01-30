@@ -14,9 +14,9 @@
       <transition-group name="obsCard-list" tag="ol" class="observationsList">
         <observation-card class="observationCard"
           v-for="record in displayedObservation"
+          :taxonRecordedId="record.species[0].id"
           :scientificName="record.species && record.species.length && record.species[0].scientificNme"
           :commonName="record.species && record.species.length && record.species[0].commonNme"
-          :imagesId="record.species[0] && record.species[0].images.map(i=>i.id)"
           :siteName="record.siteNme"
           :surveyId="record.surveyId"
           :status="record.expertReviewStatus"

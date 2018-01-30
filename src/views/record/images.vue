@@ -10,6 +10,7 @@ export default {
   props: {
     imageId: {
       type: Number,
+      required: true,
     },
   },
   computed: {

@@ -28,6 +28,9 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+import get from 'lodash/get';
+
 import card from '@/views/components/card';
 
 export default {
@@ -41,6 +44,10 @@ export default {
     };
   },
   props: {
+    taxonRecordedId: {
+      type: Number,
+      required: true,
+    },
     siteName: {
       type: String,
       default () { return undefined; },
@@ -71,13 +78,20 @@ export default {
     },
   },
   computed: {
+    ...mapGetters({
+      recordById: 'observation/recordById',
+    }),
+    record () {
+      return this.recordById(this.taxonRecordedId);
+    },
     formatedDate () {
       const date = new Date(this.startDate);
       return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
     },
     imageSources () {
-      if (!this.imagesId || !this.imagesId.length) return null;
-      return this.imagesId.map(id => `https://res.cloudinary.com/vba/image/fetch/w_300,f_auto/https://vba.dse.vic.gov.au/vba/getFile.do%3Fid%3D${id}`);
+      const imageId = get(this.record, 'images[0].id');
+      if (!imageId) return null;
+      return `https://res.cloudinary.com/vba/image/fetch/w_300,f_auto/https://vba.dse.vic.gov.au/vba/getFile.do%3Fid%3D${imageId}`;
     },
   },
   methods: {
@@ -89,6 +103,9 @@ export default {
       this.$store.dispatch('observation/expertReviewSurvey', surveyId);
       this.triggerReveal = !this.triggerReveal;
     },
+  },
+  mounted () {
+    this.$store.dispatch('observation/getRecord', this.taxonRecordedId);
   },
 };
 </script>

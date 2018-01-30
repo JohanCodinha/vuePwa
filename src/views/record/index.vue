@@ -1,16 +1,17 @@
 <template>
   <div class="container">
     <record-images
-     :imageId="specie.images.map(i=>i.id)[0]">
+      v-if="imageId"
+     :imageId="imageId">
     </record-images>
     <record-species
-       :commonName="specie.commonNme"
-       :scientificName="specie.scientificNme"
-       :observer="specie.observerFullName"
-       :type="specie.typeDesc"
-       :count="specie.totalCountInt"
-       :countAccuracy="specie.countAccuracy"
-       :reliability="specie.reliabilityDesc"
+       :commonName="specie && specie.commonNme"
+       :scientificName="specie && specie.scientificNme"
+       :observer="specie && specie.observerFullName"
+       :type="specie && specie.typeDesc"
+       :count="specie && specie.totalCountInt"
+       :countAccuracy="specie && specie.countAccuracy"
+       :reliability="specie && specie.reliabilityDesc"
        :comments="comments"
        >
     </record-species>
@@ -58,15 +59,18 @@ export default {
     species () {
       return get(this.survey, 'species', null);
     },
+    imageId () {
+      return get(this.record, 'images', []).map(i => i.id)[0];
+    },
     specie () {
       return get(this.survey, 'species[0]', null);
     },
+    recordId () {
+      return get(this.specie, 'id');
+    },
     record () {
-      const recordId = get(this.specie, 'id', null);
-      console.log(recordId);
-      return recordId !== null
-        ? this.recordById(recordId)
-        : {};
+      const id = this.recordId;
+      return this.recordById(id);
     },
     latitude () {
       return get(this.record, 'surveyComponent.survey.site.latitudeddNum', null);
@@ -83,7 +87,7 @@ export default {
     // ]),
   },
   mounted () {
-    this.$store.dispatch('observation/getRecord', this.specie.id);
+    // this.$store.dispatch('observation/getRecord', this.specie.id);
   },
 };
 </script>

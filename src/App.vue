@@ -47,7 +47,7 @@ import navigation from '@/views/navigation';
 import snackbar from '@/views/components/snackbar';
 import loading from '@/views/loading';
 import { debounce } from 'lodash';
-import { mapActions, createNamespacedHelpers } from 'vuex';
+import { mapActions, mapGetters, createNamespacedHelpers } from 'vuex';
 
 const {
   mapActions: mapActionsAccount,
@@ -69,6 +69,9 @@ export default {
     'loading-indicator': loading,
   },
   computed: {
+    ...mapGetters({
+      observations: 'observation/generalObs',
+    }),
     ...mapGettersAccount([
       'isLogin',
       'onLine',
@@ -154,8 +157,7 @@ export default {
   },
   watch: {
     isLogin: function refreshOnLogin (value) {
-      if (value) {
-        console.log(value);
+      if (value && !this.observations.length) {
         this.getGeneralObs();
       }
     },
