@@ -51,19 +51,17 @@ const actions = {
   async updateToken ({ commit, dispatch }) {
     try {
       const [account] = await db.account.toArray();
-      const { userId, displayName, jwt, username, password } = account;
-      console.log('found acc', displayName);
-      console.log('is still valid');
-      commit(types.SAVE_USER_INFO, { userId, displayName });
-      await dispatch('fetchToken', { username, password });
-      return Promise.resolve(jwt.value);
+      if (account) {
+        const { userId, displayName, username, password } = account;
+        console.log('Found account', displayName);
+        commit(types.SAVE_USER_INFO, { userId, displayName });
+        await dispatch('fetchToken', { username, password });
+      }
     } catch (error) {
-      console.log(error);
       dispatch('alerts/addSnackbar', { message: error.message, timeout: 2000 }, { root: true });
-      return Promise.reject(error);
     }
   },
-  async fetchToken ({ commit }, { username, password }) {
+  async fetchToken ({ commit, dispatch }, { username, password }) {
     try {
       const {
         jwt,
@@ -86,8 +84,8 @@ const actions = {
       commit(types.SAVE_USER_INFO, { userId, displayName });
     } catch (error) {
       const message = get(error, 'response.data.message', 'Login error');
+      dispatch('alerts/addSnackbar', { message, timeout: 2000 }, { root: true });
       commit(types.STATUS, { message });
-      throw error;
     }
   },
   async loginAsGuest ({ commit }) {

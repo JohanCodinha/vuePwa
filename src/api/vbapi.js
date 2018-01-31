@@ -16,21 +16,15 @@ http.interceptors.response.use(response => response,
       const originalRequest = requestError.config;
       const responseStatus = get(requestError, 'response.status');
       const networkError = (requestError.message === 'Network Error');
-      console.log(responseStatus, networkError);
       if (responseStatus === 401 || originalRequest._retry || networkError) throw requestError;
-      console.log(responseStatus, originalRequest._retry);
       await store.dispatch('account/updateToken');
       const jwt = store.getters['account/isLogin'];
       originalRequest.headers['x-access-token'] = jwt;
       originalRequest._retry = true;
       return http(originalRequest);
     } catch (error) {
-      console.log(error);
       return Promise.reject(error);
     }
-    // if (error.message === 'Network Error') {
-    //   return Promise.reject(error);
-    // }
   });
 
 export default {

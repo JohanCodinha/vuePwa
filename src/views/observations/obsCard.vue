@@ -105,6 +105,7 @@ export default {
     },
   },
   mounted () {
+    if (this.record) return;
     this.$store.dispatch('observation/getRecord', this.taxonRecordedId);
   },
 };

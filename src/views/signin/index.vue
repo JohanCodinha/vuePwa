@@ -71,9 +71,8 @@ export default {
           this.password = '';
         }
       } catch (error) {
-        console.log(this);
-        this.$store.dispatch('alerts/addSnackbar', { message: error.message, timeout: 20000 }, { root: true });
         console.log(error);
+        this.$store.dispatch('alerts/addSnackbar', { message: error.message, timeout: 20000 }, { root: true });
       }
     },
   },

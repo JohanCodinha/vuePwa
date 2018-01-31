@@ -15,9 +15,7 @@ const getters = {
 
 const actions = {
   updateDisplayedSnackbar ({ commit, dispatch, state }) {
-    console.log(state.snackbar, state.snackbars.length);
     if (!state.displayedSnackbar && state.snackbars.length) {
-      console.log('made it');
       const snackbar = state.snackbars[0];
       window.setTimeout(() => {
         commit(types.CLEAR_DISPLAYED_SNACKBAR);
@@ -30,6 +28,7 @@ const actions = {
     }
   },
   addSnackbar ({ commit, dispatch }, { message, timeout }) {
+    console.log(`Displaying snackbar's message: ${message} for ${timeout}`);
     commit(types.ADD_SNACKBAR, { message, timeout });
     dispatch('updateDisplayedSnackbar');
   },
