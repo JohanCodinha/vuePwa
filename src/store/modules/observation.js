@@ -49,7 +49,6 @@ const actions = {
     const jwt = rootState.account.jwt.value;
     try {
       const record = await getRecord(recordedTaxonId, jwt);
-      console.log(record);
       commit(SAVE_RECORD, record);
     } catch (error) {
       console.log(error);

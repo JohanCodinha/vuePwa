@@ -338,8 +338,6 @@ header {
   z-index: 3;
   display: flex;
   flex-direction: column;
-  // height: 101vh;
-  // min-height: 100vh;
   position: relative;
 }
 

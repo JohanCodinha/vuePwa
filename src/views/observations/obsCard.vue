@@ -115,7 +115,7 @@ export default {
   .content {
     display: flex;
     img {
-      max-width: 3rem;
+      //max-width: 3rem;
     }
     dd {
       font-size: 1rem;

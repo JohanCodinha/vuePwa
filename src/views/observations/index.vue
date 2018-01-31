@@ -6,11 +6,9 @@
         let's get started
       </router-link>
     </div>
-    <div v-if="generalObs.length > 0" class="menu">
-      <h1 class="menu-item" >{{generalObs.length}} saved observations</h1>
-      <i @click="refresh" class="material-icons menu-item">refresh</i>
-    </div>
-    <div>
+    <filtering-options>
+    </filtering-options>
+    <div class="content">
       <transition-group name="obsCard-list" tag="ol" class="observationsList">
         <observation-card class="observationCard"
           v-for="record in displayedObservation"
@@ -36,6 +34,7 @@
 // import { createNamespacedHelpers } from 'vuex';
 import { mapGetters, mapActions } from 'vuex';
 import observationCard from './obsCard';
+import filters from './filters';
 
 // const { mapActions, mapGetters } = createNamespacedHelpers('observation');
 
@@ -49,6 +48,7 @@ export default {
   },
   components: {
     'observation-card': observationCard,
+    'filtering-options': filters,
   },
   computed: {
     ...mapGetters({
@@ -75,9 +75,6 @@ export default {
     ...mapActions({
       getGeneralObs: 'observation/getGeneralObs',
     }),
-    refresh () {
-      this.getGeneralObs();
-    },
     editObservation (obsId) {
       this.$router.push({ name: 'GeneralObs', params: { observationId: obsId } });
     },
@@ -100,14 +97,12 @@ export default {
 
   .container {
     min-height: 100vh;
-    margin: 0 .5rem 0 .5rem;
     padding-bottom: .5rem;
     display: flex;
     flex-direction: column;
   }
 
-  h1 {
-    font-size: 1rem;
+  .content {
     margin: .5rem .5rem 0 .5rem;
   }
 
@@ -172,19 +167,7 @@ export default {
     }
   }
 
-  .menu {
-    display: flex;
-    min-height: 2rem;
-    margin: .5rem;
-    justify-content: space-between;
-    .menu-item {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-
-    }
-  }
-  .obsCard-list-item {
+ .obsCard-list-item {
     transition: all 10s;
     display: inline-block;
     margin-right: 10px;

@@ -41,9 +41,6 @@ const getters = {
   status: state => state.status,
 };
 const actions = {
-  // async revokeToken ({ commit, dispatch }) {
-  //  const [account] = await db.account.toArray();
-  // },
   updateOnlineStatus ({ commit }) {
     const onLine = navigator.onLine || false;
     commit(types.UPDATE_ONLINE_STATUS, { onLine });
