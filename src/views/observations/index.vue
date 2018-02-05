@@ -9,7 +9,7 @@
     <filtering-options>
     </filtering-options>
     <div class="content">
-      <transition-group name="obsCard-list" tag="ol" class="observationsList">
+      <transition-group name="_obsCard-list" tag="ol" class="observationsList">
         <observation-card class="observationCard"
           v-for="record in displayedObservation"
           :taxonRecordedId="record.species[0].id"
@@ -54,10 +54,27 @@ export default {
     ...mapGetters({
       observationsByDate: 'observation/observationsByDate',
       generalObs: 'observation/generalObs',
+      filters: 'observation/filters',
       logedIn: 'account/isLogin',
     }),
     filteredObservation () {
-      return this.observationsByDate;
+      const filteringFunctions = this.filters.map((filterName) => {
+        if (filterName === 'draft') {
+          return obs => obs.expertReviewStatus === 'Draft';
+        }
+        if (filterName === 'approved') {
+          return obs => obs.expertReviewStatus === 'Approved';
+        }
+        if (filterName === 'deleted') {
+          return obs => obs.expertReviewStatus === 'Deleted';
+        }
+        if (filterName === 'ready for review') {
+          return obs => obs.expertReviewStatus === 'Ready for review';
+        }
+        return v => v;
+      });
+      return this.observationsByDate
+        .filter(obs => filteringFunctions.every(f => f(obs)));
     },
     displayedObservation () {
       return this.filteredObservation.slice(0, this.numberOfDisplayedObs);

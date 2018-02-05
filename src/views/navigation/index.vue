@@ -38,7 +38,8 @@ nav {
   height: 3.125rem;
   max-height: 5rem;
   background-color: #201647;
-  background: linear-gradient(135deg, rgb(0, 178, 169) 0%, rgb(0, 178, 169) 38%, rgb(32, 21, 71) 88%, rgb(32, 21, 71) 100%);
+  // background: linear-gradient(135deg, rgb(0, 178, 169) 0%, rgb(0, 178, 169) 38%, rgb(32, 21, 71) 88%, rgb(32, 21, 71) 100%);
+  background: linear-gradient(135deg, #00796B 0%, #00796B 38%, #4B30AB 88%, #4B30AB 100%);
   box-shadow: 0 0 4px rgba(0,0,0,0.12), 0 4px 4px rgba(0,0,0,0.24);
   flex: 1;
   justify-content: space-around;

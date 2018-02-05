@@ -250,7 +250,8 @@ header {
   justify-content: space-between;
   align-items: center;
   z-index: 2;
-  background: linear-gradient(45deg, rgba(0,178,169,1) 0%, rgba(0,178,169,1) 38%, rgba(32,21,71,1) 88%, rgba(32,21,71,1) 100%);
+  // background: linear-gradient(45deg, rgba(0,178,169,1) 0%, rgba(0,178,169,1) 38%, rgba(32,21,71,1) 88%, rgba(32,21,71,1) 100%);
+  background: linear-gradient(45deg, #00796B 0%, #00796B 38%, #4B30AB 88%, #4B30AB 100%);
 }
 
 .header-container-left {

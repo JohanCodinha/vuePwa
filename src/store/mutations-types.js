@@ -41,6 +41,7 @@ export const HYDRATE_IMAGE = 'HYDRATE_IMAGE';
 export const SET_ACTIVE_DRAFT = 'SET_ACTIVE_DRAFT';
 export const DELETE_SURVEY = 'DELETE_SURVEY';
 export const SAVE_RECORD = 'SAVE_RECORD';
+export const UPDATE_FILTERS = 'UPDATE_FILTERS';
 
 /*
  *  Location  

@@ -6,6 +6,7 @@ import {
   DELETE_SURVEY,
   SAVE_SPECIES,
   SAVE_RECORD,
+  UPDATE_FILTERS,
 } from '../mutations-types';
 
 const {
@@ -19,11 +20,14 @@ const {
 const state = {
   general: [],
   record: [],
+  filters: [],
 };
 
 // Getters
 const getters = {
+  generalObsCount: state => state.general.length,
   generalObs: state => state.general.reverse(),
+  filters: state => state.filters,
   observationsByDate: state => [...state.general]
     .sort((a, b) => new Date(b.surveyStartSdt) - new Date(a.surveyStartSdt)),
   recordById: state => taxonRecordedId =>
@@ -76,6 +80,9 @@ const actions = {
       console.log(error);
     }
   },
+  updateFilters ({ commit }, filters) {
+    commit(UPDATE_FILTERS, filters);
+  },
 };
 
 // mutations
@@ -95,6 +102,9 @@ const mutations = {
     const savedRecord = state.record.find(
       savedRecord => savedRecord.taxonRecordedId === record.taxonRecordedId);
     if (!savedRecord) state.record.push(record);
+  },
+  [UPDATE_FILTERS] (state, filters) {
+    state.filters = filters;
   },
 };
 
