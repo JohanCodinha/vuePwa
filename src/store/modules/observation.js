@@ -32,6 +32,7 @@ const getters = {
   records: state => state.record,
   filters: state => state.filters,
   observationsByDate: state => [...state.general]
+    .filter(obs => obs.species.length > 0 )
     .sort((a, b) => new Date(b.surveyStartSdt) - new Date(a.surveyStartSdt)),
   recordById: state => taxonRecordedId =>
     state.record.find(record => record.taxonRecordedId === taxonRecordedId),
