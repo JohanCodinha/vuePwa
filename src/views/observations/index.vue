@@ -12,7 +12,7 @@
       <transition-group name="_obsCard-list" tag="ol" class="observationsList">
         <observation-card class="observationCard"
           v-for="record in displayedObservation"
-          :taxonRecordedId="record.species[0].id"
+          :taxonRecordedId="record.species[0] && record.species[0].id"
           :scientificName="record.species && record.species.length && record.species[0].scientificNme"
           :commonName="record.species && record.species.length && record.species[0].commonNme"
           :siteName="record.siteNme"
@@ -20,6 +20,17 @@
           :status="record.expertReviewStatus"
           :startDate="record.surveyStartSdt"
           :key="record.surveyId">
+        </observation-card> 
+        <!--  <observation-card class="observationCard"
+          v-for="record in records"
+          :taxonRecordedId="record.taxonRecordedId"
+          :scientificName="record.scientificNme"
+          :commonName="record.commonNme"
+          :siteName="record.surveyComponent.survey.site.siteNme"
+          :surveyId="record.surveyComponent.survey.surveyId"
+          :status="record.expertReviewStatus"
+          :startDate="record.surveyComponent.survey.surveyStartSdt"
+          :key="record.taxonRecordedId"> -->
         </observation-card>
       </transition-group>
       <div class="expand-trigger" v-if="numOfHidden > 0" @click="showMore">
@@ -54,6 +65,7 @@ export default {
     ...mapGetters({
       observationsByDate: 'observation/observationsByDate',
       generalObs: 'observation/generalObs',
+      records: 'observation/records',
       filters: 'observation/filters',
       logedIn: 'account/isLogin',
     }),

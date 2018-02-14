@@ -65,7 +65,6 @@ export default {
           username: this.username,
           password: this.password });
         if (this.isLogin) {
-          this.$store.dispatch('observation/getGeneralObs');
           this.$router.push({ name: 'observations' });
         } else {
           this.password = '';

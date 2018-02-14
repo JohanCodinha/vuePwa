@@ -1,4 +1,5 @@
 /* eslint-disable no-shadow */
+/* eslint-disable */
 import Vue from 'vue';
 import vbapi from '@/api/vbapi';
 import {
@@ -14,6 +15,7 @@ const {
   deleteSurvey,
   expertReviewSurvey,
   getRecord,
+  streamGeneralObservations,
 } = vbapi;
 
 // initial state
@@ -27,6 +29,7 @@ const state = {
 const getters = {
   generalObsCount: state => state.general.length,
   generalObs: state => state.general.reverse(),
+  records: state => state.record,
   filters: state => state.filters,
   observationsByDate: state => [...state.general]
     .sort((a, b) => new Date(b.surveyStartSdt) - new Date(a.surveyStartSdt)),
@@ -37,6 +40,22 @@ const getters = {
 // Actions
 const actions = {
   async getGeneralObs ({ rootGetters, commit, dispatch }) {
+    const jwt = rootGetters['account/isLogin'];
+    // const { records } = await getGeneralObservation(jwt);
+    // return console.log(records);
+   /*  dispatch('loading/showSpinner', null, { root: true });
+    streamGeneralObservations(jwt)
+      .node('!.*', (specie) => {
+        commit(SAVE_RECORD, specie);
+      })
+      .done(() => {
+        dispatch('loading/hideSpinner', null, { root: true });
+      })
+      .fail((error) => {
+        console.log(error);
+        dispatch('loading/hideSpinner', null, { root: true });
+      });
+    */ 
     try {
       dispatch('loading/showSpinner', null, { root: true });
       const jwt = rootGetters['account/isLogin'];
@@ -48,6 +67,7 @@ const actions = {
       dispatch('alerts/addSnackbar', { message: error.message, timeout: 2000 }, { root: true });
       console.log(error);
     }
+    
   },
   async getRecord ({ rootState, commit }, recordedTaxonId) {
     const jwt = rootState.account.jwt.value;

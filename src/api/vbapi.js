@@ -1,6 +1,8 @@
+/* eslint-disable */ 
 import axios from 'axios';
 import get from 'lodash/get';
 import store from '@/store';
+import oboe from 'oboe';
 
 const baseURL = 'https://vbago.science/vbapi';
 // const baseURL = 'http://localhost:9000';
@@ -16,11 +18,14 @@ http.interceptors.response.use(response => response,
       const originalRequest = requestError.config;
       const responseStatus = get(requestError, 'response.status');
       const networkError = (requestError.message === 'Network Error');
-      if (responseStatus === 401 || originalRequest._retry || networkError) throw requestError;
+      const retry = originalRequest.headers['retry']; 
+      if (responseStatus === 401 || retry || networkError) {
+        return requestError;
+      }
       await store.dispatch('account/updateToken');
       const jwt = store.getters['account/isLogin'];
       originalRequest.headers['x-access-token'] = jwt;
-      originalRequest._retry = true;
+      originalRequest.headers['retry'] = true;
       return http(originalRequest);
     } catch (error) {
       return Promise.reject(error);
@@ -72,6 +77,11 @@ export default {
       headers: { 'x-access-token': jwt },
     })
     .then(res => res.data),
+
+  streamGeneralObservations: jwt => oboe({
+    url: `${baseURL}/search/UserObservations`,
+    headers: { 'x-access-token': jwt },
+  }),
 
   getMethods: (surveyId, jwt) => http
     .get(`/surveys/${surveyId}/methods`, {
