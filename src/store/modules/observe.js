@@ -106,7 +106,7 @@ const actions = {
     };
     return getExif(image, tags)
   },
-  async processExifData ({ commit, dispatch }, { imageMetadata, obsId }) {
+  async processExifData ({ commit, dispatch, getters }, { imageMetadata, obsId }) {
     try {
       const { latitude, latitudeRef, longitude, longitudeRef, datetime,
         positioningError, dilutionOfPrecision } = imageMetadata;
