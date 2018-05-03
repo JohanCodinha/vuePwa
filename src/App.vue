@@ -5,7 +5,10 @@
      <snackbar></snackbar>
       <div class="header-container"
            :class="{ 'sticky-header': !activeRoute }">
-        <div class="header-container-left" v-if="displayBackArrow" @click="backArrow">
+        <div  class="header-container-left"
+              :class="{ 'standalone': standalone }"
+              v-if="displayBackArrow"
+              @click="backArrow">
           <i class="material-icons">arrow_back</i>
           <p class="header-back-route" >{{backButtonText}}</p>
         </div>
@@ -120,6 +123,9 @@ export default {
           return '';
       }
     },
+    standalone () {
+     return window.navigator.standalone;
+    },
   },
   methods: {
     ...mapActions({
@@ -192,7 +198,10 @@ export default {
   font-weight: 500;
   font-style: medium;
 }
-
+.standalone {
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
 #app {
   font-family: 'vic', Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
