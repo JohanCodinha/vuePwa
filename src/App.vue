@@ -151,6 +151,7 @@ export default {
     },
   },
   mounted: async function mounted () {
+    window.top.scrollTo(0, 1);
     const vm = this;
     window.addEventListener('load', () => {
       vm.updateOnlineStatus();
