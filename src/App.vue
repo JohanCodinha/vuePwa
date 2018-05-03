@@ -124,7 +124,7 @@ export default {
       }
     },
     standalone () {
-     return window.navigator.standalone;
+      return window.navigator.standalone;
     },
   },
   methods: {
@@ -198,10 +198,12 @@ export default {
   font-weight: 500;
   font-style: medium;
 }
+
 .standalone {
   padding-top: 20px;
   padding-bottom: 20px;
 }
+
 #app {
   font-family: 'vic', Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
