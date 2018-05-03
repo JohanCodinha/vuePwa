@@ -124,7 +124,7 @@ export default {
       }
     },
     standalone () {
-      return window.navigator.standalone;
+      return window.navigator.standalone === true;
     },
   },
   methods: {
