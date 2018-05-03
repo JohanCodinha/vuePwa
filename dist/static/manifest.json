@@ -1,0 +1,20 @@
+{ 
+  "name": "VicBioAtlas Go", 
+
+  "short_name": "VBA go", 
+
+  "start_url": ".", 
+
+  "display": "standalone", 
+
+  "icons": [{ 
+
+    "src": "./vbago-logo-small.png", 
+
+    "sizes": "512x512", 
+
+    "type": "image/png" 
+
+  }] 
+
+} 
