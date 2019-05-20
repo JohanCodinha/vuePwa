@@ -95,5 +95,7 @@ export default new Router({
       component: speciesDetails,
       props: true,
     },
+    // catch all redirect
+    { path: '*', redirect: '/' }
   ],
 });
