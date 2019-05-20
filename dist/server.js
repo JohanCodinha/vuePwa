@@ -13,12 +13,12 @@ app = express();
 // });
 
 app.use(serveStatic(__dirname));
-
+/*
 app.get('/*', function(req,res,next) {
   console.log('redirect');
   res.redirect('/')
 });
-
+*/
 let port = process.env.PORT || 5050;
 app.listen(port);
 console.log('server started '+ port);/* eslint-disable */
