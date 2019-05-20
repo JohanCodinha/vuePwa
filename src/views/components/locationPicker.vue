@@ -270,6 +270,7 @@ export default {
 }
 
 .location-display {
+  margin-top: 3.125rem;
   position: absolute;
   z-index: 2;
   background: white;

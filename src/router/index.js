@@ -96,6 +96,7 @@ export default new Router({
       props: true,
     },
     // catch all redirect
-    { path: '*', redirect: '/about' }
+    { path: '*',
+      redirect: '/about' },
   ],
 });
