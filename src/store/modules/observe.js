@@ -156,6 +156,7 @@ const actions = {
       datetime: null,
       count: 0,
       discipline: null,
+      bushfireResponse: false,
     };
     await db.observe.add(observation);
     commit(types.SAVE_OBSERVATION, observation);
@@ -177,7 +178,7 @@ const actions = {
       description,
     } = observation.position;
     const { commonName, scientificName, taxonId } = observation.taxonomy;
-    const { count, extraInfoCode, datetime, discipline, notes } = observation;
+    const { count, extraInfoCode, datetime, discipline, notes, bushfireResponse } = observation;
 
     const formData = new FormData();
     images.forEach(image => formData.append('images', image));
@@ -190,6 +191,7 @@ const actions = {
     formData.append('count', count || 1);
     formData.append('dateTime', datetime);
     formData.append('extraInfoCode', extraInfoCode);
+    formData.append('bushfireResponse', bushfireResponse);
     formData.append('userId', userId);
     formData.append('obsName', username);
     formData.append('locationDescription', description);
@@ -205,10 +207,11 @@ const actions = {
       commit(types.SET_RECORDED_ID, { obsId: observation.id, taxonRecordedId });
       dispatch('alerts/addSnackbar', { message: 'Upload success !', timeout: 3500 }, { root: true });
       dispatch('deleteObservation', observation.id);
-      dispatch('observation/getGeneralObs', null, { root: true });
+      //dispatch('observation/getGeneralObs', null, { root: true });
       router.replace({ name: 'observations' });
     } catch (error) {
       console.log(error);
+      dispatch('loading/hideSpinner', null, { root: true });
       dispatch('alerts/addSnackbar', { message: error.message, timeout: 3500 }, { root: true });
       return error;
     }
@@ -296,6 +299,9 @@ const actions = {
   setExtraInfo ({ commit }, { code, obsId }) {
     commit('SET_EXTRA_CODE', { code, obsId });
   },
+  setBushfireResponse ({ commit }, { selected, obsId }) {
+    commit('SET_BUSHFIRE_RESPONSE', { selected, obsId });
+  },
   setNotes ({ commit, getters }, { notes, obsId }) {
     const observation = getters.getObservationById(obsId)
     db.observe.where('id').equals(obsId).modify(obs => 
@@ -349,6 +355,10 @@ const mutations = {
   [types.SET_EXTRA_CODE] (state, { code, obsId }) {
     const observation = state.items.find(obs => obs.id === obsId);
     Vue.set(observation, 'extraInfoCode', code);
+  },
+  [types.SET_BUSHFIRE_RESPONSE] (state, { selected, obsId }) {
+    const observation = state.items.find(obs => obs.id === obsId);
+    Vue.set(observation, 'bushfireResponse', selected);
   },
   [types.SET_RECORDED_ID] (state, { obsId, taxonRecordedId }) {
     const observation = state.items.find(obs => obs.id === obsId);

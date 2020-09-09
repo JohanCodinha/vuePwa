@@ -2,6 +2,16 @@
   <div class="input-field">
     <i class="material-icons">info_outline</i>
     <ul class="radioList">
+      <li>
+              <input type="radio"
+                     id="bushfire"
+                     :value="bushfire"
+                     @click="toggleBushfire(bushfire)">
+              <label for="bushfire">
+                      <i class="material-icons">radio_button_{{bushfire ? 'checked':'unchecked'}}</i>
+                      <p>Bushfire Response</p>
+              </label>
+      </li>
       <li v-for="option in options">
         <input type="radio"
                :id="option.text"
@@ -14,11 +24,6 @@
         </label>
       </li>
     </ul>
-    <!-- <select class="form-select" name="extra-info" id="extra-info" v-model="selected">
-      <option v-for="option in options"
-        :value="option.value">{{ option.text }}</option>
-    </select>
-    --> 
   </div>
 </template>
 
@@ -69,11 +74,20 @@ export default {
       if (!this.activeDraft) return null;
       return this.activeDraft.extraInfoCode;
     },
+    bushfire () {
+      if (!this.activeDraft) return null;
+      return this.activeDraft.bushfireResponse;
+    },
   },
   methods: {
     ...mapActionsObserve([
       'setExtraInfo',
+      'setBushfireResponse',
     ]),
+    toggleBushfire (selected) {
+      console.log(selected);
+      return this.setBushfireResponse({ selected: !selected, obsId: this.obsId });
+    },
     radioClick (code) {
       console.log(code, this.selected);
       if (this.selected === code) {

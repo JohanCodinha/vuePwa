@@ -32,7 +32,8 @@ const getters = {
   records: state => state.record,
   filters: state => state.filters,
   observationsByDate: state => [...state.general]
-    .filter(obs => obs.species.length > 0 )
+        .filter(obs => {
+                return obs.species.length > 0 })
     .sort((a, b) => new Date(b.surveyStartSdt) - new Date(a.surveyStartSdt)),
   recordById: state => taxonRecordedId =>
     state.record.find(record => record.taxonRecordedId === taxonRecordedId),
@@ -42,21 +43,6 @@ const getters = {
 const actions = {
   async getGeneralObs ({ rootGetters, commit, dispatch }) {
     const jwt = rootGetters['account/isLogin'];
-    // const { records } = await getGeneralObservation(jwt);
-    // return console.log(records);
-   /*  dispatch('loading/showSpinner', null, { root: true });
-    streamGeneralObservations(jwt)
-      .node('!.*', (specie) => {
-        commit(SAVE_RECORD, specie);
-      })
-      .done(() => {
-        dispatch('loading/hideSpinner', null, { root: true });
-      })
-      .fail((error) => {
-        console.log(error);
-        dispatch('loading/hideSpinner', null, { root: true });
-      });
-    */ 
     try {
       dispatch('loading/showSpinner', null, { root: true });
       const jwt = rootGetters['account/isLogin'];
@@ -65,6 +51,7 @@ const actions = {
       dispatch('loading/hideSpinner', null, { root: true });
       commit(SAVE_GENERAL_OBS, records);
     } catch (error) {
+      dispatch('loading/hideSpinner', null, { root: true });
       dispatch('alerts/addSnackbar', { message: error.message, timeout: 2000 }, { root: true });
       console.log(error);
     }
@@ -109,7 +96,7 @@ const actions = {
 // mutations
 const mutations = {
   [SAVE_GENERAL_OBS] (state, records) {
-    state.general = records;
+    Vue.set(state, 'general', records);
   },
   [DELETE_SURVEY] (state, surveyId) {
     const newState = state.general.filter(record => record.surveyId !== surveyId);
