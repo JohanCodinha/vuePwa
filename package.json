@@ -90,7 +90,7 @@
     "ora": "^1.4.0",
     "rimraf": "^2.7.1",
     "semver": "^5.7.1",
-    "shelljs": "^0.7.8",
+    "shelljs": "^0.8.5",
     "sw-precache-webpack-plugin": "^0.11.5",
     "uglify-es": "^3.3.9",
     "url-loader": "^0.5.8",
