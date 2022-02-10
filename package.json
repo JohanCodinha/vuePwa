@@ -36,7 +36,7 @@
     "exif-js": "git://github.com/JohanCodinha/exif-js",
     "lodash": "^4.17.20",
     "mapbox-gl": "^0.40.0",
-    "node-sass": "^4.14",
+    "node-sass": "^7.0",
     "oboe": "^2.1.5",
     "sass-loader": "^6.0.7",
     "vue": "^2.6.12",
